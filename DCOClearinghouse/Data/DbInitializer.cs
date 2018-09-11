@@ -17,7 +17,7 @@ namespace DCOClearinghouse.Data
 
 
             context.ResourceCategories.RemoveRange(context.ResourceCategories);
-            var categories = new ResourceCategory[]
+            var categories = new []
             {
                 new ResourceCategory
                 {
@@ -46,7 +46,7 @@ namespace DCOClearinghouse.Data
             }
             context.SaveChanges();
 
-            var resources = new Resource[]
+            var resources = new[]
             {
                 new Resource
                 {

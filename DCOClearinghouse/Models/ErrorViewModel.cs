@@ -1,5 +1,3 @@
-using System;
-
 namespace DCOClearinghouse.Models
 {
     public class ErrorViewModel

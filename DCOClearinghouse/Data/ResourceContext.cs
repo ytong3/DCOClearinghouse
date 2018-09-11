@@ -1,5 +1,4 @@
-﻿using System.Data.Common;
-using DCOClearinghouse.Models;
+﻿using DCOClearinghouse.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DCOClearinghouse.Data
@@ -13,7 +12,8 @@ namespace DCOClearinghouse.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Resource>().ToTable("Resource");
+            modelBuilder.Entity<Resource>().ToTable("Resource")
+                .Property(r => r.Status).HasDefaultValue(ResourceStatus.New);
             modelBuilder.Entity<ResourceCategory>().ToTable("ResourceCategory");
         }
     }
