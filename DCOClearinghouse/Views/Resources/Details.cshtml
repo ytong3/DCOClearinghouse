@@ -23,32 +23,21 @@
             @Html.DisplayFor(model => model.Content)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.BadlinkVotes)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.BadlinkVotes)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.CreateDate)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.CreateDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.Category)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Category.ID)
+            @Html.DisplayFor(model => model.Category.CategoryName)
         </dd>
     </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a asp-action="ReportBadlink" asp-route-id="@Model.ID">Report link is broken</a> |
     <a asp-action="Index">Back to List</a>
 </div>

@@ -10,23 +10,23 @@ using DCOClearinghouse.Models;
 
 namespace DCOClearinghouse.Controllers
 {
-    public class ResourcesController : Controller
+    public class Resources : Controller
     {
         private readonly ResourceContext _context;
 
-        public ResourcesController(ResourceContext context)
+        public Resources(ResourceContext context)
         {
             _context = context;
         }
 
-        // GET: Resources
+        // GET: ResourcesForUsers
         public async Task<IActionResult> Index()
         {
             var resourceContext = _context.Resources.Include(r => r.Category);
             return View(await resourceContext.ToListAsync());
         }
 
-        // GET: Resources/Details/5
+        // GET: ResourcesForUsers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,14 +45,14 @@ namespace DCOClearinghouse.Controllers
             return View(resource);
         }
 
-        // GET: Resources/Create
+        // GET: ResourcesForUsers/Create
         public IActionResult Create()
         {
             ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "ID");
             return View();
         }
 
-        // POST: Resources/Create
+        // POST: ResourcesForUsers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -69,7 +69,7 @@ namespace DCOClearinghouse.Controllers
             return View(resource);
         }
 
-        // GET: Resources/Edit/5
+        // GET: ResourcesForUsers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,7 +86,7 @@ namespace DCOClearinghouse.Controllers
             return View(resource);
         }
 
-        // POST: Resources/Edit/5
+        // POST: ResourcesForUsers/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -122,7 +122,7 @@ namespace DCOClearinghouse.Controllers
             return View(resource);
         }
 
-        // GET: Resources/Delete/5
+        // GET: ResourcesForUsers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -141,7 +141,7 @@ namespace DCOClearinghouse.Controllers
             return View(resource);
         }
 
-        // POST: Resources/Delete/5
+        // POST: ResourcesForUsers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -150,6 +150,16 @@ namespace DCOClearinghouse.Controllers
             _context.Resources.Remove(resource);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> ReportBadLink(int id)
+        {
+            var resource = await _context.Resources.FindAsync(id);
+            resource.BadlinkVotes++;
+
+            await _context.SaveChangesAsync();
+            // TODO: give the user some feedback like greying out the link after reporting.
+            return RedirectToAction(nameof(Details), new {id = id});
         }
 
         private bool ResourceExists(int id)
