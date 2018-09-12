@@ -152,6 +152,16 @@ namespace DCOClearinghouse.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> ReportBadLink(int id)
+        {
+            var resource = await _context.Resources.FindAsync(id);
+            resource.BadlinkVotes++;
+
+            await _context.SaveChangesAsync();
+            // TODO: give the user some feedback like greying out the link after reporting.
+            return RedirectToAction(nameof(Details), new {id = id});
+        }
+
         private bool ResourceExists(int id)
         {
             return _context.Resources.Any(e => e.ID == id);
