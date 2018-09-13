@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DCOClearinghouse.Models.Resource>
+﻿@model IDictionary<string,IList<DCOClearinghouse.Models.Resource>>
 
 @{
     ViewData["Title"] = "Resources";
@@ -12,61 +12,19 @@
     <a asp-action="Create">Add New</a>
 </p>
 
-<div class="card-group">
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">Assitive Technology</h5>
-      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+<div class="row">
+@foreach(var category in Model){
+  <div class="col-md-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">@category.Key</div>
+      <div class="panel-body">
+          @foreach(var resource in @category.Value){
+              <a>@resource.Subject</a>
+          }
+      </div>
     </div>
   </div>
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">Education</h5>
-      <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">Employment</h5>
-      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-    </div>
-  </div>
+}
 </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Subject)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Content)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Subject)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Content)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryName)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+

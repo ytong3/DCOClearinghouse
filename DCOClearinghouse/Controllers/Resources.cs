@@ -22,8 +22,26 @@ namespace DCOClearinghouse.Controllers
         // GET: ResourcesForUsers
         public async Task<IActionResult> Index()
         {
-            var resourceContext = _context.Resources.Include(r => r.Category);
-            return View(await resourceContext.ToListAsync());
+            // showcase sample categories on Index
+            var resourceByCategory = _context.Resources.Include(r=>r.Category).Where(r=>r.CategoryID>=1 && r.CategoryID<=4)
+                                .GroupBy(r=>r.CategoryID)
+                                .SelectMany(g=>g.Take(10))
+                                .ToListAsync();
+
+            var resoureceList = await resourceByCategory;
+
+            var viewData = new Dictionary<string, IList<Resource>>();
+            viewData.Add("Assistive Technology", new List<Resource>());
+            viewData.Add("Education", new List<Resource>());
+            viewData.Add("Employment", new List<Resource>());
+            viewData.Add("Healing", new List<Resource>());
+
+            foreach(var resource in resoureceList)
+            {
+                viewData[resource.Category.CategoryName].Add(resource);
+            }
+
+            return View(viewData);
         }
 
         // GET: ResourcesForUsers/Details/5
