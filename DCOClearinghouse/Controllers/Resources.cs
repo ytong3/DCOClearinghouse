@@ -24,24 +24,12 @@ namespace DCOClearinghouse.Controllers
         {
             // showcase sample categories on Index
             var resourceByCategory = _context.Resources.Include(r=>r.Category).Where(r=>r.CategoryID>=1 && r.CategoryID<=4)
-                                .GroupBy(r=>r.CategoryID)
-                                .SelectMany(g=>g.Take(10))
-                                .ToListAsync();
+                                .GroupBy(r=>r.Category.CategoryName)
+                                .ToDictionaryAsync(g=>g.Key, g=>g.Take(10).ToList());
 
-            var resoureceList = await resourceByCategory;
+            var resourceDictionary = await resourceByCategory;
 
-            var viewData = new Dictionary<string, IList<Resource>>();
-            viewData.Add("Assistive Technology", new List<Resource>());
-            viewData.Add("Education", new List<Resource>());
-            viewData.Add("Employment", new List<Resource>());
-            viewData.Add("Healing", new List<Resource>());
-
-            foreach(var resource in resoureceList)
-            {
-                viewData[resource.Category.CategoryName].Add(resource);
-            }
-
-            return View(viewData);
+            return View(resourceDictionary);
         }
 
         // GET: ResourcesForUsers/Details/5
