@@ -36,7 +36,7 @@ namespace DCOClearinghouse
             // services.AddDbContext<ResourceContext>(options =>
             //     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<ResourceContext>(options =>
-                options.UseInMemoryDatabase());
+                options.UseInMemoryDatabase(databaseName: "development-db"));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

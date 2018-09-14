@@ -53,7 +53,8 @@ namespace DCOClearinghouse.Data
                     Subject = "Training:Online Workshops",
                     CategoryID = 1,
                     BadlinkVotes = 0,
-                    Content = @"Website: http://www.d.umn.edu/itss/training/online/",
+                    Content = @"A training workshops",
+                    Link = "http://www.d.umn.edu/itss/training/online/",
                     Status = ResourceStatus.New
                 },
                 new Resource
@@ -61,7 +62,8 @@ namespace DCOClearinghouse.Data
                     Subject = "Assistive Technology Act Programs",
                     CategoryID = 1,
                     BadlinkVotes = 0,
-                    Content = @"Website: http://www.ataporg.org/",
+                    Content = @"Website",
+                    Link = "http://www.ataporg.org",
                     Status = ResourceStatus.New
                 },
                 new Resource
@@ -70,6 +72,7 @@ namespace DCOClearinghouse.Data
                     CategoryID = 4,
                     BadlinkVotes = 0,
                     Content = @"Website: http://www.tcmstudent.com/theory/Chinese%20Style.html",
+                    Link = "http://www.tcmstudent.com/theory/Chinese%20Style.html",
                     Status = ResourceStatus.New
                 },
                 new Resource
@@ -78,6 +81,7 @@ namespace DCOClearinghouse.Data
                     CategoryID = 3,
                     BadlinkVotes = 0,
                     Content = @"Website: http://www.ilr.cornell.edu/ped/",
+                    Link = "http://www.ilr.cornell.edu/ped/",
                     Status = ResourceStatus.Approved
                 },
                 new Resource
@@ -86,6 +90,7 @@ namespace DCOClearinghouse.Data
                     CategoryID = 2,
                     BadlinkVotes = 0,
                     Content = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
+                    Link = "http://www.classesusa.com/featuredschools/fos/index.cfm",
                     Status = ResourceStatus.Removed
                 }
             };

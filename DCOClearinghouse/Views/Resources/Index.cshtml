@@ -19,7 +19,7 @@
       <div class="panel-heading">@category.Key</div>
       <div class="panel-body">
           @foreach(var resource in @category.Value){
-              <a>@resource.Subject</a>
+              <a asp-action="Details" asp-route-id="@resource.ID">@resource.Subject</a><br>
           }
       </div>
     </div>
