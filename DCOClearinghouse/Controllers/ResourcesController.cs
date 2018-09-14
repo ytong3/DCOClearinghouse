@@ -10,11 +10,11 @@ using DCOClearinghouse.Models;
 
 namespace DCOClearinghouse.Controllers
 {
-    public class Resources : Controller
+    public class ResourcesController : Controller
     {
         private readonly ResourceContext _context;
 
-        public Resources(ResourceContext context)
+        public ResourcesController(ResourceContext context)
         {
             _context = context;
         }
@@ -23,7 +23,7 @@ namespace DCOClearinghouse.Controllers
         public async Task<IActionResult> Index()
         {
             // showcase sample categories on Index
-            var resourceByCategory = _context.Resources.Include(r=>r.Category).Where(r=>r.CategoryID>=1 && r.CategoryID<=4)
+            var resourceByCategory = _context.Resources.Include(r=>r.Category).Where(r=>r.CategoryID>=1 && r.CategoryID<=12)
                                 .GroupBy(r=>r.Category.CategoryName)
                                 .ToDictionaryAsync(g=>g.Key, g=>g.Take(10).ToList());
 

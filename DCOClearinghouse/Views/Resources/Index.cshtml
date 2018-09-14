@@ -1,7 +1,8 @@
-﻿@model IDictionary<string,List<DCOClearinghouse.Models.Resource>>
+﻿@using DCOClearinghouse.Utility
+@model IDictionary<string,List<DCOClearinghouse.Models.Resource>>
 
 @{
-    ViewData["Title"] = "Resources";
+    ViewData["Title"] = "ResourcesController";
 }
 
 <div class="jumbotron">
@@ -12,19 +13,22 @@
     <a asp-action="Create">Add New</a>
 </p>
 
-<div class="row">
-@foreach(var category in Model){
-  <div class="col-md-3">
-    <div class="panel panel-default">
-      <div class="panel-heading">@category.Key</div>
-      <div class="panel-body">
-          @foreach(var resource in @category.Value){
-              <a asp-action="Details" asp-route-id="@resource.ID">@resource.Subject</a><br>
-          }
-      </div>
+@foreach (var row in Model.ToArray().Split(4))
+{
+    <div class="row">
+        @foreach (var category in row)
+        {
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">@category.Key</div>
+                    <div class="panel-body">
+                        @foreach(var resource in @category.Value){
+                            <a asp-action="Details" asp-route-id="@resource.ID">@resource.Subject</a><br>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
     </div>
-  </div>
 }
-</div>
-
 

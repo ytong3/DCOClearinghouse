@@ -38,6 +38,21 @@ namespace DCOClearinghouse.Data
                 {
                     ID = 4,
                     CategoryName = "Healing"
+                },
+                new ResourceCategory
+                {
+                    ID = 5,
+                    CategoryName = "Additional cat 1"
+                },
+                new ResourceCategory
+                {
+                    ID = 6,
+                    CategoryName = "Additiona cat 3"
+                },
+                new ResourceCategory
+                {
+                    ID = 7,
+                    CategoryName = "Additional cat 4"
                 }
             };
             foreach (var resourceCategory in categories)
@@ -93,6 +108,35 @@ namespace DCOClearinghouse.Data
                     Link = "http://www.classesusa.com/featuredschools/fos/index.cfm",
                     Status = ResourceStatus.Removed
                 }
+                ,
+                new Resource
+                {
+                    Subject = "Google.com",
+                    CategoryID = 4,
+                    BadlinkVotes = 0,
+                    Content = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
+                    Link = "http://www.classesusa.com/featuredschools/fos/index.cfm",
+                    Status = ResourceStatus.Removed
+                },
+                new Resource
+                {
+                    Subject = "Yahoo.com",
+                    CategoryID = 5,
+                    BadlinkVotes = 0,
+                    Content = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
+                    Link = "https://yahoo.com",
+                    Status = ResourceStatus.Approved
+                },
+                new Resource
+                {
+                    Subject = "Bing.com",
+                    CategoryID = 7,
+                    BadlinkVotes = 0,
+                    Content = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
+                    Link = "https://bing.com",
+                    Status = ResourceStatus.Approved
+                },
+
             };
             foreach (var resource in resources)
             {
