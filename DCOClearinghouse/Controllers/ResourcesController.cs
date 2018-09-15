@@ -19,12 +19,12 @@ namespace DCOClearinghouse.Controllers
             _context = context;
         }
 
-        // GET: ResourcesForUsers
+        // GET: Resources
         public async Task<IActionResult> Index()
         {
             // showcase sample categories on Index
             var resourceByCategory = _context.Resources.Include(r=>r.Category).Where(r=>r.CategoryID>=1 && r.CategoryID<=12)
-                                .GroupBy(r=>r.Category.CategoryName)
+                                .GroupBy(r=>r.Category)
                                 .ToDictionaryAsync(g=>g.Key, g=>g.Take(10).ToList());
 
             var resourceDictionary = await resourceByCategory;
@@ -32,7 +32,26 @@ namespace DCOClearinghouse.Controllers
             return View(resourceDictionary);
         }
 
-        // GET: ResourcesForUsers/Details/5
+        // Get: Resources/Category/3
+        public async Task<IActionResult> Category(int? id)
+        {
+            var resourceCategory = await _context.ResourceCategories
+                .Include(c => c.Resources)
+                .SingleOrDefaultAsync(c => c.ID == id);
+
+            if (resourceCategory == null)
+            {
+                throw new InvalidOperationException("resource category.");
+            }
+
+
+            //TODO: make use of ViewData to pass in multiple models
+            ViewData["CategoryName"] = resourceCategory.CategoryName;
+
+            return View(resourceCategory.Resources);
+        }
+
+        // GET: Resources/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -51,14 +70,14 @@ namespace DCOClearinghouse.Controllers
             return View(resource);
         }
 
-        // GET: ResourcesForUsers/Create
+        // GET: Resources/Create
         public IActionResult Create()
         {
             ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "ID");
             return View();
         }
 
-        // POST: ResourcesForUsers/Create
+        // POST: Resources/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -75,7 +94,7 @@ namespace DCOClearinghouse.Controllers
             return View(resource);
         }
 
-        // GET: ResourcesForUsers/Edit/5
+        // GET: Resources/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,7 +111,7 @@ namespace DCOClearinghouse.Controllers
             return View(resource);
         }
 
-        // POST: ResourcesForUsers/Edit/5
+        // POST: Resources/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -128,7 +147,7 @@ namespace DCOClearinghouse.Controllers
             return View(resource);
         }
 
-        // GET: ResourcesForUsers/Delete/5
+        // GET: Resources/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -147,7 +166,7 @@ namespace DCOClearinghouse.Controllers
             return View(resource);
         }
 
-        // POST: ResourcesForUsers/Delete/5
+        // POST: Resources/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
