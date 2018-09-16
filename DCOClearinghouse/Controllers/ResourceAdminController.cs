@@ -48,7 +48,7 @@ namespace DCOClearinghouse.Controllers
         // GET: ResourcesController/Create
         public IActionResult Create()
         {
-            ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "ID");
+            ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "CategoryName");
             return View();
         }
 
@@ -57,15 +57,16 @@ namespace DCOClearinghouse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Subject,Content,CategoryID,BadlinkVotes,CreateDate,Status")] Resource resource)
+        public async Task<IActionResult> Create([Bind("ID,Subject,Content,CategoryID")] Resource resource)
         {
+            resource.CreateDate = DateTime.UtcNow;
             if (ModelState.IsValid)
             {
                 _context.Add(resource);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "ID", resource.CategoryID);
+            ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID ", "CategoryName", resource.CategoryID);
             return View(resource);
         }
 

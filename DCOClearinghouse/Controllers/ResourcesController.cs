@@ -73,7 +73,7 @@ namespace DCOClearinghouse.Controllers
         // GET: Resources/Create
         public IActionResult Create()
         {
-            ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "ID");
+            ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "CategoryName");
             return View();
         }
 

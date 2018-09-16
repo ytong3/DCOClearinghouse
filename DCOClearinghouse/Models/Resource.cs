@@ -14,15 +14,24 @@ namespace DCOClearinghouse.Models
     public class Resource
     {
         public int ID { get; set; }
+        [StringLength(60, MinimumLength = 3)]
+        [Required]
         public string Subject { get; set; }
 
         [DataType(DataType.Url)]
         public string Link { get; set; }
+
+        [StringLength(300, MinimumLength = 3)]
+        [Required]
         public string Content { get; set; }
+
         public int CategoryID { get; set; }
 
         [Display(Name = "Marked as bad link")]
         public int BadlinkVotes { get; set; }
+
+        [Display(Name = "Date")]
+        [DataType((DataType.Date))]
         public DateTime CreateDate { get; set; }
 
         [EnumDataType(typeof(ResourceStatus))]
