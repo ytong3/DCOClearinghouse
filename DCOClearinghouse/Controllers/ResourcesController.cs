@@ -23,7 +23,8 @@ namespace DCOClearinghouse.Controllers
         public async Task<IActionResult> Index()
         {
             // showcase sample categories on Index
-            var resourceByCategory = _context.Resources.Include(r=>r.Category).Where(r=>r.CategoryID>=1 && r.CategoryID<=12)
+            var resourceByCategory = _context.Resources.AsNoTracking()
+                                .Include(r=>r.Category).Where(r=>r.CategoryID>=1 && r.CategoryID<=12)
                                 .GroupBy(r=>r.Category)
                                 .ToDictionaryAsync(g=>g.Key, g=>g.Take(10).ToList());
 
@@ -36,6 +37,7 @@ namespace DCOClearinghouse.Controllers
         public async Task<IActionResult> Category(int? id)
         {
             var resourceCategory = await _context.ResourceCategories
+                .AsNoTracking()
                 .Include(c => c.Resources)
                 .SingleOrDefaultAsync(c => c.ID == id);
 
@@ -60,6 +62,7 @@ namespace DCOClearinghouse.Controllers
             }
 
             var resource = await _context.Resources
+                .AsNoTracking()
                 .Include(r => r.Category)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (resource == null)
