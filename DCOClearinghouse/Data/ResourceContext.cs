@@ -9,12 +9,14 @@ namespace DCOClearinghouse.Data
 
         public DbSet<Resource> Resources { get; set; }
         public DbSet<ResourceCategory> ResourceCategories { get; set; }
+        public DbSet<ResourceType> ResourceTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Resource>().ToTable("Resource")
                 .Property(r => r.Status).HasDefaultValue(ResourceStatus.New);
             modelBuilder.Entity<ResourceCategory>().ToTable("ResourceCategory");
+            modelBuilder.Entity<ResourceType>().ToTable("ResourceType");
         }
     }
 }

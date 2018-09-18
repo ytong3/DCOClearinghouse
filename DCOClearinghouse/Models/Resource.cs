@@ -38,5 +38,7 @@ namespace DCOClearinghouse.Models
         public ResourceStatus Status { get; set; }
 
         public ResourceCategory Category { get; set; }
+
+        public ResourceType Type { get; set; }
     }
 }

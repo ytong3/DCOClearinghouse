@@ -15,9 +15,44 @@ namespace DCOClearinghouse.Data
                 return; // no need to be seeded again
             }
 
+            #region ResourceTypes
 
-            context.ResourceCategories.RemoveRange(context.ResourceCategories);
-            var categories = new []
+            var types = new[]
+            {
+                new ResourceType
+                {
+                    ID = 1,
+                    TypeName = "Activities"
+                },
+                new ResourceType
+                {
+                    ID = 2,
+                    TypeName = "Events"
+                },
+                new ResourceType
+                {
+                    ID = 3,
+                    TypeName = "Tutorial"
+                },
+                new ResourceType
+                {
+                    ID = 4,
+                    TypeName = "Product"
+                }
+            };
+
+            foreach (var resourceType in types)
+            {
+                context.ResourceTypes.Add(resourceType);
+            }
+
+            context.SaveChanges();
+
+            #endregion
+
+            #region Categories
+
+            var categories = new[]
             {
                 new ResourceCategory
                 {
@@ -59,7 +94,12 @@ namespace DCOClearinghouse.Data
             {
                 context.ResourceCategories.Add(resourceCategory);
             }
+
             context.SaveChanges();
+
+            #endregion
+
+            #region Resources
 
             var resources = new[]
             {
@@ -70,7 +110,12 @@ namespace DCOClearinghouse.Data
                     BadlinkVotes = 0,
                     Content = @"A training workshops",
                     Link = "http://www.d.umn.edu/itss/training/online/",
-                    Status = ResourceStatus.New
+                    Status = ResourceStatus.New,
+                    Type = new ResourceType()
+                    {
+                        ID = 1
+                    }
+                    
                 },
                 new Resource
                 {
@@ -79,7 +124,11 @@ namespace DCOClearinghouse.Data
                     BadlinkVotes = 0,
                     Content = @"Website",
                     Link = "http://www.ataporg.org",
-                    Status = ResourceStatus.New
+                    Status = ResourceStatus.New,
+                    Type = new ResourceType()
+                    {
+                    ID = 2
+                }
                 },
                 new Resource
                 {
@@ -88,7 +137,11 @@ namespace DCOClearinghouse.Data
                     BadlinkVotes = 0,
                     Content = @"Website: http://www.tcmstudent.com/theory/Chinese%20Style.html",
                     Link = "http://www.tcmstudent.com/theory/Chinese%20Style.html",
-                    Status = ResourceStatus.New
+                    Status = ResourceStatus.New,
+                    Type = new ResourceType()
+                    {
+                        ID = 3
+                    }
                 },
                 new Resource
                 {
@@ -97,7 +150,12 @@ namespace DCOClearinghouse.Data
                     BadlinkVotes = 0,
                     Content = @"Website: http://www.ilr.cornell.edu/ped/",
                     Link = "http://www.ilr.cornell.edu/ped/",
-                    Status = ResourceStatus.Approved
+                    Status = ResourceStatus.Approved,
+                    Type = new ResourceType()
+                    {
+                        ID = 3
+                    }
+
                 },
                 new Resource
                 {
@@ -106,9 +164,12 @@ namespace DCOClearinghouse.Data
                     BadlinkVotes = 0,
                     Content = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
                     Link = "http://www.classesusa.com/featuredschools/fos/index.cfm",
-                    Status = ResourceStatus.Removed
-                }
-                ,
+                    Status = ResourceStatus.Removed,
+                    Type = new ResourceType()
+                    {
+                        ID = 3
+                    }
+                },
                 new Resource
                 {
                     Subject = "Google.com",
@@ -116,7 +177,11 @@ namespace DCOClearinghouse.Data
                     BadlinkVotes = 0,
                     Content = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
                     Link = "http://www.classesusa.com/featuredschools/fos/index.cfm",
-                    Status = ResourceStatus.Removed
+                    Status = ResourceStatus.Removed,
+                    Type = new ResourceType()
+                    {
+                        ID = 4
+                    }
                 },
                 new Resource
                 {
@@ -125,7 +190,11 @@ namespace DCOClearinghouse.Data
                     BadlinkVotes = 0,
                     Content = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
                     Link = "https://yahoo.com",
-                    Status = ResourceStatus.Approved
+                    Status = ResourceStatus.Approved,
+                    Type = new ResourceType()
+                    {
+                        ID = 2
+                    }
                 },
                 new Resource
                 {
@@ -134,15 +203,21 @@ namespace DCOClearinghouse.Data
                     BadlinkVotes = 0,
                     Content = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
                     Link = "https://bing.com",
-                    Status = ResourceStatus.Approved
+                    Status = ResourceStatus.Approved,
+                    Type = new ResourceType()
+                    {
+                        ID = 1
+                    }
                 },
-
             };
             foreach (var resource in resources)
             {
                 context.Resources.Add(resource);
             }
+
             context.SaveChanges();
+
+            #endregion
         }
     }
 }
