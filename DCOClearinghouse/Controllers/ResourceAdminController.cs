@@ -22,7 +22,7 @@ namespace DCOClearinghouse.Controllers
         // GET: ResourcesController
         public async Task<IActionResult> Index()
         {
-            var resourceContext = _context.Resources.Include(r => r.Category);
+            var resourceContext = _context.Resources.Include(r => r.Category).Include(r => r.Type);
             return View(await resourceContext.ToListAsync());
         }
 
@@ -83,7 +83,9 @@ namespace DCOClearinghouse.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "ID", resource.CategoryID);
+            ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "CategoryName", resource.CategoryID);
+            ViewData["ResourceTypeList"] = new SelectList(_context.ResourceTypes, "ID", "TypeName", resource.TypeID);
+
             return View(resource);
         }
 
@@ -92,8 +94,9 @@ namespace DCOClearinghouse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Subject,Content,CategoryID,BadlinkVotes,CreateDate,Status")] Resource resource)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Subject,Content,TypeID,CategoryID,BadlinkVotes,CreateDate,Status")] Resource resource)
         {
+            //TODO: implement the anti-overposting mechanism in the Contoso University example.
             if (id != resource.ID)
             {
                 return NotFound();
@@ -119,7 +122,6 @@ namespace DCOClearinghouse.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "ID", resource.CategoryID);
             return View(resource);
         }
 
