@@ -36,6 +36,7 @@ namespace DCOClearinghouse.Controllers
 
             var resource = await _context.Resources
                 .Include(r => r.Category)
+                .Include(r=>r.Type)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (resource == null)
             {
@@ -48,7 +49,8 @@ namespace DCOClearinghouse.Controllers
         // GET: ResourcesController/Create
         public IActionResult Create()
         {
-            ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "CategoryName");
+            ViewData["CategoryDropdownList"] = GetCategorySelectList();
+            ViewData["TypeDropdownList"] = GetTypeSelectList();
             return View();
         }
 
@@ -66,7 +68,8 @@ namespace DCOClearinghouse.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID ", "CategoryName", resource.CategoryID);
+
+            ViewData["CategoryID"] = GetCategorySelectList();
             return View(resource);
         }
 
@@ -83,8 +86,8 @@ namespace DCOClearinghouse.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "CategoryName", resource.CategoryID);
-            ViewData["ResourceTypeList"] = new SelectList(_context.ResourceTypes, "ID", "TypeName", resource.TypeID);
+            ViewData["CategoryID"] = GetCategorySelectList(resource);
+            ViewData["ResourceTypeList"] = GetTypeSelectList(resource);
 
             return View(resource);
         }
@@ -159,5 +162,19 @@ namespace DCOClearinghouse.Controllers
         {
             return _context.Resources.Any(e => e.ID == id);
         }
+
+        #region Dropdown list helpers
+
+        private SelectList GetCategorySelectList(Resource resource = null)
+        {
+            return new SelectList(_context.ResourceCategories, "ID", "CategoryName", resource?.CategoryID);
+        }
+
+        private SelectList GetTypeSelectList(Resource resource = null)
+        {
+            return new SelectList(_context.ResourceTypes, "ID", "TypeName", resource?.TypeID);
+        }
+
+        #endregion
     }
 }

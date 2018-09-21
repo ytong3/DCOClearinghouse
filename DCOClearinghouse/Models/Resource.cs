@@ -24,8 +24,9 @@ namespace DCOClearinghouse.Models
         [StringLength(300, MinimumLength = 3)]
         [Required]
         public string Content { get; set; }
-
+        [Display(Name = "Category")]
         public int CategoryID { get; set; }
+        [Display(Name = "Type")]
         public int TypeID { get; set; }
 
         [Display(Name = "Marked as bad link")]
