@@ -1,4 +1,5 @@
-﻿@model DCOClearinghouse.Models.Resource
+﻿@model DCOClearinghouse.ViewModels.ResourceAdminViewModel
+
 
 @{
     ViewData["Title"] = "Create";
@@ -12,29 +13,34 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Subject" class="control-label"></label>
-                <input asp-for="Subject" class="form-control" />
-                <span asp-validation-for="Subject" class="text-danger"></span>
+                <label asp-for="@Model.Resource.Subject" class="control-label"></label>
+                <input asp-for="@Model.Resource.Subject" class="form-control" />
+                <span asp-validation-for="@Model.Resource.Subject" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Content" class="control-label"></label>
-                <input asp-for="Content" class="form-control" />
-                <span asp-validation-for="Content" class="text-danger"></span>
+                <label asp-for="@Model.Resource.Content" class="control-label"></label>
+                <input asp-for="@Model.Resource.Content" class="form-control" />
+                <span asp-validation-for="@Model.Resource.Content" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Link" class="control-label"></label>
-                <input asp-for="Link" class="form-control" />
-                <span asp-validation-for="Link" class="text-danger"></span>
+                <label asp-for="@Model.Resource.Link" class="control-label"></label>
+                <input asp-for="@Model.Resource.Link" class="form-control" />
+                <span asp-validation-for="@Model.Resource.Link" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="TypeID" class="control-label"></label>
-                <select asp-for="TypeID" class="form-control" asp-items="ViewBag.TypeDropdownList">
+            <div id="typeDropdown" class="form-group">
+                <label asp-for="@Model.Resource.TypeID" class="control-label"></label>
+                <select asp-for="@Model.Resource.TypeID" class="form-control" asp-items="ViewBag.TypeDropdownList">
                     <option>Please select one</option>
                 </select>
             </div>
+            <div id="newTypeField" class="form-group">
+                <label asp-for="@Model.NewTypeName" class="control-label">Specify the new type</label>
+                <input asp-for="@Model.NewTypeName" class="form-control" />
+                <span asp-validation-for="@Model.NewTypeName" class="text-danger"></span>
+            </div>
             <div class="form-group">
-                <label asp-for="CategoryID" class="control-label"></label>
-                <select asp-for="CategoryID" class="form-control" asp-items="ViewBag.CategoryDropdownList">
+                <label asp-for="@Model.Resource.CategoryID" class="control-label"></label>
+                <select asp-for="@Model.Resource.CategoryID" class="form-control" asp-items="ViewBag.CategoryDropdownList">
                     <option>Please select one</option>
                 </select>
             </div>
@@ -51,4 +57,21 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#newTypeField").hide();
+            ($("#typeDropdown").change(function() {
+                var selectedText = $(this).find(':selected').text();
+                if (selectedText === "Add new") {
+                    console.log("start to hide.");
+                    $("#newTypeField").show();
+                    // to prevent model validation error
+                    $(this).find(':selected').val(-1);
+
+                } else {
+                    $("#newTypeField").hide();
+                }
+            }));
+        });
+    </script>
 }

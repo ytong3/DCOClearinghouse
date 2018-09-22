@@ -21,22 +21,18 @@ namespace DCOClearinghouse.Data
             {
                 new ResourceType
                 {
-                    ID = 1,
                     TypeName = "Activities"
                 },
                 new ResourceType
                 {
-                    ID = 2,
                     TypeName = "Events"
                 },
                 new ResourceType
                 {
-                    ID = 3,
                     TypeName = "Tutorial"
                 },
                 new ResourceType
                 {
-                    ID = 4,
                     TypeName = "Product"
                 }
             };
@@ -56,37 +52,30 @@ namespace DCOClearinghouse.Data
             {
                 new ResourceCategory
                 {
-                    ID = 1,
                     CategoryName = "Assistive Technology"
                 },
                 new ResourceCategory
                 {
-                    ID = 2,
                     CategoryName = "Education"
                 },
                 new ResourceCategory
                 {
-                    ID = 3,
                     CategoryName = "Employment"
                 },
                 new ResourceCategory
                 {
-                    ID = 4,
                     CategoryName = "Healing"
                 },
                 new ResourceCategory
                 {
-                    ID = 5,
                     CategoryName = "Additional cat 1"
                 },
                 new ResourceCategory
                 {
-                    ID = 6,
                     CategoryName = "Additiona cat 3"
                 },
                 new ResourceCategory
                 {
-                    ID = 7,
                     CategoryName = "Additional cat 4"
                 }
             };
@@ -106,68 +95,68 @@ namespace DCOClearinghouse.Data
                 new Resource
                 {
                     Subject = "Training:Online Workshops",
-                    CategoryID = 1,
+                    CategoryID = categories[0].ID,
                     BadlinkVotes = 0,
                     Content = @"A training workshops",
                     Link = "http://www.d.umn.edu/itss/training/online/",
                     Status = ResourceStatus.New,
                     Type = new ResourceType()
                     {
-                        ID = 1
+                        ID = types[0].ID
                     }
                     
                 },
                 new Resource
                 {
                     Subject = "Assistive Technology Act Programs",
-                    CategoryID = 1,
+                    CategoryID = categories[0].ID,
                     BadlinkVotes = 0,
                     Content = @"Website",
                     Link = "http://www.ataporg.org",
                     Status = ResourceStatus.New,
                     Type = new ResourceType()
                     {
-                    ID = 2
+                    ID = types[2].ID
                 }
                 },
                 new Resource
                 {
                     Subject = "TCM Study Tools - Chinese Style",
-                    CategoryID = 4,
+                    CategoryID = categories[3].ID,
                     BadlinkVotes = 0,
                     Content = @"Website: http://www.tcmstudent.com/theory/Chinese%20Style.html",
                     Link = "http://www.tcmstudent.com/theory/Chinese%20Style.html",
                     Status = ResourceStatus.New,
                     Type = new ResourceType()
                     {
-                        ID = 3
+                        ID = types[2].ID
                     }
                 },
                 new Resource
                 {
                     Subject = "ILR Program on Employment and Disability",
-                    CategoryID = 3,
+                    CategoryID = categories[2].ID,
                     BadlinkVotes = 0,
                     Content = @"Website: http://www.ilr.cornell.edu/ped/",
                     Link = "http://www.ilr.cornell.edu/ped/",
                     Status = ResourceStatus.Approved,
                     Type = new ResourceType()
                     {
-                        ID = 3
+                        ID = types[2].ID
                     }
 
                 },
                 new Resource
                 {
                     Subject = "ClassesUSA.com",
-                    CategoryID = 2,
+                    CategoryID = types[1].ID,
                     BadlinkVotes = 0,
                     Content = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
                     Link = "http://www.classesusa.com/featuredschools/fos/index.cfm",
                     Status = ResourceStatus.Removed,
                     Type = new ResourceType()
                     {
-                        ID = 3
+                        ID = types[2].ID
                     }
                 },
                 new Resource
@@ -180,33 +169,33 @@ namespace DCOClearinghouse.Data
                     Status = ResourceStatus.Removed,
                     Type = new ResourceType()
                     {
-                        ID = 4
+                        ID = types[0].ID
                     }
                 },
                 new Resource
                 {
                     Subject = "Yahoo.com",
-                    CategoryID = 5,
+                    CategoryID = categories[4].ID,
                     BadlinkVotes = 0,
                     Content = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
                     Link = "https://yahoo.com",
                     Status = ResourceStatus.Approved,
                     Type = new ResourceType()
                     {
-                        ID = 2
+                        ID = types[1].ID
                     }
                 },
                 new Resource
                 {
                     Subject = "Bing.com",
-                    CategoryID = 7,
+                    CategoryID = categories[5].ID,
                     BadlinkVotes = 0,
                     Content = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
                     Link = "https://bing.com",
                     Status = ResourceStatus.Approved,
                     Type = new ResourceType()
                     {
-                        ID = 1
+                        ID = types[0].ID
                     }
                 },
             };

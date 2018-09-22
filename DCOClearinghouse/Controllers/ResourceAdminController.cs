@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DCOClearinghouse.Data;
 using DCOClearinghouse.Models;
+using DCOClearinghouse.ViewModels;
 
 namespace DCOClearinghouse.Controllers
 {
@@ -59,18 +61,59 @@ namespace DCOClearinghouse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Subject,Content,CategoryID")] Resource resource)
+        public async Task<IActionResult> Create([Bind("Resource, NewCategoryName, NewTypeName")] ResourceAdminViewModel newResourceVM)
         {
-            resource.CreateDate = DateTime.UtcNow;
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(resource);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+                if (ModelState.IsValid)
+                {
+                    newResourceVM.Resource.CreateDate = DateTime.UtcNow;
+                    var newResource = newResourceVM?.Resource;
+                    if (newResource == null)
+                        throw new Exception("resource creates");
 
-            ViewData["CategoryID"] = GetCategorySelectList();
-            return View(resource);
+                    // TODO: prevent overposting
+
+                    // handle new category
+                    var newCategoryName = newResourceVM.NewCategoryName;
+                    if (!string.IsNullOrEmpty(newCategoryName))
+                    {
+                        var newCategory = new ResourceCategory
+                        {
+                            CategoryName = newCategoryName
+                        };
+                        _context.ResourceCategories.Add(newCategory);
+                        await _context.SaveChangesAsync();
+
+                        newResource.CategoryID = newCategory.ID;
+                    }
+
+                    // handle new type
+                    var newTypeName = newResourceVM.NewTypeName;
+                    if (!string.IsNullOrEmpty(newTypeName))
+                    {
+                        var newType = new ResourceType
+                        {
+                            TypeName = newTypeName
+                        };
+                        _context.ResourceTypes.Add(newType);
+                        await _context.SaveChangesAsync();
+
+                        newResource.TypeID = newType.ID;
+                    }
+
+                    _context.Add(newResource);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to save changes. " +
+                                             "Try again, and if the problem persists " +
+                                             "see your system administrator.");
+            }
+            return View(newResourceVM);
         }
 
         // GET: ResourcesController/Edit/5
@@ -165,14 +208,28 @@ namespace DCOClearinghouse.Controllers
 
         #region Dropdown list helpers
 
-        private SelectList GetCategorySelectList(Resource resource = null)
+        private List<SelectListItem> GetCategorySelectList(Resource currentResource = null)
         {
-            return new SelectList(_context.ResourceCategories, "ID", "CategoryName", resource?.CategoryID);
+            List<SelectListItem> list = new SelectList(_context.ResourceCategories, "ID", "CategoryName", currentResource?.CategoryID).ToList();
+            list.Add(new SelectListItem
+            {
+                Text = "Add new",
+                Value = null
+            });
+            return list;
         }
 
-        private SelectList GetTypeSelectList(Resource resource = null)
+        private List<SelectListItem> GetTypeSelectList(Resource currentResource = null)
         {
-            return new SelectList(_context.ResourceTypes, "ID", "TypeName", resource?.TypeID);
+            List<SelectListItem> list =
+                new SelectList(_context.ResourceTypes, "ID", "TypeName", currentResource?.TypeID).ToList();
+
+            list.Add(new SelectListItem
+            {
+                Text = "Add new",
+                Value = null
+            });
+            return list;
         }
 
         #endregion
