@@ -8,60 +8,85 @@
     <h1>Admin Console</h1>
 </div>
 
-<p>
-    <a asp-action="Create">Create new</a>
-</p>
+Quick tasks
+
+<ul>
+    <li>
+        <a asp-action="Create">Create new resource</a>
+    </li>
+    <li>
+        <a asp-action="">See new resources</a>
+    </li>
+    <li>
+        <a asp-action="">Find resource by category</a>
+    </li>
+</ul>
+
+
+
+<form asp-action="Index" method="get">
+    Find resources
+    <div class="form-actions no-color">
+        <div class="form-group">
+            <label class="control-label">@Html.DisplayNameFor(m => m.CategoryID)</label>
+            <select name="searchCategoryId" class="form-control" asp-items="ViewBag.CategoryDropdownList">
+                <option value="">Any</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">@Html.DisplayNameFor(m=>m.TypeID)</label>
+            <select name="searchTypeId" class="form-control" asp-items="ViewBag.TypeDropdownList">
+                <option value="" selected >Any</option>
+            </select>
+        </div>
+        <input type="submit" value="Search" class="btn btn-default" /> |
+        <a asp-action="Index">Reset filter</a>
+    </div>
+</form>
+
+
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Subject)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BadlinkVotes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreateDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(m=>m.Subject)
+        </th>
+        <th>
+            @Html.DisplayNameFor(m=>m.CategoryID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(m=>m.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(m=>m.CreateDate)
+        </th>
+        <th>
+
+        </th>
+    </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var resource in Model)
+    {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Subject)
+                @Html.DisplayFor(_=>resource.Subject)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Type.TypeName)
+                @Html.DisplayFor(_=>resource.Category.CategoryName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BadlinkVotes)
+                @Html.DisplayFor(_=>resource.Type.TypeName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreateDate)
+                @Html.DisplayFor(_=>resource.CreateDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@resource.ID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@resource.ID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@resource.ID">Delete</a>
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>

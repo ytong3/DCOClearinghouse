@@ -30,19 +30,26 @@
             <div id="typeDropdown" class="form-group">
                 <label asp-for="@Model.Resource.TypeID" class="control-label"></label>
                 <select asp-for="@Model.Resource.TypeID" class="form-control" asp-items="ViewBag.TypeDropdownList">
-                    <option>Please select one</option>
+                    <option value="" selected disabled hidden>Please select one</option>
                 </select>
+                <span asp-validation-for="@Model.Resource.TypeID" class="text-danger"></span>
             </div>
             <div id="newTypeField" class="form-group">
                 <label asp-for="@Model.NewTypeName" class="control-label">Specify the new type</label>
                 <input asp-for="@Model.NewTypeName" class="form-control" />
                 <span asp-validation-for="@Model.NewTypeName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div id="categoryDropdown" class="form-group">
                 <label asp-for="@Model.Resource.CategoryID" class="control-label"></label>
                 <select asp-for="@Model.Resource.CategoryID" class="form-control" asp-items="ViewBag.CategoryDropdownList">
-                    <option>Please select one</option>
+                    <option value="" selected disabled hidden>Please select one</option>
                 </select>
+                <span asp-validation-for="@Model.Resource.CategoryID" class="text-danger"></span>
+            </div>
+            <div id="newCategoryField" class="form-group">
+                <label asp-for="@Model.NewCategoryName" class="control-label">Specify the new category</label>
+                <input asp-for="@Model.NewCategoryName" class="form-control"/>
+                <span asp-validation-for="@Model.NewCategoryName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
@@ -58,20 +65,28 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript">
-        $(document).ready(function () {
-            $("#newTypeField").hide();
-            ($("#typeDropdown").change(function() {
+
+        function ShowWidgetOnlyValueIsSlected(dropdownId, targetText, additionalFieldId) {
+            ($(dropdownId).change(function() {
                 var selectedText = $(this).find(':selected').text();
-                if (selectedText === "Add new") {
+                if (selectedText === targetText) {
                     console.log("start to hide.");
-                    $("#newTypeField").show();
+                    $(additionalFieldId).show();
                     // to prevent model validation error
                     $(this).find(':selected').val(-1);
 
                 } else {
-                    $("#newTypeField").hide();
+                    $(additionalFieldId).hide();
                 }
             }));
+        }
+
+        $(document).ready(function () {
+            $("#newTypeField").hide();
+            $("#newCategoryField").hide();
+
+            ShowWidgetOnlyValueIsSlected("#typeDropdown", "Add new", "#newTypeField");
+            ShowWidgetOnlyValueIsSlected("#categoryDropdown", "Add new", "#newCategoryField");
         });
     </script>
 }

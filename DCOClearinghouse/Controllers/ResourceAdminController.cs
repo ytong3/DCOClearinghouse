@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using DCOClearinghouse.Data;
 using DCOClearinghouse.Models;
 using DCOClearinghouse.ViewModels;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace DCOClearinghouse.Controllers
 {
@@ -22,10 +23,27 @@ namespace DCOClearinghouse.Controllers
         }
 
         // GET: ResourcesController
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? searchCategoryId, int? searchTypeId)
         {
-            var resourceContext = _context.Resources.Include(r => r.Category).Include(r => r.Type);
-            return View(await resourceContext.ToListAsync());
+            ViewData["CategoryDropdownList"] = GetCategorySelectList(searchCategoryId, allowAddNew: false);
+            ViewData["TypeDropdownList"] = GetTypeSelectList(searchTypeId, allowAddNew: false);
+            ViewData["CurrentSearchType"] = searchTypeId;
+            ViewData["CurrentSearchCategory"] = searchCategoryId;
+
+            var resources = _context.Resources.AsNoTracking();
+
+
+            if (searchTypeId != null)
+            {
+                resources = resources.Where(r => r.TypeID == searchTypeId);
+            }
+
+            if (searchCategoryId != null)
+            {
+                resources = resources.Where(r => r.CategoryID == searchCategoryId);
+            }
+
+            return View(await resources.Include(r => r.Category).Include(r => r.Type).ToListAsync());
         }
 
         // GET: ResourcesController/Details/5
@@ -37,6 +55,7 @@ namespace DCOClearinghouse.Controllers
             }
 
             var resource = await _context.Resources
+                .AsNoTracking()
                 .Include(r => r.Category)
                 .Include(r=>r.Type)
                 .FirstOrDefaultAsync(m => m.ID == id);
@@ -113,7 +132,9 @@ namespace DCOClearinghouse.Controllers
                                              "Try again, and if the problem persists " +
                                              "see your system administrator.");
             }
-            return View(newResourceVM);
+            ViewData["CategoryDropdownList"] = GetCategorySelectList();
+            ViewData["TypeDropdownList"] = GetTypeSelectList();
+            return View();
         }
 
         // GET: ResourcesController/Edit/5
@@ -129,8 +150,8 @@ namespace DCOClearinghouse.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryID"] = GetCategorySelectList(resource);
-            ViewData["ResourceTypeList"] = GetTypeSelectList(resource);
+            ViewData["CategoryID"] = GetCategorySelectList(resource.CategoryID);
+            ViewData["ResourceTypeList"] = GetTypeSelectList(resource.TypeID);
 
             return View(resource);
         }
@@ -180,6 +201,7 @@ namespace DCOClearinghouse.Controllers
             }
 
             var resource = await _context.Resources
+                .AsNoTracking()
                 .Include(r => r.Category)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (resource == null)
@@ -208,27 +230,30 @@ namespace DCOClearinghouse.Controllers
 
         #region Dropdown list helpers
 
-        private List<SelectListItem> GetCategorySelectList(Resource currentResource = null)
+        private List<SelectListItem> GetCategorySelectList(int? currentCategoryId = null, bool allowAddNew = true)
         {
-            List<SelectListItem> list = new SelectList(_context.ResourceCategories, "ID", "CategoryName", currentResource?.CategoryID).ToList();
-            list.Add(new SelectListItem
-            {
-                Text = "Add new",
-                Value = null
-            });
+            List<SelectListItem> list = new SelectList(_context.ResourceCategories, "ID", "CategoryName", currentCategoryId).ToList();
+
+            if (allowAddNew)
+                list.Add(new SelectListItem
+                {
+                    Text = "Add new",
+                    Value = null
+                });
             return list;
         }
 
-        private List<SelectListItem> GetTypeSelectList(Resource currentResource = null)
+        private List<SelectListItem> GetTypeSelectList(int? currentTypeId = null, bool allowAddNew = true)
         {
             List<SelectListItem> list =
-                new SelectList(_context.ResourceTypes, "ID", "TypeName", currentResource?.TypeID).ToList();
+                new SelectList(_context.ResourceTypes, "ID", "TypeName", currentTypeId).ToList();
 
-            list.Add(new SelectListItem
-            {
-                Text = "Add new",
-                Value = null
-            });
+            if (allowAddNew)
+                list.Add(new SelectListItem
+                {
+                    Text = "Add new",
+                    Value = null
+                });
             return list;
         }
 
