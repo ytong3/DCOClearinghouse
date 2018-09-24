@@ -26,22 +26,23 @@ Quick tasks
 
 <form asp-action="Index" method="get">
     Find resources
-    <div class="form-actions no-color">
-        <div class="form-group">
+    <div class="row">
+
+        <div class="form-group col-md-4">
             <label class="control-label">@Html.DisplayNameFor(m => m.CategoryID)</label>
             <select name="searchCategoryId" class="form-control" asp-items="ViewBag.CategoryDropdownList">
                 <option value="">Any</option>
             </select>
         </div>
-        <div class="form-group">
-            <label class="control-label">@Html.DisplayNameFor(m=>m.TypeID)</label>
+        <div class="form-group col-md-4">
+            <label class="control-label">@Html.DisplayNameFor(m => m.TypeID)</label>
             <select name="searchTypeId" class="form-control" asp-items="ViewBag.TypeDropdownList">
-                <option value="" selected >Any</option>
+                <option value="" selected>Any</option>
             </select>
         </div>
-        <input type="submit" value="Search" class="btn btn-default" /> |
-        <a asp-action="Index">Reset filter</a>
-    </div>
+     </div>
+     <input type="submit" value="Search" class="btn btn-default"/> |
+     <a asp-action="Index">Reset filter</a>
 </form>
 
 
