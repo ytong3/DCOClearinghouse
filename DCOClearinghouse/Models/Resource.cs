@@ -14,8 +14,9 @@ namespace DCOClearinghouse.Models
     public class Resource
     {
         public int ID { get; set; }
-        [StringLength(60, MinimumLength = 3)]
+        [StringLength(60, MinimumLength = 2)]
         [Required]
+        [Display(Name = "Organization")]
         public string Subject { get; set; }
 
         [DataType(DataType.Url)]

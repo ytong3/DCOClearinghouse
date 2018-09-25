@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DCOClearinghouse.Data;
+using DCOClearinghouse.Models;
+using DCOClearinghouse.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DCOClearinghouse.Data;
-using DCOClearinghouse.Models;
-using DCOClearinghouse.ViewModels;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace DCOClearinghouse.Controllers
 {
@@ -23,7 +22,12 @@ namespace DCOClearinghouse.Controllers
         }
 
         // GET: ResourcesController
-        public async Task<IActionResult> Index(int? searchCategoryId, int? searchTypeId, ResourceStatus? searchStatus)
+        public async Task<IActionResult> Index(
+            int? searchCategoryId, 
+            int? searchTypeId, 
+            ResourceStatus? searchStatus, 
+            string sortOrder,
+            int? page)
         {
             ViewData["CategoryDropdownList"] = GetCategorySelectList(searchCategoryId, allowAddNew: false);
             ViewData["TypeDropdownList"] = GetTypeSelectList(searchTypeId, allowAddNew: false);
@@ -31,9 +35,12 @@ namespace DCOClearinghouse.Controllers
             ViewData["CurrentSearchType"] = searchTypeId;
             ViewData["CurrentSearchCategory"] = searchCategoryId;
             ViewData["CurrentStatus"] = searchStatus;
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["TitleSortParam"] = string.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewData["DateSortParam"] = string.Equals(sortOrder, "Date") ? "date_desc" : "Date";
+
 
             var resources = _context.Resources.AsNoTracking();
-
 
             if (searchTypeId != null)
             {
@@ -51,7 +58,28 @@ namespace DCOClearinghouse.Controllers
                 resources = resources.Where(r=> r.Status == searchStatus);
             }
 
-            return View(await resources.Include(r => r.Category).Include(r => r.Type).ToListAsync());
+            switch (sortOrder)
+            {
+                case "title_desc":
+                    resources = resources.OrderByDescending(r => r.Subject);
+                    break;
+                case "Date":
+                    resources = resources.OrderBy(r => r.CreateDate);
+                    break;
+                case "date_desc":
+                    resources = resources.OrderByDescending(r => r.CreateDate);
+                    break;
+                default:
+                    resources = resources.OrderBy(r => r.Subject);
+                    break;
+            }
+
+            // load related data
+            resources = resources.Include(r => r.Category).Include(r => r.Type);
+
+            int pageSize = 20;
+            //return View(await resources.Include(r => r.Category).Include(r => r.Type).ToListAsync());
+            return View(await PaginatedList<Resource>.CreateAsync(resources, page ?? 1, pageSize));
         }
 
         // GET: ResourcesController/Details/5

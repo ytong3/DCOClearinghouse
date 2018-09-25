@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DCOClearinghouse.Models.Resource>
+﻿@model PaginatedList<DCOClearinghouse.Models.Resource>
 
 @{
     ViewData["Title"] = "Admin Console";
@@ -15,32 +15,30 @@
         <a asp-action="Create">Create new resource</a>
     </li>
     <li>
-        <a asp-action="">See new resources</a>
+        <a asp-action="">Review newly suggested resource</a>
     </li>
     <li>
         <a asp-action="">Find resource by category</a>
     </li>
 </ul>
 
-
-
 <form asp-action="Index" method="get">
     <h3>Find resources</h3>
     <div class="row">
         <div class="form-group col-md-4">
-            <label class="control-label">@Html.DisplayNameFor(m => m.CategoryID)</label>
+            <label class="control-label">Title</label>
             <select name="searchCategoryId" class="form-control" asp-items="ViewBag.CategoryDropdownList">
                 <option value="">Any</option>
             </select>
         </div>
         <div class="form-group col-md-4">
-            <label class="control-label">@Html.DisplayNameFor(m => m.TypeID)</label>
+            <label class="control-label">Type</label>
             <select name="searchTypeId" class="form-control" asp-items="ViewBag.TypeDropdownList">
                 <option value="" selected>Any</option>
             </select>
         </div>
         <div class="form-group col-md-4">
-            <label class="control-label">@Html.DisplayNameFor(m=>m.Status)</label>
+            <label class="control-label">Status</label>
                 <select name="searchStatus" asp-items="ViewBag.StatusDropdownList" class="form-control">
                     <option value="" selected>Any</option>
                 </select>
@@ -55,19 +53,30 @@
     <thead>
     <tr>
         <th>
-            @Html.DisplayNameFor(m=>m.Subject)
+            <a asp-action="Index"
+               asp-route-sortOrder="@ViewData["TitleSortParam"]"
+               asp-route-searchCategoryId="@ViewData["CurrentSearchCategory"]"
+               asp-route-searchTypeId="@ViewData["CurrentSearchType"]"
+               asp-route-searchStatus="@ViewData["CurrentStatus"]">
+                Title
+            </a>
         </th>
         <th>
-            @Html.DisplayNameFor(m=>m.CategoryID)
+            Category
         </th>
         <th>
-            @Html.DisplayNameFor(m=>m.Type)
+            Type
         </th>
         <th>
-            @Html.DisplayNameFor(m=>m.CreateDate)
+            <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]"               
+               asp-route-searchCategoryId="@ViewData["CurrentSearchCategory"]"
+               asp-route-searchTypeId="@ViewData["CurrentSearchType"]"
+               asp-route-searchStatus="@ViewData["CurrentStatus"]">
+                Date
+            </a>
         </th>
         <th>
-            @Html.DisplayNameFor(m=>m.Status)
+            Status
         </th>
         <th>
 
@@ -102,3 +111,28 @@
     }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-page="@(Model.PageIndex-1)"
+   asp-route-searchTypeId="@ViewData["CurrentSearchType"]"
+   asp-route-searchStatus="@ViewData["CurrentStatus"]"
+   class="btn btn-default @prevDisabled"
+>
+    Preivous
+</a>
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-page="@(Model.PageIndex+1)"
+   asp-route-searchTypeId="@ViewData["CurrentSearchType"]"
+   asp-route-searchStatus="@ViewData["CurrentStatus"]"
+   class="btn btn-default @nextDisabled"
+>
+    Preivous
+</a>
