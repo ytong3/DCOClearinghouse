@@ -23,12 +23,14 @@ namespace DCOClearinghouse.Controllers
         }
 
         // GET: ResourcesController
-        public async Task<IActionResult> Index(int? searchCategoryId, int? searchTypeId)
+        public async Task<IActionResult> Index(int? searchCategoryId, int? searchTypeId, ResourceStatus? searchStatus)
         {
             ViewData["CategoryDropdownList"] = GetCategorySelectList(searchCategoryId, allowAddNew: false);
             ViewData["TypeDropdownList"] = GetTypeSelectList(searchTypeId, allowAddNew: false);
+            ViewData["StatusDropdownList"] = GetStatusSelectList(searchStatus);
             ViewData["CurrentSearchType"] = searchTypeId;
             ViewData["CurrentSearchCategory"] = searchCategoryId;
+            ViewData["CurrentStatus"] = searchStatus;
 
             var resources = _context.Resources.AsNoTracking();
 
@@ -41,6 +43,12 @@ namespace DCOClearinghouse.Controllers
             if (searchCategoryId != null)
             {
                 resources = resources.Where(r => r.CategoryID == searchCategoryId);
+            }
+
+            if (searchStatus != null)
+            {
+                searchStatus = (ResourceStatus)searchStatus;
+                resources = resources.Where(r=> r.Status == searchStatus);
             }
 
             return View(await resources.Include(r => r.Category).Include(r => r.Type).ToListAsync());
@@ -255,6 +263,12 @@ namespace DCOClearinghouse.Controllers
                     Value = null
                 });
             return list;
+        }
+
+        private SelectList GetStatusSelectList(ResourceStatus? status){
+            var allStatuses = from ResourceStatus s in Enum.GetValues(typeof(ResourceStatus))
+                select new { ID = s, Name = s.ToString()};
+            return new SelectList(allStatuses, "ID", "Name", status);
         }
 
         #endregion

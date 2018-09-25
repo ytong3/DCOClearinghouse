@@ -28,7 +28,6 @@ namespace DCOClearinghouse.Models
         [Display(Name = "Category")]
         [Required(ErrorMessage = "{0} is required.")]
         public int? CategoryID { get; set; }
-
         [Display(Name = "Type")]
         [Required(ErrorMessage = "{0} is required.")]
         public int? TypeID { get; set; }
