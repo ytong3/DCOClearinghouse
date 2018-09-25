@@ -25,10 +25,11 @@ namespace DCOClearinghouse.Models
         public string Line2 { get; set; }
         public string City { get; set; }
 
-        [Display(Name = "State")]
+        [Display(Name = "State/Province")]
         [RegularExpression("[A-Z]{2}")]
         public string State { get; set; }
         [DataType(DataType.PostalCode)]
         public string Zipcode { get; set; }
+        public string Country { get; set; }
     }
 }

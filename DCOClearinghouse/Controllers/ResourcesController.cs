@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using DCOClearinghouse.ViewModels;
 
 namespace DCOClearinghouse.Controllers
 {
@@ -85,18 +86,29 @@ namespace DCOClearinghouse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Subject,Description,CategoryID,TypeID,IsContactInfoPublic,Contact")] Resource resource)
+        public async Task<IActionResult> Create([Bind("Resource, ContactProvided")] ResourceViewModel resourceVM)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    var resource = resourceVM.Resource;
                     resource.CreateDate = DateTime.Now;
                     resource.Status = ResourceStatus.New;
+                    if (resourceVM.ContactProvided)
+                    {
+                        // perform some validation ...
+                    }
+                    else
+                    {
+                        resource.Contact = null;
+                    }
 
                     _context.Add(resource);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+
+                    //TODO: show a confirmation page upon successful submission.
+                    return RedirectToAction(nameof(CreatedConfirmed));
                 }
             }
             catch (DbUpdateException)
@@ -107,7 +119,12 @@ namespace DCOClearinghouse.Controllers
             }
             ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "CategoryName");
             ViewData["TypeID"] = new SelectList(_context.ResourceTypes, "ID", "TypeName");
-            return View(resource);
+            return View();
+        }
+
+        public async Task<IActionResult> CreatedConfirmed()
+        {
+            return View();
         }
 
         // GET: Resources/Edit/5

@@ -17,7 +17,7 @@ namespace DCOClearinghouse.Models
         [Display(Name = "Title")]
         public string Subject { get; set; }
 
-        [DataType(DataType.Url)]
+        [UIHint("NewWindowUrl"), DataType(DataType.Url)]
         public string Link { get; set; }
 
         [StringLength(300, MinimumLength = 3)]
@@ -25,10 +25,8 @@ namespace DCOClearinghouse.Models
         public string Description { get; set; }
 
         [Display(Name = "Category")]
-        [Required(ErrorMessage = "{0} is required.")]
         public int? CategoryID { get; set; }
         [Display(Name = "Type")]
-        [Required(ErrorMessage = "{0} is required.")]
         public int? TypeID { get; set; }
 
         [Display(Name = "Marked as bad link")]
