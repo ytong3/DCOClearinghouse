@@ -1,4 +1,5 @@
-﻿using DCOClearinghouse.Models;
+﻿using System.Security.Policy;
+using DCOClearinghouse.Models;
 using Microsoft.EntityFrameworkCore.Internal;
 
 namespace DCOClearinghouse.Data
@@ -103,8 +104,24 @@ namespace DCOClearinghouse.Data
                     Type = new ResourceType()
                     {
                         ID = types[0].ID
+                    },
+                    IsContactInfoPublic = true,
+                    Contact = new ContactInfo
+                    {
+                        FirstName = "Joe",
+                        LastName = "Smith",
+                        Email = "j.smith@aol.com",
+                        Organization = "Acme Inc.",
+                        PhoneNumber = "8483932933",
+                        Address = new Address
+                        {
+                            Line1 = "112 Main St",
+                            Line2 = "Suite 2",
+                            City = "Someville",
+                            State = "CA",
+                            Zipcode = "32345"
+                        }
                     }
-                    
                 },
                 new Resource
                 {
@@ -117,7 +134,24 @@ namespace DCOClearinghouse.Data
                     Type = new ResourceType()
                     {
                     ID = types[2].ID
-                }
+                    },
+                    IsContactInfoPublic = true,
+                    Contact = new ContactInfo
+                    {
+                        FirstName = "Joe",
+                        LastName = "Smith",
+                        Email = "j.smith@aol.com",
+                        Organization = "Acme Inc.",
+                        PhoneNumber = "8483932933",
+                        Address = new Address
+                        {
+                            Line1 = "112 Main St",
+                            Line2 = "Suite 2",
+                            City = "Someville",
+                            State = "CA",
+                            Zipcode = "32345"
+                        }
+                    }
                 },
                 new Resource
                 {
@@ -143,8 +177,24 @@ namespace DCOClearinghouse.Data
                     Type = new ResourceType()
                     {
                         ID = types[2].ID
+                    },
+                    IsContactInfoPublic = false,
+                    Contact = new ContactInfo
+                    {
+                        FirstName = "Helen",
+                        LastName = "Lou",
+                        Email = "h.lou@yahoo.com",
+                        Organization = "Acme Inc.",
+                        PhoneNumber = "8483932933",
+                        Address = new Address
+                        {
+                            Line1 = "112 Main St",
+                            Line2 = "Suite 2",
+                            City = "Someville",
+                            State = "CA",
+                            Zipcode = "32345"
+                        }
                     }
-
                 },
                 new Resource
                 {

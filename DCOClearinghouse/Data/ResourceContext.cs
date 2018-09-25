@@ -1,5 +1,6 @@
 ﻿using DCOClearinghouse.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace DCOClearinghouse.Data
 {
@@ -15,6 +16,12 @@ namespace DCOClearinghouse.Data
         {
             modelBuilder.Entity<Resource>().ToTable("Resource")
                 .Property(r => r.Status).HasDefaultValue(ResourceStatus.New);
+            modelBuilder.Entity<Resource>()
+                .Property(r => r.Contact)
+                .HasConversion(
+                    c => JsonConvert.SerializeObject(c),
+                    c => JsonConvert.DeserializeObject<ContactInfo>(c));
+                
             modelBuilder.Entity<ResourceCategory>().ToTable("ResourceCategory");
             modelBuilder.Entity<ResourceType>().ToTable("ResourceType");
         }

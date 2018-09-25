@@ -1,7 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DCOClearinghouse.Models
 {
@@ -42,6 +40,9 @@ namespace DCOClearinghouse.Models
 
         [EnumDataType(typeof(ResourceStatus))]
         public ResourceStatus Status { get; set; }
+
+        public ContactInfo Contact { get; set; }
+        public Boolean IsContactInfoPublic { get; set; }
 
         #region Navigation properties
 
