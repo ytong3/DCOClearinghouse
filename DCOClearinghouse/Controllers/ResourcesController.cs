@@ -85,7 +85,7 @@ namespace DCOClearinghouse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Subject,Content,CategoryID,BadlinkVotes,CreateDate,Status")] Resource resource)
+        public async Task<IActionResult> Create([Bind("ID,Subject,Description,CategoryID,BadlinkVotes,CreateDate,Status")] Resource resource)
         {
             if (ModelState.IsValid)
             {
@@ -119,7 +119,7 @@ namespace DCOClearinghouse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Subject,Content,CategoryID,BadlinkVotes,CreateDate,Status")] Resource resource)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Subject,Description,CategoryID,BadlinkVotes,CreateDate,Status")] Resource resource)
         {
             if (id != resource.ID)
             {

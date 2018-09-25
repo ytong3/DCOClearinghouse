@@ -1,4 +1,5 @@
-﻿using System.Security.Policy;
+﻿using System;
+using System.Security.Policy;
 using DCOClearinghouse.Models;
 using Microsoft.EntityFrameworkCore.Internal;
 
@@ -98,9 +99,10 @@ namespace DCOClearinghouse.Data
                     Subject = "Training:Online Workshops",
                     CategoryID = categories[0].ID,
                     BadlinkVotes = 0,
-                    Content = @"A training workshops",
+                    Description = @"A training workshops",
                     Link = "http://www.d.umn.edu/itss/training/online/",
                     Status = ResourceStatus.New,
+                    CreateDate = DateTime.Today,
                     Type = new ResourceType()
                     {
                         ID = types[0].ID
@@ -128,9 +130,10 @@ namespace DCOClearinghouse.Data
                     Subject = "Assistive Technology Act Programs",
                     CategoryID = categories[0].ID,
                     BadlinkVotes = 0,
-                    Content = @"Website",
+                    Description = @"Website",
                     Link = "http://www.ataporg.org",
                     Status = ResourceStatus.New,
+                    CreateDate = new DateTime(2015, 8, 3),
                     Type = new ResourceType()
                     {
                     ID = types[2].ID
@@ -158,9 +161,10 @@ namespace DCOClearinghouse.Data
                     Subject = "TCM Study Tools - Chinese Style",
                     CategoryID = categories[3].ID,
                     BadlinkVotes = 0,
-                    Content = @"Website: http://www.tcmstudent.com/theory/Chinese%20Style.html",
+                    Description = @"Website: http://www.tcmstudent.com/theory/Chinese%20Style.html",
                     Link = "http://www.tcmstudent.com/theory/Chinese%20Style.html",
                     Status = ResourceStatus.New,
+                    CreateDate = new DateTime(2017, 8, 3),
                     Type = new ResourceType()
                     {
                         ID = types[2].ID
@@ -171,9 +175,10 @@ namespace DCOClearinghouse.Data
                     Subject = "ILR Program on Employment and Disability",
                     CategoryID = categories[2].ID,
                     BadlinkVotes = 0,
-                    Content = @"Website: http://www.ilr.cornell.edu/ped/",
+                    Description = @"Website: http://www.ilr.cornell.edu/ped/",
                     Link = "http://www.ilr.cornell.edu/ped/",
                     Status = ResourceStatus.Approved,
+                    CreateDate = new DateTime(2018, 8, 3),
                     Type = new ResourceType()
                     {
                         ID = types[2].ID
@@ -201,9 +206,10 @@ namespace DCOClearinghouse.Data
                     Subject = "ClassesUSA.com",
                     CategoryID = types[1].ID,
                     BadlinkVotes = 0,
-                    Content = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
+                    Description = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
                     Link = "http://www.classesusa.com/featuredschools/fos/index.cfm",
                     Status = ResourceStatus.Removed,
+                    CreateDate = new DateTime(2017, 9, 3),
                     Type = new ResourceType()
                     {
                         ID = types[2].ID
@@ -214,9 +220,10 @@ namespace DCOClearinghouse.Data
                     Subject = "Google.com",
                     CategoryID = 4,
                     BadlinkVotes = 0,
-                    Content = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
+                    Description = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
                     Link = "http://www.classesusa.com/featuredschools/fos/index.cfm",
                     Status = ResourceStatus.Removed,
+                    CreateDate = new DateTime(2017, 10, 3),
                     Type = new ResourceType()
                     {
                         ID = types[0].ID
@@ -227,9 +234,10 @@ namespace DCOClearinghouse.Data
                     Subject = "Yahoo.com",
                     CategoryID = categories[4].ID,
                     BadlinkVotes = 0,
-                    Content = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
+                    Description = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
                     Link = "https://yahoo.com",
                     Status = ResourceStatus.Approved,
+                    CreateDate = new DateTime(2018, 8, 3),
                     Type = new ResourceType()
                     {
                         ID = types[1].ID
@@ -240,9 +248,10 @@ namespace DCOClearinghouse.Data
                     Subject = "Bing.com",
                     CategoryID = categories[5].ID,
                     BadlinkVotes = 0,
-                    Content = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
+                    Description = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
                     Link = "https://bing.com",
                     Status = ResourceStatus.Approved,
+                    CreateDate = new DateTime(2011, 7, 3),
                     Type = new ResourceType()
                     {
                         ID = types[0].ID

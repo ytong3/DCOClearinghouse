@@ -197,7 +197,7 @@ namespace DCOClearinghouse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Subject,Content,TypeID,CategoryID,BadlinkVotes,CreateDate,Status")] Resource resource)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Subject,Description,TypeID,CategoryID,BadlinkVotes,CreateDate,Status")] Resource resource)
         {
             //TODO: implement the anti-overposting mechanism in the Contoso University example.
             if (id != resource.ID)

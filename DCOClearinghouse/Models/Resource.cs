@@ -22,7 +22,7 @@ namespace DCOClearinghouse.Models
 
         [StringLength(300, MinimumLength = 3)]
         [Required]
-        public string Content { get; set; }
+        public string Description { get; set; }
 
         [Display(Name = "Category")]
         [Required(ErrorMessage = "{0} is required.")]
