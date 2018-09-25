@@ -9,7 +9,7 @@
 <h4>Resource</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -23,11 +23,87 @@
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CategoryID" class="control-label">Category</label>
-                <select asp-for="CategoryID" class ="form-control" asp-items="ViewBag.CategoryID"></select>
+                <label asp-for="Link" class="control-label"></label>
+                <input asp-for="Link" class="form-control" />
+                <span asp-validation-for="Link" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <label asp-for="CategoryID" class="control-label">Category</label>
+                <select asp-for="CategoryID" class="form-control" asp-items="ViewBag.CategoryID">
+                    <option value="" slected hidden>Please select</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" class="form-check-input" id="contactInfoProvidedCheck">
+                <label class="form-check-label" for="exampleCheck1">I also would like to provide my contact information.</label>
+            </div>
+            <div id="contact-form" class="form-group" hidden>
+                <div class="form-group">                
+                    <input type="checkbox" class="form-check-input" id="shareContactWithPublicCheck">
+                    <label class="form-check-label" asp-for="IsContactInfoPublic">Share my contact publicly.</label>
+                    <small id="emailHelp" class="form-text text-muted">If unchecked, only admin can see your contact.</small>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label asp-for="Contact.FirstName" class="control-label"></label>
+                        <input asp-for="Contact.FirstName" class="form-control" />
+                        <span asp-validation-for="Contact.FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Contact.LastName" class="control-label"></label>
+                        <input asp-for="Contact.LastName" class="form-control" />
+                        <span asp-validation-for="Contact.LastName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 form-group">
+                        <label asp-for="Contact.PhoneNumber" class="control-label"></label>
+                        <input asp-for="Contact.PhoneNumber" class="form-control" />
+                        <span asp-validation-for="Contact.PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 form-group">
+                        <label asp-for="Contact.Email" class="control-label"></label>
+                        <input asp-for="Contact.Email" class="form-control" />
+                        <span asp-validation-for="Contact.Email" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <label asp-for="Contact.Address.Line1" class="control-label"></label>
+                        <input asp-for="Contact.Address.Line1" class="form-control" />
+                        <span asp-validation-for="Contact.Address.Line1" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <label asp-for="Contact.Address.Line2" class="control-label"></label>
+                        <input asp-for="Contact.Address.Line2" class="form-control" />
+                        <span asp-validation-for="Contact.Address.Line2" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label asp-for="Contact.Address.City" class="control-label"></label>
+                        <input asp-for="Contact.Address.City" class="form-control" />
+                        <span asp-validation-for="Contact.Address.City" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Contact.Address.State" class="control-label"></label>
+                        <input asp-for="Contact.Address.State" class="form-control" />
+                        <span asp-validation-for="Contact.Address.State" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Contact.Address.Zipcode" class="control-label"></label>
+                        <input asp-for="Contact.Address.Zipcode" class="form-control" />
+                        <span asp-validation-for="Contact.Address.Zipcode" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -39,4 +115,17 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script type="text/javascript">
+        $("document").ready(function() {
+            $("#contactInfoProvidedCheck").change(function() {
+                if (document.getElementById('contactInfoProvidedCheck').checked) {
+                    $("#contact-form").show();
+                } else {
+                    $("#contact-form").hide();
+                }
+            })
+        })
+
+    </script>
 }

@@ -14,7 +14,7 @@ namespace DCOClearinghouse.Models
         public int ID { get; set; }
         [StringLength(60, MinimumLength = 2)]
         [Required]
-        [Display(Name = "Organization")]
+        [Display(Name = "Title")]
         public string Subject { get; set; }
 
         [DataType(DataType.Url)]

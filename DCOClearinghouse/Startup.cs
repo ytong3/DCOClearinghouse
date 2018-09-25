@@ -33,10 +33,10 @@ namespace DCOClearinghouse
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            // services.AddDbContext<ResourceContext>(options =>
-            //     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<ResourceContext>(options =>
-                options.UseInMemoryDatabase(databaseName: "development-db"));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDbContext<ResourceContext>(options =>
+            //    options.UseInMemoryDatabase(databaseName: "development-db"));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
