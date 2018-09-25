@@ -34,10 +34,16 @@
                 </select>
             </div>
             <div class="form-group">
-                <input type="checkbox" class="form-check-input" id="contactInfoProvidedCheck">
-                <label class="form-check-label" for="exampleCheck1">I also would like to provide my contact information.</label>
+                <label asp-for="TypeID" class="control-label"></label>
+                <select asp-for="TypeID" class="form-control" asp-items="ViewBag.TypeID">
+                    <option value="" slected hidden>Please select</option>
+                </select>
             </div>
-            <div id="contact-form" class="form-group" hidden>
+            <div class="form-group">
+                <input type="checkbox" class="form-check-input" id="contactInfoProvidedCheck">
+                <label class="form-check-label">I also would like to provide my contact information.</label>
+            </div>
+            <div id="contact-form" class="form-group" hidden disabled>
                 <div class="form-group">                
                     <input type="checkbox" class="form-check-input" id="shareContactWithPublicCheck">
                     <label class="form-check-label" asp-for="IsContactInfoPublic">Share my contact publicly.</label>
@@ -121,8 +127,10 @@
             $("#contactInfoProvidedCheck").change(function() {
                 if (document.getElementById('contactInfoProvidedCheck').checked) {
                     $("#contact-form").show();
+                    $("#contact-form").enable();
                 } else {
                     $("#contact-form").hide();
+                    $("#contact-form").enable(false);
                 }
             })
         })

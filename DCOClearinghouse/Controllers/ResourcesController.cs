@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DCOClearinghouse.Data;
+using DCOClearinghouse.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DCOClearinghouse.Data;
-using DCOClearinghouse.Models;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DCOClearinghouse.Controllers
 {
@@ -77,6 +76,7 @@ namespace DCOClearinghouse.Controllers
         public IActionResult Create()
         {
             ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "CategoryName");
+            ViewData["TypeID"] = new SelectList(_context.ResourceTypes, "ID", "TypeName");
             return View();
         }
 
@@ -85,15 +85,28 @@ namespace DCOClearinghouse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Subject,Description,CategoryID,BadlinkVotes,CreateDate,Status")] Resource resource)
+        public async Task<IActionResult> Create([Bind("Subject,Description,CategoryID,TypeID,IsContactInfoPublic,Contact")] Resource resource)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(resource);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    resource.CreateDate = DateTime.Now;
+                    resource.Status = ResourceStatus.New;
+
+                    _context.Add(resource);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "ID", resource.CategoryID);
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to save changes. " +
+                                             "Try again, and if the problem persists " +
+                                             "see your system administrator.");
+            }
+            ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "CategoryName");
+            ViewData["TypeID"] = new SelectList(_context.ResourceTypes, "ID", "TypeName");
             return View(resource);
         }
 
