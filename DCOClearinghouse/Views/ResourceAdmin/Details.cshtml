@@ -6,98 +6,117 @@
 
 <h2>Details</h2>
 
-<div>
-    <h4>Resource</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Subject)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Subject)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Link)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Link)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.BadlinkVotes)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.BadlinkVotes)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.CreateDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CreateDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Category.CategoryName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Type)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Type.TypeName)
-        </dd>
-    </dl>
+<div class="row">
+    <div class="col-md-6">
+        <h4>Resource</h4>
+        <hr/>
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Subject)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Subject)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Link)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Link)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.BadlinkVotes)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.BadlinkVotes)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.CreateDate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.CreateDate)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Category)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Category.CategoryName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Type)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Type.TypeName)
+            </dd>
+        </dl>
+    </div>
     
-    Address:
-    <dl class="dl-horizontal">
-        <dt>
-            Contact shown to public
-        </dt>
-        <dd>
-            @(Model.IsContactInfoPublic?"Yes":"No")
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Contact.FirstName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Contact.FirstName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Contact.LastName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Contact.LastName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Contact.Organization)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Contact.Organization)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Contact.Address)
-        </dt>
-        <dd>
-            @{
-                var address = Model.Contact?.Address;
-                var addressString = address == null ? "Not provided" : $"{address.Line1}<br/>{address.Line2}<br/>{address.City}, {address.State} {address.Zipcode}";
+    <div class="col-md-6">
 
+        <h4>Contact Information</h4>
+        <hr/>
+        <dl class="dl-horizontal">
+            @if (Model.Contact != null)
+            {
+                <dt>
+                    Publicly sharable
+                </dt>
+                <dd>
+                    @(Model.Contact.IsContactInfoPublic ? "Yes" : "No")
+                </dd>
+                <dt>
+                    Name
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Contact.FirstName) @Html.DisplayFor(model => model.Contact.LastName)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Contact.Organization)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Contact.Organization)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Contact.PhoneNumber)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Contact.PhoneNumber)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Contact.Email)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Contact.Email)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Contact.Address)
+                </dt>
+                <dd>
+                    @{
+                        var address = Model.Contact?.Address;
+                        var addressString = address == null ? "Not provided" : $"{address.Line1}<br/>{address.Line2}<br/>{address.City}, {address.State} {address.Zipcode}";
+
+                    }
+                    @Html.Raw(addressString)
+                </dd>
             }
-            @Html.Raw(addressString)
-        </dd>
-    </dl>
+            else
+            {
+                @Html.Raw("No contact information is provided.")
+            }
+        </dl>
+    </div>
 
 </div>
 <div>

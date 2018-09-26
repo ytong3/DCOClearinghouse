@@ -107,9 +107,9 @@ namespace DCOClearinghouse.Data
                     {
                         ID = types[0].ID
                     },
-                    IsContactInfoPublic = true,
                     Contact = new ContactInfo
                     {
+                        IsContactInfoPublic = true,
                         FirstName = "Joe",
                         LastName = "Smith",
                         Email = "j.smith@aol.com",
@@ -138,9 +138,9 @@ namespace DCOClearinghouse.Data
                     {
                     ID = types[2].ID
                     },
-                    IsContactInfoPublic = true,
                     Contact = new ContactInfo
                     {
+                        IsContactInfoPublic = true,
                         FirstName = "Joe",
                         LastName = "Smith",
                         Email = "j.smith@aol.com",
@@ -183,9 +183,10 @@ namespace DCOClearinghouse.Data
                     {
                         ID = types[2].ID
                     },
-                    IsContactInfoPublic = false,
+                    
                     Contact = new ContactInfo
                     {
+                        IsContactInfoPublic = false,
                         FirstName = "Helen",
                         LastName = "Lou",
                         Email = "h.lou@yahoo.com",

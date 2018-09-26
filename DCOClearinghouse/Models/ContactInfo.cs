@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DCOClearinghouse.Models
 {
     public class ContactInfo
     {
+        public bool IsContactInfoPublic { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Organization { get; set; }

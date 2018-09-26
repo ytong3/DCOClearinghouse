@@ -40,7 +40,7 @@ namespace DCOClearinghouse.Models
         public ResourceStatus Status { get; set; }
 
         public ContactInfo Contact { get; set; }
-        public Boolean IsContactInfoPublic { get; set; }
+        
 
         #region Navigation properties
 

@@ -42,13 +42,13 @@
                 </select>
             </div>
             <div class="form-group">
-                <input type="checkbox" class="form-check-input" id="contactInfoProvidedCheck">
-                <label class="form-check-label" asp-for="ContactProvided">I also would like to provide my contact information.</label>
+                <input type="checkbox"  asp-for="ContactProvided" class="form-check-input" id="contactInfoProvidedCheck">
+                <label class="form-check-label">I also would like to provide my contact information.</label>
             </div>
             <div id="contact-form" class="form-group" hidden disabled>
                 <div class="form-group">                
-                    <input type="checkbox" class="form-check-input" id="shareContactWithPublicCheck">
-                    <label class="form-check-label" asp-for="Resource.IsContactInfoPublic">Share my contact publicly.</label>
+                    <input type="checkbox" asp-for="Resource.Contact.IsContactInfoPublic" class="form-check-input" id="shareContactWithPublicCheck">
+                    <label class="form-check-label" >Share my contact publicly.</label>
                     <small id="emailHelp" class="form-text text-muted">If unchecked, only admin can see your contact.</small>
                 </div>
                 <div class="row">
@@ -61,6 +61,13 @@
                         <label asp-for="Resource.Contact.LastName" class="control-label"></label>
                         <input asp-for="Resource.Contact.LastName" class="form-control" />
                         <span asp-validation-for="Resource.Contact.LastName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 form-group">
+                        <label asp-for="Resource.Contact.Organization" class="control-label"></label>
+                        <input asp-for="Resource.Contact.Organization" class="form-control" />
+                        <span asp-validation-for="Resource.Contact.Organization" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row">
