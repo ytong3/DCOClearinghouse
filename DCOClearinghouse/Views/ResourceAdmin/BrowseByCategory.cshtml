@@ -1,0 +1,16 @@
+﻿@model System.Collections.Generic.List<DCOClearinghouse.Models.ResourceCategory>
+
+@{
+    ViewData["Title"] = "Browse by Categories";
+}
+
+<h3>All categories</h3>
+
+@{
+    var rootNodes = from category in Model where category.Depth == 0 select category;
+}
+
+@foreach (var node in rootNodes)
+{
+    await Html.RenderPartialAsync("_TreeNodePartial", node);
+}

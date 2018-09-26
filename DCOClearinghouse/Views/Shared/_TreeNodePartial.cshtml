@@ -1,0 +1,10 @@
+﻿@model ResourceCategory
+
+<div style="padding-left: 50px">
+    <strong>@Model.CategoryName</strong>
+    @foreach (var subcategory in Model.ChildrenCategories)
+    {
+        await Html.RenderPartialAsync("_TreeNodePartial", subcategory);
+    }
+</div>
+

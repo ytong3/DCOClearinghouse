@@ -271,6 +271,12 @@ namespace DCOClearinghouse.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> BrowseByCategory()
+        {
+            var allCategories = await _context.ResourceCategories.AsNoTracking().Include(c=>c.ChildrenCategories).ToListAsync();
+            return View(allCategories);
+        }
+
         private bool ResourceExists(int id)
         {
             return _context.Resources.Any(e => e.ID == id);
