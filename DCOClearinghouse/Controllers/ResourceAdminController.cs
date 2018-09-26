@@ -105,7 +105,8 @@ namespace DCOClearinghouse.Controllers
         // GET: ResourcesController/Create
         public IActionResult Create()
         {
-            ViewData["CategoryDropdownList"] = GetCategorySelectListDFSOrdered();
+            ViewData["CategoryDropdownListAddAllowed"] = GetCategorySelectListDFSOrdered();
+            ViewData["CategoryDropdownList"] = GetCategorySelectListDFSOrdered(currentCategoryId: null, allowAddNew: false);
             ViewData["TypeDropdownList"] = GetTypeSelectList();
             return View();
         }
@@ -135,7 +136,9 @@ namespace DCOClearinghouse.Controllers
                         if (newCategory.ParentCategoryID != null)
                         {
                             var parentCategory = await
-                                _context.ResourceCategories.SingleOrDefaultAsync(c=>c.ID == newCategory.ParentCategoryID);
+                                _context.ResourceCategories
+                                    .AsNoTracking()
+                                    .SingleOrDefaultAsync(c=>c.ID == newCategory.ParentCategoryID);
 
                             if (parentCategory == null)
                                 throw new Exception("Category doesn't exist.");
@@ -176,7 +179,8 @@ namespace DCOClearinghouse.Controllers
                                              "Try again, and if the problem persists " +
                                              "see your system administrator.");
             }
-            ViewData["CategoryDropdownList"] = GetCategorySelectListDFSOrdered();
+            ViewData["CategoryDropdownListAddAllowed"] = GetCategorySelectListDFSOrdered();
+            ViewData["CategoryDropdownList"] = GetCategorySelectListDFSOrdered(currentCategoryId:null, allowAddNew:false);
             ViewData["TypeDropdownList"] = GetTypeSelectList();
             return View();
         }
