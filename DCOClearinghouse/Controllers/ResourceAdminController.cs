@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace DCOClearinghouse.Controllers
 {
@@ -29,7 +28,7 @@ namespace DCOClearinghouse.Controllers
             string sortOrder,
             int? page)
         {
-            ViewData["CategoryDropdownList"] = GetCategorySelectList(searchCategoryId, allowAddNew: false);
+            ViewData["CategoryDropdownList"] = GetCategorySelectListDFSOrdered(searchCategoryId, allowAddNew: false);
             ViewData["TypeDropdownList"] = GetTypeSelectList(searchTypeId, allowAddNew: false);
             ViewData["StatusDropdownList"] = GetStatusSelectList(searchStatus);
             ViewData["CurrentSearchType"] = searchTypeId;
@@ -106,7 +105,7 @@ namespace DCOClearinghouse.Controllers
         // GET: ResourcesController/Create
         public IActionResult Create()
         {
-            ViewData["CategoryDropdownList"] = GetCategorySelectList();
+            ViewData["CategoryDropdownList"] = GetCategorySelectListDFSOrdered();
             ViewData["TypeDropdownList"] = GetTypeSelectList();
             return View();
         }
@@ -116,7 +115,7 @@ namespace DCOClearinghouse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Resource, NewCategoryName, NewTypeName")] ResourceAdminViewModel newResourceVM)
+        public async Task<IActionResult> Create([Bind("Resource, NewCategory, NewTypeName")] ResourceAdminViewModel newResourceVM)
         {
             try
             {
@@ -130,13 +129,22 @@ namespace DCOClearinghouse.Controllers
                     // TODO: prevent overposting
 
                     // handle new category
-                    var newCategoryName = newResourceVM.NewCategoryName;
-                    if (!string.IsNullOrEmpty(newCategoryName))
+                    var newCategory = newResourceVM.NewCategory;
+                    if (!string.IsNullOrEmpty(newCategory.CategoryName))
                     {
-                        var newCategory = new ResourceCategory
+                        if (newCategory.ParentCategoryID != null)
                         {
-                            CategoryName = newCategoryName
-                        };
+                            var parentCategory = await
+                                _context.ResourceCategories.SingleOrDefaultAsync(c=>c.ID == newCategory.ParentCategoryID);
+
+                            if (parentCategory == null)
+                                throw new Exception("Category doesn't exist.");
+                            newCategory.Depth = parentCategory.Depth + 1;
+                        }
+                        else
+                        {
+                            newCategory.Depth = 0;
+                        }
                         _context.ResourceCategories.Add(newCategory);
                         await _context.SaveChangesAsync();
 
@@ -168,7 +176,7 @@ namespace DCOClearinghouse.Controllers
                                              "Try again, and if the problem persists " +
                                              "see your system administrator.");
             }
-            ViewData["CategoryDropdownList"] = GetCategorySelectList();
+            ViewData["CategoryDropdownList"] = GetCategorySelectListDFSOrdered();
             ViewData["TypeDropdownList"] = GetTypeSelectList();
             return View();
         }
@@ -186,7 +194,7 @@ namespace DCOClearinghouse.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryID"] = GetCategorySelectList(resource.CategoryID);
+            ViewData["CategoryID"] = GetCategorySelectListDFSOrdered(resource.CategoryID);
             ViewData["ResourceTypeList"] = GetTypeSelectList(resource.TypeID);
 
             return View(resource);
@@ -266,9 +274,24 @@ namespace DCOClearinghouse.Controllers
 
         #region Dropdown list helpers
 
-        private List<SelectListItem> GetCategorySelectList(int? currentCategoryId = null, bool allowAddNew = true)
+        private List<SelectListItem> GetCategorySelectListDFSOrdered(int? currentCategoryId = null, bool allowAddNew = true)
         {
-            List<SelectListItem> list = new SelectList(_context.ResourceCategories, "ID", "CategoryName", currentCategoryId).ToList();
+            // get all
+            List<ResourceCategory> allCategories = _context.ResourceCategories.Include(c => c.ChildrenCategories).ToList();
+            var rootCategories = from rootCategory in allCategories where rootCategory.Depth == 0 select rootCategory;
+            
+            List<ResourceCategory> dfsOrdered = new List<ResourceCategory>();
+            foreach (var rootCategory in rootCategories)
+            {
+                var subTree = DepthFirstTranversalCategories(rootCategory);
+                if (subTree != null)
+                    dfsOrdered.AddRange(subTree);
+            }
+
+            var dropDownItems = from category in dfsOrdered select new {category.ID, CategoryName = string.Concat(Enumerable.Repeat("--", category.Depth))+category.CategoryName};
+
+
+            List<SelectListItem> list = new SelectList(dropDownItems, "ID", "CategoryName", currentCategoryId).ToList();
 
             if (allowAddNew)
                 list.Add(new SelectListItem
@@ -277,6 +300,25 @@ namespace DCOClearinghouse.Controllers
                     Value = null
                 });
             return list;
+        }
+
+        private List<ResourceCategory> DepthFirstTranversalCategories(ResourceCategory category)
+        {
+            if (category == null || category.Depth > 3)
+            {
+                return null;
+            }
+
+            var result = new List<ResourceCategory> {category};
+
+            foreach (var childCategory in category.ChildrenCategories)
+            {
+                var subTreeDFSTraversal = DepthFirstTranversalCategories(childCategory);
+                if (subTreeDFSTraversal!=null)
+                    result.AddRange(subTreeDFSTraversal);
+            }
+
+            return result;
         }
 
         private List<SelectListItem> GetTypeSelectList(int? currentTypeId = null, bool allowAddNew = true)

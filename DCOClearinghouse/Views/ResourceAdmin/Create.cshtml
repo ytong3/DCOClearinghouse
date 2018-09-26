@@ -8,53 +8,89 @@
 <h2>Create a new resource</h2>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="@Model.Resource.Subject" class="control-label"></label>
-                <input asp-for="@Model.Resource.Subject" class="form-control" />
-                <span asp-validation-for="@Model.Resource.Subject" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Resource.Description" class="control-label"></label>
-                <input asp-for="@Model.Resource.Description" class="form-control" />
-                <span asp-validation-for="@Model.Resource.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Resource.Link" class="control-label"></label>
-                <input asp-for="@Model.Resource.Link" class="form-control" />
-                <span asp-validation-for="@Model.Resource.Link" class="text-danger"></span>
-            </div>
-            <div id="typeDropdown" class="form-group">
-                <label asp-for="@Model.Resource.TypeID" class="control-label"></label>
-                <select asp-for="@Model.Resource.TypeID" class="form-control" asp-items="ViewBag.TypeDropdownList">
-                    <option value="" selected disabled hidden>Please select one</option>
-                </select>
-                <span asp-validation-for="@Model.Resource.TypeID" class="text-danger"></span>
-            </div>
-            <div id="newTypeField" class="form-group">
-                <label asp-for="@Model.NewTypeName" class="control-label">Specify the new type</label>
-                <input asp-for="@Model.NewTypeName" class="form-control" />
-                <span asp-validation-for="@Model.NewTypeName" class="text-danger"></span>
-            </div>
-            <div id="categoryDropdown" class="form-group">
-                <label asp-for="@Model.Resource.CategoryID" class="control-label"></label>
-                <select asp-for="@Model.Resource.CategoryID" class="form-control" asp-items="ViewBag.CategoryDropdownList">
-                    <option value="" selected disabled hidden>Please select one</option>
-                </select>
-                <span asp-validation-for="@Model.Resource.CategoryID" class="text-danger"></span>
-            </div>
-            <div id="newCategoryField" class="form-group">
-                <label asp-for="@Model.NewCategoryName" class="control-label">Specify the new category</label>
-                <input asp-for="@Model.NewCategoryName" class="form-control"/>
-                <span asp-validation-for="@Model.NewCategoryName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </form>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label asp-for="@Model.Resource.Subject" class="control-label"></label>
+                        <input asp-for="@Model.Resource.Subject" class="form-control" />
+                        <span asp-validation-for="@Model.Resource.Subject" class="text-danger"></span>
+                    </div>
+                    <div class ="col-md-6"></div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="@Model.Resource.Description" class="control-label"></label>
+                        <input asp-for="@Model.Resource.Description" class="form-control" />
+                        <span asp-validation-for="@Model.Resource.Description" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="@Model.Resource.Link" class="control-label"></label>
+                        <input asp-for="@Model.Resource.Link" class="form-control" />
+                        <span asp-validation-for="@Model.Resource.Link" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                <div class="row">
+                    <div id="typeDropdown" class="form-group col-md-6">
+                        <label asp-for="@Model.Resource.TypeID" class="control-label"></label>
+                        <select asp-for="@Model.Resource.TypeID" class="form-control" asp-items="ViewBag.TypeDropdownList">
+                            <option value="" selected disabled hidden>Please select one</option>
+                        </select>
+                        <span asp-validation-for="@Model.Resource.TypeID" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                
+                <div class="row">
+                    <div id ="newTypeField" class="form-group col-md-6">
+                        <label asp-for="@Model.NewTypeName" class="control-label">Specify the new type</label>
+                        <input asp-for="@Model.NewTypeName" class="form-control" />
+                        <span asp-validation-for="@Model.NewTypeName" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                
+                <div class="row">
+                    <div id="categoryDropdown" class="form-group col-md-6">
+                        <label asp-for="@Model.Resource.CategoryID" class="control-label"></label>
+                        <select asp-for="@Model.Resource.CategoryID" class="form-control" asp-items="ViewBag.CategoryDropdownList">
+                            <option value="" selected disabled hidden>Please select one</option>
+                        </select>
+                        <span asp-validation-for="@Model.Resource.CategoryID" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+                
+                <div id="newCategoryField" class="row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="@Model.NewCategory.CategoryName" class="control-label">Specify the new category</label>
+                        <input asp-for="@Model.NewCategory.CategoryName" class="form-control" />
+                        <span asp-validation-for="@Model.NewCategory.CategoryName" class="text-danger"></span>
+                    </div>
+                    <div id="parentCategoryForNewCategory" class="col-md-6">
+                        <label asp-for="@Model.NewCategory.ParentCategoryID" class="control-label"></label>
+                        <select asp-for="@Model.NewCategory.ParentCategoryID" class="form-control" asp-items="ViewBag.CategoryDropdownList">
+                            <option value="" selected disabled hidden>Please select one</option>
+                        </select>
+                        <span asp-validation-for="@Model.Resource.CategoryID" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

@@ -54,31 +54,44 @@ namespace DCOClearinghouse.Data
             {
                 new ResourceCategory
                 {
-                    CategoryName = "Assistive Technology"
+                    CategoryName = "Assistive Technology",
+                    ParentCategoryID = null,
+                    Depth = 0
                 },
                 new ResourceCategory
                 {
-                    CategoryName = "Education"
+                    CategoryName = "Education",
+                    ParentCategoryID = null
                 },
                 new ResourceCategory
                 {
-                    CategoryName = "Employment"
+                    CategoryName = "Employment",
+                    ParentCategoryID = null,
+                    Depth = 0
                 },
                 new ResourceCategory
                 {
-                    CategoryName = "Healing"
+                    CategoryName = "Healing",
+                    ParentCategoryID = null,
+                    Depth = 0
                 },
                 new ResourceCategory
                 {
-                    CategoryName = "Additional cat 1"
+                    CategoryName = "Additional cat 1",
+                    ParentCategoryID = null,
+                    Depth = 0
                 },
                 new ResourceCategory
                 {
-                    CategoryName = "Additiona cat 3"
+                    CategoryName = "Additiona cat 3",
+                    ParentCategoryID = null,
+                    Depth = 0
                 },
                 new ResourceCategory
                 {
-                    CategoryName = "Additional cat 4"
+                    CategoryName = "Additional cat 4",
+                    ParentCategoryID = null,
+                    Depth = 0
                 }
             };
             foreach (var resourceCategory in categories)
@@ -87,6 +100,80 @@ namespace DCOClearinghouse.Data
             }
 
             context.SaveChanges();
+
+            #region Subcategories
+
+            var subCategories = new[]
+            {
+                new ResourceCategory
+                {
+                    CategoryName = "Subcat 1",
+                    ParentCategoryID = categories[0].ID,
+                    Depth = categories[0].Depth+1
+                },
+                new ResourceCategory
+                {
+                    CategoryName = "Subcat 2",
+                    ParentCategoryID = categories[0].ID,
+                    Depth = categories[0].Depth+1
+                },
+                new ResourceCategory
+                {
+                    CategoryName = "Subcat 3",
+                    ParentCategoryID = categories[1].ID,
+                    Depth = categories[1].Depth+1
+                },
+                new ResourceCategory
+                {
+                    CategoryName = "Subcat 4",
+                    ParentCategoryID = categories[2].ID,
+                    Depth = categories[2].Depth+1
+                }
+            };
+            foreach (var subcategory in subCategories)
+            {
+                context.ResourceCategories.Add(subcategory);
+            }
+
+            context.SaveChanges();
+
+            #endregion
+
+            #region Subsubcategory
+
+            var subsubCategories = new[]
+            {
+                new ResourceCategory
+                {
+                    CategoryName = "Subsubcat 1",
+                    ParentCategoryID = subCategories[0].ID,
+                    Depth = subCategories[0].Depth+1
+                },
+                new ResourceCategory
+                {
+                    CategoryName = "Subsubcat 2",
+                    ParentCategoryID = subCategories[0].ID,
+                    Depth = subCategories[0].Depth+1
+                },
+                new ResourceCategory
+                {
+                    CategoryName = "Subsubcat 3",
+                    ParentCategoryID = subCategories[1].ID,
+                    Depth = subCategories[1].Depth+1
+                },
+                new ResourceCategory
+                {
+                    CategoryName = "Subsubcat 4",
+                    ParentCategoryID = subCategories[2].ID,
+                    Depth = subCategories[2].Depth+1
+                }
+            };
+            foreach (var subsbucategory in subsubCategories)
+            {
+                context.ResourceCategories.Add(subsbucategory);
+            }
+
+            #endregion
 
             #endregion
 

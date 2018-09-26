@@ -7,7 +7,6 @@ namespace DCOClearinghouse.Data
     public class ResourceContext : DbContext
     {
         public ResourceContext(DbContextOptions<ResourceContext> options): base(options) { }
-
         public DbSet<Resource> Resources { get; set; }
         public DbSet<ResourceCategory> ResourceCategories { get; set; }
         public DbSet<ResourceType> ResourceTypes { get; set; }
@@ -21,8 +20,10 @@ namespace DCOClearinghouse.Data
                 .HasConversion(
                     c => JsonConvert.SerializeObject(c),
                     c => JsonConvert.DeserializeObject<ContactInfo>(c));
-                
+
             modelBuilder.Entity<ResourceCategory>().ToTable("ResourceCategory");
+            
+
             modelBuilder.Entity<ResourceType>().ToTable("ResourceType");
         }
     }
