@@ -1,5 +1,5 @@
 ﻿@using DCOClearinghouse.Utility
-@model IDictionary<DCOClearinghouse.Models.ResourceCategory,List<DCOClearinghouse.Models.Resource>>
+@model DCOClearinghouse.ViewModels.ResourceIndexViewModel []
 
 @{
     ViewData["Title"] = "Resources";
@@ -13,20 +13,20 @@
     <a asp-action="Create">Suggest New Resources</a>
 </p>
 
-@foreach (var row in Model.ToArray().Split(4))
+@foreach (var row in Model.Split(4))
 {
     <div class="row">
         @foreach (var category in row)
         {
             <div class="col-md-3">
                 <div class="panel panel-default">
-                    <div class="panel-heading"><a asp-action="Category" asp-route-id="@category.Key.ID"><strong>@category.Key.CategoryName</strong></a></div>
+                    <div class="panel-heading"><a asp-action="Category" asp-route-id="@category.ID"><strong>@category.CategoryName</strong></a></div>
                     <div class="panel-body">
-                        @foreach(var resource in @category.Value){
-                            <a asp-action="Details" asp-route-id="@resource.ID">@resource.Subject</a><br>
+                        @foreach(var subCategory in @category.Children){
+                            <a asp-action="Category" asp-route-id="@subCategory.ID">@subCategory.CategoryName</a><br>
                         }
                     </div>
-                    <div class="panel-footer"><a asp-action="Category" asp-route-id="@category.Key.ID">More ...</a></div>
+                    <div class="panel-footer"><a asp-action="Category" asp-route-id="@category.ID">More ...</a></div>
                 </div>
             </div>
         }

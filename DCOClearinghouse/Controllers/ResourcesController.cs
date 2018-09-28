@@ -22,15 +22,21 @@ namespace DCOClearinghouse.Controllers
         // GET: Resources
         public async Task<IActionResult> Index()
         {
-            // showcase sample categories on Index
-            var resourceByCategory = _context.Resources.AsNoTracking()
-                                .Include(r=>r.Category).Where(r=>r.CategoryID>=1 && r.CategoryID<=12)
-                                .GroupBy(r=>r.Category)
-                                .ToDictionaryAsync(g=>g.Key, g=>g.Take(10).ToList());
+            // get root category
+            var rootCategories = await _context.ResourceCategories
+                .AsNoTracking()
+                .Include(r => r.ChildrenCategories)
+                .ThenInclude(subCat => subCat.CategoryName)
+                .Where(c => c.Depth == 0)
+                .Select(c => new ResourceIndexViewModel()
+                {
+                    ID = c.ID,
+                    CategoryName = c.CategoryName,
+                    Children = c.ChildrenCategories.Take(5)
+                })
+                .ToArrayAsync();
 
-            var resourceDictionary = await resourceByCategory;
-
-            return View(resourceDictionary);
+            return View(rootCategories);
         }
 
         // Get: Resources/Category/3
