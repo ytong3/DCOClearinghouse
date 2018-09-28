@@ -273,7 +273,10 @@ namespace DCOClearinghouse.Controllers
 
         public async Task<IActionResult> BrowseByCategory()
         {
-            var allCategories = await _context.ResourceCategories.AsNoTracking().Include(c=>c.ChildrenCategories).ToListAsync();
+            var allCategories = await _context.ResourceCategories.AsNoTracking().
+                Include(c=>c.ChildrenCategories)
+                .Include(c=>c.Resources)
+                .ToListAsync();
             return View(allCategories);
         }
 

@@ -6,7 +6,6 @@ namespace DCOClearinghouse.Models
 {
     public class ResourceCategory
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         public string CategoryName { get; set; }
         [Display(Name = "Parent Category")]

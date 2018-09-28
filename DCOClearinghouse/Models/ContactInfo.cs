@@ -19,6 +19,7 @@ namespace DCOClearinghouse.Models
         public string Email { get; set; }
 
         public Address Address { get; set; }
+        public string Title { get; set; }
     }
 
     public class Address

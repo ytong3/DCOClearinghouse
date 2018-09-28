@@ -1,7 +1,7 @@
 ﻿@model ResourceCategory
 
 <div style="padding-left: 50px">
-    <strong>@Model.CategoryName</strong>
+    <strong>┕@Model.CategoryName (@Model.Resources.Count)</strong>
     @foreach (var subcategory in Model.ChildrenCategories)
     {
         await Html.RenderPartialAsync("_TreeNodePartial", subcategory);

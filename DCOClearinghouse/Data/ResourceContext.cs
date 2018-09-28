@@ -22,7 +22,6 @@ namespace DCOClearinghouse.Data
                     c => JsonConvert.DeserializeObject<ContactInfo>(c));
 
             modelBuilder.Entity<ResourceCategory>().ToTable("ResourceCategory");
-            
 
             modelBuilder.Entity<ResourceType>().ToTable("ResourceType");
         }

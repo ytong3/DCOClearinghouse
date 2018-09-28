@@ -24,7 +24,7 @@ namespace DCOClearinghouse.Controllers
         {
             // showcase sample categories on Index
             var resourceByCategory = _context.Resources.AsNoTracking()
-                                .Include(r=>r.Category).Where(r=>r.CategoryID>=1 && r.CategoryID<=12)
+                                .Include(r=>r.Category).Where(r=>r.Category.Depth==0)
                                 .GroupBy(r=>r.Category)
                                 .ToDictionaryAsync(g=>g.Key, g=>g.Take(10).ToList());
 

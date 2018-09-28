@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DCOClearinghouse.Models
 {
@@ -11,8 +12,9 @@ namespace DCOClearinghouse.Models
     }
     public class Resource
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
-        [StringLength(60, MinimumLength = 2)]
+        [StringLength(200, MinimumLength = 1)]
         [Required]
         [Display(Name = "Title")]
         public string Subject { get; set; }
@@ -21,7 +23,6 @@ namespace DCOClearinghouse.Models
         public string Link { get; set; }
 
         [StringLength(300, MinimumLength = 3)]
-        [Required]
         public string Description { get; set; }
 
         [Display(Name = "Category")]
@@ -34,7 +35,7 @@ namespace DCOClearinghouse.Models
 
         [Display(Name = "Date")]
         [DataType((DataType.Date))]
-        public DateTime CreateDate { get; set; }
+        public DateTime? CreateDate { get; set; }
 
         [EnumDataType(typeof(ResourceStatus))]
         public ResourceStatus Status { get; set; }

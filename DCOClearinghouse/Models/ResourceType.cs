@@ -5,7 +5,6 @@ namespace DCOClearinghouse.Models
 {
     public class ResourceType
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? ID { get; set; }
         public string TypeName { get; set; }
 

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DCOClearinghouse.Models;
 using Microsoft.AspNetCore.Mvc;
-using DCOClearinghouse.Models;
+using System.Diagnostics;
 
 namespace DCOClearinghouse.Controllers
 {
