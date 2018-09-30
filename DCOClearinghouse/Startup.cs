@@ -28,8 +28,10 @@ namespace DCOClearinghouse
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            var connectionStr = Configuration.GetConnectionString("DefaultConnection");
+
             services.AddDbContext<ResourceContext>(options =>
-                options.UseMySql(Configuration["MYSQLCONNSTR_DefaultConnection"]));
+                options.UseMySql(connectionStr));
             //services.AddDbContext<ResourceContext>(options =>
             //    options.UseInMemoryDatabase(databaseName: "development-db"));
 
