@@ -44,6 +44,7 @@ namespace DCOClearinghouse.Controllers
         {
             var resourceCategory = await _context.ResourceCategories
                 .AsNoTracking()
+                .Include(c=>c.ChildrenCategories)
                 .Include(c => c.Resources)
                 .SingleOrDefaultAsync(c => c.ID == id);
 
@@ -54,9 +55,8 @@ namespace DCOClearinghouse.Controllers
 
 
             //TODO: make use of ViewData to pass in multiple models
-            ViewData["CategoryName"] = resourceCategory.CategoryName;
 
-            return View(resourceCategory.Resources);
+            return View(resourceCategory);
         }
 
         // GET: Resources/Details/5

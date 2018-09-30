@@ -1,38 +1,71 @@
-﻿@model IEnumerable<DCOClearinghouse.Models.Resource>
+﻿@model ResourceCategory
 
 @{
     ViewData["Title"] = "Category";
 }
 
 <div class="jumbotron">
-    <h3>@ViewData["CategoryName"]</h3>
+    <h3>@Model.CategoryName</h3>
 </div>
 
 <p>
     <a asp-action="Create">Submit new</a>
 </p>
 
-<table calss="table">
-    <thead>
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model=> model.Subject)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model=> model.CreateDate)
-        </th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model) {
-        <tr>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.ID">@Html.DisplayFor(modelItem => item.Subject)</a>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreateDate)
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+<h3>
+    Subcategories
+</h3>
+@if (Model.ChildrenCategories.Count == 0)
+{
+    <p>None</p>
+}
+else
+{
+    <ol>
+        @foreach (var subcat in Model.ChildrenCategories)
+        {
+            <li>
+                <a asp-action="Category" asp-route-id="@subcat.ID">@Html.DisplayFor(m=>subcat.CategoryName)</a>
+            </li>
+        }
+    </ol>
+}
+
+<h3>
+    Resources under current category
+</h3>
+@if (Model.Resources.Count == 0)
+{
+    <p>None</p>
+}
+else
+{
+    <div class="container">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.Resources.FirstOrDefault().Subject)
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.Resources.FirstOrDefault().CreateDate)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Resources)
+                {
+                    <tr>
+                        <td scope="row">
+                            <a asp-action="Details" asp-route-id="@item.ID">@Html.DisplayFor(modelItem => item.Subject)</a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreateDate)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+

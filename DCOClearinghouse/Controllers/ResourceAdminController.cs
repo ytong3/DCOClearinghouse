@@ -290,7 +290,10 @@ namespace DCOClearinghouse.Controllers
         private List<SelectListItem> GetCategorySelectListDFSOrdered(int? currentCategoryId = null, bool allowAddNew = true)
         {
             // get all
-            List<ResourceCategory> allCategories = _context.ResourceCategories.Include(c => c.ChildrenCategories).ToList();
+            List<ResourceCategory> allCategories = _context.ResourceCategories
+                .Include(c => c.ChildrenCategories)
+                .Include(c=>c.Resources)
+                .ToList();
             var rootCategories = from rootCategory in allCategories where rootCategory.Depth == 0 select rootCategory;
             
             List<ResourceCategory> dfsOrdered = new List<ResourceCategory>();
@@ -301,13 +304,18 @@ namespace DCOClearinghouse.Controllers
                     dfsOrdered.AddRange(subTree);
             }
 
-            var dropDownItems = from category in dfsOrdered select new {category.ID, CategoryName = string.Concat(Enumerable.Repeat("--", category.Depth))+category.CategoryName};
+            var dropDownItems = from category in dfsOrdered
+                select new
+                {
+                    category.ID,
+                    CategoryName = string.Concat(Enumerable.Repeat("--", category.Depth))+category.CategoryName+$"({category.Resources.Count})"
+                };
 
 
             List<SelectListItem> list = new SelectList(dropDownItems, "ID", "CategoryName", currentCategoryId).ToList();
 
             if (allowAddNew)
-                list.Add(new SelectListItem
+                list.Insert(0,new SelectListItem
                 {
                     Text = "Add new",
                     Value = null
@@ -340,7 +348,7 @@ namespace DCOClearinghouse.Controllers
                 new SelectList(_context.ResourceTypes, "ID", "TypeName", currentTypeId).ToList();
 
             if (allowAddNew)
-                list.Add(new SelectListItem
+                list.Insert(0, new SelectListItem
                 {
                     Text = "Add new",
                     Value = null
