@@ -33,7 +33,6 @@ namespace DCOClearinghouse
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .ConfigureLogging((hostingContext, logging) => { logging.AddAzureWebAppDiagnostics(); });
+                .UseStartup<Startup>();
     }
 }

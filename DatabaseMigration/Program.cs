@@ -45,9 +45,14 @@ namespace DatabaseMigration
 
             Console.ReadLine();
 
+            WriteToNewDatabase("new_dco_resources", outputCategories, outputResources);
+        }
+
+        static void WriteToNewDatabase(string databaseName, ResourceCategory[] outputCategories, Resource[] outputResources)
+        {
             Console.WriteLine("==Start to write to new database==");
             var options = new DbContextOptionsBuilder<ResourceContext>()
-                .UseMySql("Server=localhost;Port=3306;Database=new_dco_resources;Uid=root;Pwd=root;")
+                .UseMySql($"Server=localhost;Port=3306;Database={databaseName};Uid=root;Pwd=root;")
                 .EnableSensitiveDataLogging()
                 .Options;
 
@@ -83,8 +88,6 @@ namespace DatabaseMigration
             //        Console.WriteLine(item.CategoryId+"<---->"+item.ListId);
             //    }
             //}
-
-            Console.ReadLine();
         }
     }
 }
