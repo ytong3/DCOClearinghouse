@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace DatabaseMigration.Resources
+﻿namespace DatabaseMigration.Resources
 {
     public partial class Categories
     {

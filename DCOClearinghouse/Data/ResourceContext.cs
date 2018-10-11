@@ -10,6 +10,7 @@ namespace DCOClearinghouse.Data
         public DbSet<Resource> Resources { get; set; }
         public DbSet<ResourceCategory> ResourceCategories { get; set; }
         public DbSet<ResourceType> ResourceTypes { get; set; }
+        public DbSet<Tag> Tags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,6 +25,21 @@ namespace DCOClearinghouse.Data
             modelBuilder.Entity<ResourceCategory>().ToTable("ResourceCategory");
 
             modelBuilder.Entity<ResourceType>().ToTable("ResourceType");
+
+            modelBuilder.Entity<Tag>().ToTable("Tag");
+
+            modelBuilder.Entity<ResourceTag>()
+                .HasKey(rt => new {rt.ResourceID, rt.TagID});
+
+            modelBuilder.Entity<ResourceTag>()
+                .HasOne(rt => rt.Resource)
+                .WithMany(r => r.ResourceTags)
+                .HasForeignKey(rt => rt.ResourceID);
+
+            modelBuilder.Entity<ResourceTag>()
+                .HasOne(rt => rt.Tag)
+                .WithMany(t => t.ResourceTags)
+                .HasForeignKey(rt => rt.TagID);
         }
     }
 }

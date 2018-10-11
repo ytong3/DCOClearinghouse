@@ -1,13 +1,11 @@
 ﻿using DatabaseMigration.Resources;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using DCOClearinghouse.Data;
 using DCOClearinghouse.Models;
 using Microsoft.EntityFrameworkCore;
-using Remotion.Linq.Clauses;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
+using System.Linq;
 
 namespace DatabaseMigration
 {
@@ -77,7 +75,8 @@ namespace DatabaseMigration
             }
 
 
-            Console.WriteLine("Succeed.");
+            Console.WriteLine("Succeed. Press any key to exit.");
+            Console.ReadLine();
 
             //using (var context = new dco_resourcesContext())
             //{

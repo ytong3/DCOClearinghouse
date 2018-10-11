@@ -1,10 +1,8 @@
-﻿using System;
+﻿using DatabaseMigration.Resources;
+using DCOClearinghouse.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using DatabaseMigration.Resources;
-using DCOClearinghouse.Models;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore;
 
 namespace DatabaseMigration
 {

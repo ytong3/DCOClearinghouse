@@ -1,12 +1,12 @@
 ﻿using DCOClearinghouse.Data;
 using DCOClearinghouse.Models;
+using DCOClearinghouse.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using DCOClearinghouse.ViewModels;
 
 namespace DCOClearinghouse.Controllers
 {
@@ -70,6 +70,8 @@ namespace DCOClearinghouse.Controllers
             var resource = await _context.Resources
                 .AsNoTracking()
                 .Include(r => r.Category)
+                .Include(r=> r.ResourceTags)
+                .ThenInclude(t=>t.Tag)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (resource == null)
             {

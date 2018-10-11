@@ -32,8 +32,6 @@ namespace DCOClearinghouse
 
             services.AddDbContext<ResourceContext>(options =>
                 options.UseMySql(connectionStr));
-            //services.AddDbContext<ResourceContext>(options =>
-            //    options.UseInMemoryDatabase(databaseName: "development-db"));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

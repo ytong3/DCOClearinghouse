@@ -36,6 +36,15 @@
                 @Html.DisplayFor(model => model.Category.CategoryName)
             </dd>
             <dt>
+                @Html.DisplayNameFor(model => model.ResourceTags)
+            </dt>
+            <dd>
+                @foreach (var tag in Model.ResourceTags)
+                {
+                    @Html.DisplayFor(_=>tag.Tag.Name);
+                },
+            </dd>
+            <dt>
                 @Html.DisplayNameFor(model => model.Type)
             </dt>
             <dd>
