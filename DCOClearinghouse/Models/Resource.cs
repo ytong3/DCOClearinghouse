@@ -50,6 +50,7 @@ namespace DCOClearinghouse.Models
 
         public ResourceType Type { get; set; }
 
+        [Display(Name="Tags")]
         public ICollection<ResourceTag> ResourceTags { get; set; }
         #endregion
 
