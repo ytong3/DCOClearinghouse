@@ -30,25 +30,6 @@ namespace DCOClearinghouse.Controllers
                 .ToListAsync();
 
             return View(allRootCategories);
-
-            // get root category
-            var rootCategories = await _context.ResourceCategories
-                .AsNoTracking()
-                .Include(r => r.ChildrenCategories)
-                .ThenInclude(subCat => subCat.CategoryName)
-                .Include(r => r.ChildrenCategories)
-                .ThenInclude(subCat => subCat.Resources)
-                .Where(c => c.Depth == 0)
-                .OrderBy(c=>c.CategoryName)
-                .Select(c => new ResourceIndexViewModel()
-                {
-                    ID = c.ID,
-                    CategoryName = c.CategoryName,
-                    Children = c.ChildrenCategories.OrderBy(cc=>cc.CategoryName).Take(20)
-                })
-                .ToArrayAsync();
-
-            return View(rootCategories);
         }
 
         // Get: Resources/Category/3

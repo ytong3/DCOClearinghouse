@@ -26,13 +26,13 @@
                         </a>
                     </div>
                     <div class="panel-body">
-                        @foreach (var rowInPanel in @category.ChildrenCategories.ToArray().Split(2))
+                        @foreach (var rowInPanel in @category.ChildrenCategories.ToArray().Split(1))
                         {
                             <div class="row">
 
                                 @foreach (var subCategory in rowInPanel)
                                 {
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-12">
                                         <a asp-action="Category" asp-route-id="@subCategory.ID">@subCategory.CategoryName (@subCategory.Resources.Count)</a>
                                         <br>
                                     </div>
@@ -41,9 +41,9 @@
                             </div>
                         }
                     </div>
-                    @*<div class="panel-footer">
-                            <a asp-action="Category" asp-route-id="@category.ID">More ...</a>
-                        </div>*@
+                    <div class="panel-footer">
+                            <a asp-action="Category" asp-route-id="@category.ID">See all</a>
+                    </div>
                 </div>
             </div>
         }
