@@ -1,0 +1,25 @@
+﻿@model System.Collections.Generic.List<DCOClearinghouse.Models.Tag>
+
+@{
+    ViewData["Title"] = "Tag Cloud";
+}
+@section Scripts{
+    <script src="~/js/tagcloud.js"></script>
+    <script type="text/javascript">
+$(document).ready((function () {
+  $.fn.tagcloud.defaults = {
+  size: {start: 10, end: 35, unit: 'pt'},
+  color: {start: '#cde', end: '#f52'}
+};
+
+  $('#tags a').tagcloud();
+}));
+
+    </script>
+}
+
+<div id="tags">
+    @foreach(var tag in Model){
+        <a asp-action="Tag" asp-route-id="tg.ID" rel="@tag.ResourceTags.Count">@tag.Name (@tag.ResourceTags.Count)</a>
+    }
+</div>

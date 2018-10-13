@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -50,6 +51,27 @@ namespace DCOClearinghouse.Controllers
             //TODO: make use of ViewData to pass in multiple models
 
             return View(resourceCategory);
+        }
+
+        public async Task<IActionResult> Tagcloud(){
+            
+            var allTags = await _context.Tags
+                .AsNoTracking()
+                .Include(t=>t.ResourceTags)
+                .ToListAsync();
+
+            return View(allTags);
+        }
+
+        public async Task<IActionResult> Tag(int? id)
+        {
+            var resourceTags = await _context.ResourceTags.AsNoTracking()
+            .Include(rt=>rt.Tag)
+            .Include(rt=>rt.Resource)
+            .Where(rt=>rt.TagID==id)
+            .ToListAsync();
+
+            return View(resourceTags);
         }
 
         // GET: Resources/Details/5

@@ -11,6 +11,8 @@ namespace DCOClearinghouse.Data
         public DbSet<ResourceCategory> ResourceCategories { get; set; }
         public DbSet<ResourceType> ResourceTypes { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<ResourceTag> ResourceTags {get; set;}
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,6 +27,8 @@ namespace DCOClearinghouse.Data
             modelBuilder.Entity<ResourceCategory>().ToTable("ResourceCategory");
 
             modelBuilder.Entity<ResourceType>().ToTable("ResourceType");
+
+            modelBuilder.Entity<ResourceTag>().ToTable("ResourceTag");
 
             modelBuilder.Entity<Tag>().ToTable("Tag");
 

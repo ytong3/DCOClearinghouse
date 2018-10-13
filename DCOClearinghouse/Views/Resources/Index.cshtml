@@ -5,12 +5,11 @@
     ViewData["Title"] = "Resources";
 }
 
-<div class="jumbotron">
-    <h1>Resources</h1>
-</div>
-
 <p>
     <a asp-action="Create">Suggest New Resources</a>
+</p>
+<p>
+    <a asp-action="Tagcloud">View Tagcloud</a>
 </p>
 
 @foreach (var row in Model.ToArray().Split(4))
