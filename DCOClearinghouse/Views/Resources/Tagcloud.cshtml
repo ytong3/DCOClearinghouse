@@ -20,6 +20,6 @@ $(document).ready((function () {
 
 <div id="tags">
     @foreach(var tag in Model){
-        <a asp-action="Tag" asp-route-id="tg.ID" rel="@tag.ResourceTags.Count">@tag.Name (@tag.ResourceTags.Count)</a>
+        <a asp-action="Tag" asp-route-id="@tag.ID" rel="@tag.ResourceTags.Count">@tag.Name (@tag.ResourceTags.Count)</a>
     }
 </div>
