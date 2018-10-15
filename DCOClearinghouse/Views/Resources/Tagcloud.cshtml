@@ -3,23 +3,39 @@
 @{
     ViewData["Title"] = "Tag Cloud";
 }
+
 @section Scripts{
     <script src="~/js/tagcloud.js"></script>
     <script type="text/javascript">
-$(document).ready((function () {
-  $.fn.tagcloud.defaults = {
-  size: {start: 10, end: 35, unit: 'pt'},
-  color: {start: '#cde', end: '#f52'}
-};
+        $(document).ready((function() {
+            $.fn.tagcloud.defaults = {
+                size: { start: 10, end: 35, unit: 'pt' },
+                color: { start: '#cde', end: '#f52' }
+            };
 
-  $('#tags a').tagcloud();
-}));
+            $('#tags a').tagcloud();
+        }));
 
     </script>
 }
 
-<div id="tags">
-    @foreach(var tag in Model){
-        <a asp-action="Tag" asp-route-id="@tag.ID" rel="@tag.ResourceTags.Count">@tag.Name (@tag.ResourceTags.Count)</a>
-    }
+<div class="page-header">
+    <h1>Resources</h1>
+</div>
+
+<ul class="nav nav-tabs">
+    <li>@Html.ActionLink("News", "Index", "Resources")</li>
+    <li>@Html.ActionLink("Classified", "AllCategories", "Resources")</li>
+    <li class="active">
+        <a asp-action="Tagcloud">Tags</a>
+    </li>
+</ul>
+
+<div class="container container-fluid">
+    <div id="tags">
+        @foreach (var tag in Model)
+        {
+            <a asp-action="Tag" asp-route-id="@tag.ID" rel="@tag.ResourceTags.Count">@tag.Name (@tag.ResourceTags.Count)</a>
+        }
+    </div>
 </div>

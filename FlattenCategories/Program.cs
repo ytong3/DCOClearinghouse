@@ -5,7 +5,7 @@ using DCOClearinghouse.Data;
 using DCOClearinghouse.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace FlattenCategories
+namespace DatabaseMaintenance
 {
     class Program
     {
@@ -14,7 +14,17 @@ namespace FlattenCategories
             Console.WriteLine("Start to flatten the categories and keep the subcategories as tags.");
 
             //FlattenCategories("flattened_dco_resources");
-            RemoveEmptyCategories("flattened_dco_resources");
+            //RemoveEmptyCategories("flattened_dco_resources");
+            var optionsForNewDb = new DbContextOptionsBuilder<ResourceContext>()
+                .UseMySql($"Server=localhost;Port=3306;Database=flattened_dco_resources;Uid=root;Pwd=root;")
+                .EnableSensitiveDataLogging()
+                .Options;
+
+            using (var context = new ResourceContext(optionsForNewDb))
+            {
+                TagMaintenance.MergeDuplicateTags(context);
+                TagMaintenance.RemoveEmptyTags(context);
+            }
         }
 
         private static void RemoveEmptyCategories(string database)

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DCOClearinghouse", "DCOClea
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseMigration", "DatabaseMigration\DatabaseMigration.csproj", "{ADF2F3EC-D8D5-4830-A6F1-A5BB819A3081}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlattenCategories", "FlattenCategories\FlattenCategories.csproj", "{D953515F-1953-4BC3-BD6F-3BD54876E7CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseMaintenance", "FlattenCategories\DatabaseMaintenance.csproj", "{D953515F-1953-4BC3-BD6F-3BD54876E7CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

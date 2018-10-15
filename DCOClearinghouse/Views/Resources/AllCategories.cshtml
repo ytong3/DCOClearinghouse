@@ -1,0 +1,57 @@
+﻿@using DCOClearinghouse.Utility
+@model System.Collections.Generic.List<DCOClearinghouse.Models.ResourceCategory>
+
+@{
+    ViewData["Title"] = "Resources";
+}
+
+<div class="page-header">
+    <h1>Resources</h1>
+</div>
+
+<ul class="nav nav-tabs">
+    <li>@Html.ActionLink("News", "Index", "Resources")</li>
+    <li class="active">@Html.ActionLink("Classified", "AllCategories", "Resources")</li>
+    <li>@Html.ActionLink("Tags", "Tagcloud", "Resources")</li>
+</ul>
+
+<p>
+    <a asp-action="Create">Suggest New Resources</a>
+</p>
+
+
+@foreach (var row in Model.ToArray().Split(4))
+{
+    <div class="row">
+        @foreach (var category in row)
+        {
+            <div class="col-md-3">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <a asp-action="Category" asp-route-id="@category.ID">
+                            <strong>@category.CategoryName</strong>
+                        </a>
+                    </div>
+                    <div class="panel-body">
+                        @foreach (var rowInPanel in @category.ChildrenCategories.ToArray().Split(1))
+                        {
+                            <div class="row">
+
+                                @foreach (var subCategory in rowInPanel)
+                                {
+                                    <div class="col-sm-12">
+                                        <a asp-action="Category" asp-route-id="@subCategory.ID">@subCategory.CategoryName (@subCategory.Resources.Count)</a>
+                                        <br>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <div class="panel-footer">
+                        <a asp-action="Category" asp-route-id="@category.ID">See all</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

@@ -1,50 +1,64 @@
 ﻿@using DCOClearinghouse.Utility
-@model System.Collections.Generic.List<DCOClearinghouse.Models.ResourceCategory>
+@model System.Collections.Generic.List<Resource>
 
 @{
     ViewData["Title"] = "Resources";
 }
 
-<p>
-    <a asp-action="Create">Suggest New Resources</a>
-</p>
-<p>
-    <a asp-action="Tagcloud">View Tagcloud</a>
-</p>
+<nav class="page-header">
+    <h1>Resources</h1>
+</nav>
 
-@foreach (var row in Model.ToArray().Split(4))
-{
-    <div class="row">
-        @foreach (var category in row)
-        {
-            <div class="col-md-3">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <a asp-action="Category" asp-route-id="@category.ID">
-                            <strong>@category.CategoryName</strong>
-                        </a>
-                    </div>
-                    <div class="panel-body">
-                        @foreach (var rowInPanel in @category.ChildrenCategories.ToArray().Split(1))
-                        {
-                            <div class="row">
+<ul class="nav nav-tabs">
+    <li class="active">@Html.ActionLink("Latest", "Index", "Resources")</li>
+    <li>@Html.ActionLink("Classified", "AllCategories", "Resources")</li>
+    <li>@Html.ActionLink("Tags", "Tagcloud", "Resources")</li>
+</ul>
 
-                                @foreach (var subCategory in rowInPanel)
-                                {
-                                    <div class="col-sm-12">
-                                        <a asp-action="Category" asp-route-id="@subCategory.ID">@subCategory.CategoryName (@subCategory.Resources.Count)</a>
-                                        <br>
-                                    </div>
-                                }
+<br/>
 
-                            </div>
-                        }
-                    </div>
-                    <div class="panel-footer">
-                            <a asp-action="Category" asp-route-id="@category.ID">See all</a>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
+<a asp-action="Create">
+    <button type="button" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span> Submit New
+    </button>
+</a>
+
+@{
+    int rowNumber = 0;
 }
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>
+
+        </th>
+        <th>
+            
+        </th>
+        <th>
+            
+        </th>
+
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var resource in Model)
+    {
+        <tr>
+            <td>
+                @{ rowNumber++;} <span>@rowNumber</span>.
+            </td>
+            <td>
+                <a href="@resource.Link" target="_blank">@Html.DisplayFor(_ => resource.Subject)</a>
+            </td>
+            <td>
+                <div class="btn-group btn-group-sm" role="group" aria-label="actions">
+                    @Html.ActionLink("Details", "Details", "Resources", new {@ID = resource.ID}, new { @class = "btn btn-default"})
+                    @Html.ActionLink("Bad link", "ReportBadLink", "Resources", new {@ID = resource.ID}, new { @class = "btn btn-default"})
+                    <button type="button" class="btn btn-default">Upvote</button>
+                </div>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

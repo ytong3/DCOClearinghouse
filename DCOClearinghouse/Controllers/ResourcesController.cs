@@ -20,8 +20,19 @@ namespace DCOClearinghouse.Controllers
             _context = context;
         }
 
-        // GET: Resources
         public async Task<IActionResult> Index()
+        {
+            //return the latest
+            var mostRecent = await _context.Resources.AsNoTracking()
+                .OrderByDescending(r => r.CreateDate)
+                .Take(20)
+                .ToListAsync();
+
+            return View(mostRecent);
+        }
+
+        // GET: Resources
+        public async Task<IActionResult> AllCategories()
         {
             var allRootCategories = await _context.ResourceCategories
                 .AsNoTracking()
@@ -58,6 +69,7 @@ namespace DCOClearinghouse.Controllers
             var allTags = await _context.Tags
                 .AsNoTracking()
                 .Include(t=>t.ResourceTags)
+                .OrderByDescending(t=>t.ResourceTags.Count)
                 .ToListAsync();
 
             return View(allTags);
@@ -240,7 +252,7 @@ namespace DCOClearinghouse.Controllers
 
             await _context.SaveChangesAsync();
             // TODO: give the user some feedback like greying out the link after reporting.
-            return RedirectToAction(nameof(Details), new {id = id});
+            return RedirectToAction(nameof(Index));
         }
 
         private bool ResourceExists(int id)
