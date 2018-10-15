@@ -20,7 +20,7 @@
         try
         {
             Uri uri = new Uri(urlString);
-            return uri?.Host;
+            return "("+uri?.Host+")";
         }
         catch (UriFormatException)
         {
@@ -53,7 +53,7 @@
             </td>
             <td>
                 <a href="@resource.Link" target="_blank">@Html.DisplayFor(_ => resource.Subject)</a>
-                (<span class="small">@GetHostDomain(resource.Link)</span>)
+                <span class="small">@GetHostDomain(resource.Link)</span>
             </td>
             <td>
                 <div class="btn-group btn-group-sm" role="group" aria-label="actions">
