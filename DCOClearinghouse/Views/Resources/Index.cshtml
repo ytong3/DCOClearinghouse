@@ -19,12 +19,32 @@
 
 <a asp-action="Create">
     <button type="button" class="btn btn-primary">
-        <span class="glyphicon glyphicon-pencil"></span> Submit New
+        <span class="glyphicon glyphicon-plus"></span> Submit New
     </button>
 </a>
 
 @{
     int rowNumber = 0;
+}
+
+@functions
+{
+
+    string GetHostDomain(string urlString)
+    {
+        if (urlString == null)
+            return null;
+        try
+        {
+            Uri uri = new Uri(urlString);
+            return uri?.Host;
+        }
+        catch (UriFormatException)
+        {
+            return null;
+        }
+    }
+
 }
 <table class="table table-striped">
     <thead>
@@ -50,6 +70,7 @@
             </td>
             <td>
                 <a href="@resource.Link" target="_blank">@Html.DisplayFor(_ => resource.Subject)</a>
+                (<span class="small">@GetHostDomain(resource.Link)</span>)
             </td>
             <td>
                 <div class="btn-group btn-group-sm" role="group" aria-label="actions">
