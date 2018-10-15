@@ -2,22 +2,8 @@
 @model System.Collections.Generic.List<DCOClearinghouse.Models.ResourceCategory>
 
 @{
-    ViewData["Title"] = "Resources";
+    Layout = "_ResourcesLayout";
 }
-
-<div class="page-header">
-    <h1>Resources</h1>
-</div>
-
-<ul class="nav nav-tabs">
-    <li>@Html.ActionLink("News", "Index", "Resources")</li>
-    <li class="active">@Html.ActionLink("Classified", "AllCategories", "Resources")</li>
-    <li>@Html.ActionLink("Tags", "Tagcloud", "Resources")</li>
-</ul>
-
-<p>
-    <a asp-action="Create">Suggest New Resources</a>
-</p>
 
 
 @foreach (var row in Model.ToArray().Split(4))

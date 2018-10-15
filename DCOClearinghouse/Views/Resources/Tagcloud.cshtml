@@ -1,7 +1,7 @@
 ﻿@model System.Collections.Generic.List<DCOClearinghouse.Models.Tag>
 
 @{
-    ViewData["Title"] = "Tag Cloud";
+    Layout = "_ResourcesLayout";
 }
 
 @section Scripts{
@@ -18,18 +18,6 @@
 
     </script>
 }
-
-<div class="page-header">
-    <h1>Resources</h1>
-</div>
-
-<ul class="nav nav-tabs">
-    <li>@Html.ActionLink("News", "Index", "Resources")</li>
-    <li>@Html.ActionLink("Classified", "AllCategories", "Resources")</li>
-    <li class="active">
-        <a asp-action="Tagcloud">Tags</a>
-    </li>
-</ul>
 
 <div class="container container-fluid">
     <div id="tags">

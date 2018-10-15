@@ -38,7 +38,7 @@ namespace DCOClearinghouse.Controllers
                 .AsNoTracking()
                 .Where(c => c.Depth == 0)
                 .Include(c => c.ChildrenCategories)
-                .ThenInclude(childCategory=>childCategory.Resources)
+                .ThenInclude(childCategory => childCategory.Resources)
                 .ToListAsync();
 
             return View(allRootCategories);
@@ -49,7 +49,7 @@ namespace DCOClearinghouse.Controllers
         {
             var resourceCategory = await _context.ResourceCategories
                 .AsNoTracking()
-                .Include(c=>c.ChildrenCategories)
+                .Include(c => c.ChildrenCategories)
                 .Include(c => c.Resources)
                 .SingleOrDefaultAsync(c => c.ID == id);
 
@@ -64,12 +64,12 @@ namespace DCOClearinghouse.Controllers
             return View(resourceCategory);
         }
 
-        public async Task<IActionResult> Tagcloud(){
-            
+        public async Task<IActionResult> Tagcloud()
+        {
             var allTags = await _context.Tags
                 .AsNoTracking()
-                .Include(t=>t.ResourceTags)
-                .OrderByDescending(t=>t.ResourceTags.Count)
+                .Include(t => t.ResourceTags)
+                .OrderByDescending(t => t.ResourceTags.Count)
                 .ToListAsync();
 
             return View(allTags);
@@ -78,10 +78,10 @@ namespace DCOClearinghouse.Controllers
         public async Task<IActionResult> Tag(int? id)
         {
             var resourceTags = await _context.ResourceTags.AsNoTracking()
-            .Include(rt=>rt.Tag)
-            .Include(rt=>rt.Resource)
-            .Where(rt=>rt.TagID==id)
-            .ToListAsync();
+                .Include(rt => rt.Tag)
+                .Include(rt => rt.Resource)
+                .Where(rt => rt.TagID == id)
+                .ToListAsync();
 
             return View(resourceTags);
         }
@@ -97,8 +97,8 @@ namespace DCOClearinghouse.Controllers
             var resource = await _context.Resources
                 .AsNoTracking()
                 .Include(r => r.Category)
-                .Include(r=> r.ResourceTags)
-                .ThenInclude(t=>t.Tag)
+                .Include(r => r.ResourceTags)
+                .ThenInclude(t => t.Tag)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (resource == null)
             {
@@ -152,6 +152,7 @@ namespace DCOClearinghouse.Controllers
                                              "Try again, and if the problem persists " +
                                              "see your system administrator.");
             }
+
             ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "CategoryName");
             ViewData["TypeID"] = new SelectList(_context.ResourceTypes, "ID", "TypeName");
             return View();
@@ -175,6 +176,7 @@ namespace DCOClearinghouse.Controllers
             {
                 return NotFound();
             }
+
             ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "ID", resource.CategoryID);
             return View(resource);
         }
@@ -184,7 +186,9 @@ namespace DCOClearinghouse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Subject,Description,CategoryID,BadlinkVotes,CreateDate,Status")] Resource resource)
+        public async Task<IActionResult> Edit(int id,
+            [Bind("ID,Subject,Description,CategoryID,BadlinkVotes,CreateDate,Status")]
+            Resource resource)
         {
             if (id != resource.ID)
             {
@@ -209,8 +213,10 @@ namespace DCOClearinghouse.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "ID", resource.CategoryID);
             return View(resource);
         }

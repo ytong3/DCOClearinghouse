@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Resources";
+    Layout = "_Layout";
+}
+
+@functions
+{
+
+    string IsActive(string viewName)
+    {
+        if (string.Equals(viewName, ViewContext.RouteData.Values["Action"]))
+            
+            return "active";
+        else
+        {
+            return "";
+        }
+    }
+
+}
+
+<nav class="page-header">
+    <h1>Resources</h1>
+</nav>
+
+<ul class="nav nav-tabs">
+    <li class="@IsActive("Index")">@Html.ActionLink("Latest", "Index", "Resources")</li>
+    <li class="@IsActive("AllCategories")">@Html.ActionLink("Classified", "AllCategories", "Resources")</li>
+    <li class="@IsActive("Tagcloud")">@Html.ActionLink("Tags", "Tagcloud", "Resources")</li>
+</ul>
+
+<br />
+
+<a asp-action="Create" asp-controller="Resources">
+    <button type="button" class="btn btn-primary">
+        <span class="glyphicon glyphicon-plus"></span> Submit New
+    </button>
+</a>
+
+@section Scripts{ 
+    @RenderSection("Scripts", false)
+}
+
+<br/>
+<br/>
+@RenderBody()

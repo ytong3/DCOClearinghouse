@@ -2,26 +2,9 @@
 @model System.Collections.Generic.List<Resource>
 
 @{
-    ViewData["Title"] = "Resources";
+    Layout = "_ResourcesLayout";
 }
 
-<nav class="page-header">
-    <h1>Resources</h1>
-</nav>
-
-<ul class="nav nav-tabs">
-    <li class="active">@Html.ActionLink("Latest", "Index", "Resources")</li>
-    <li>@Html.ActionLink("Classified", "AllCategories", "Resources")</li>
-    <li>@Html.ActionLink("Tags", "Tagcloud", "Resources")</li>
-</ul>
-
-<br/>
-
-<a asp-action="Create">
-    <button type="button" class="btn btn-primary">
-        <span class="glyphicon glyphicon-plus"></span> Submit New
-    </button>
-</a>
 
 @{
     int rowNumber = 0;
