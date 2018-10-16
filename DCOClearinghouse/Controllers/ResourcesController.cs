@@ -20,15 +20,11 @@ namespace DCOClearinghouse.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int? page)
         {
             //return the latest
-            var mostRecent = await _context.Resources.AsNoTracking()
-                .OrderByDescending(r => r.CreateDate)
-                .Take(20)
-                .ToListAsync();
-
-            return View(mostRecent);
+                ViewData["pageNumber"] = page ?? 1;
+            return View();
         }
 
         // GET: Resources
@@ -261,18 +257,10 @@ namespace DCOClearinghouse.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        #region Partial View
-        public async Task<IActionResult> ResourcesTablePartial(int page=1)
+        public IActionResult GetResourceTable(int? page)
         {
-            var allResources = _context.Resources
-            .AsNoTracking()
-            .OrderByDescending(r=>r.CreateDate);
-
-            var pageOfResource = await PaginatedList<Resource>.CreateAsync(allResources, page, 20);
-
-            return PartialView(pageOfResource);
+            return ViewComponent("ResourceTable", new {pageNumber = page??1});
         }
-        #endregion
 
         private bool ResourceExists(int id)
         {

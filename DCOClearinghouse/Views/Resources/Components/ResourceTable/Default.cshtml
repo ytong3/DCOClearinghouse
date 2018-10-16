@@ -1,0 +1,88 @@
+@model PaginatedList<DCOClearinghouse.Models.Resource>
+
+@{
+    int rowNumber = (int)ViewData["startIndex"];
+}
+
+@functions
+{
+    string GetHostDomain(string urlString)
+    {
+        if (urlString == null)
+            return null;
+        try
+        {
+            Uri uri = new Uri(urlString);
+            return "("+uri?.Host+")";
+        }
+        catch (UriFormatException)
+        {
+            return null;
+        }
+    }
+}
+
+<div id="table-container">
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>
+
+        </th>
+        <th>
+            
+        </th>
+        <th class="min">
+            
+        </th>
+
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var resource in Model)
+    {
+        <tr>
+            <td>
+                @{ rowNumber++;} <span>@rowNumber</span>.
+            </td>
+            <td>
+                <a href="@resource.Link" target="_blank">@Html.DisplayFor(_ => resource.Subject)</a>
+                <span class="small">@GetHostDomain(resource.Link)</span>
+            </td>
+            <td class="min"> 
+                <div class="btn-group btn-group-sm" role="group" aria-label="actions">
+                    @Html.ActionLink("Details", "Details", "Resources", new {@ID = resource.ID}, new { @class = "btn btn-default"})
+                    @Html.ActionLink("Bad link", "ReportBadLink", "Resources", new {@ID = resource.ID}, new { @class = "btn btn-default"})
+                    <button type="button" class="btn btn-default">Upvote</button>
+                </div>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+</div>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="@ViewContext.RouteData.Values["Action"]"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-page="@(Model.PageIndex-1)"
+   asp-route-searchTypeId="@ViewData["CurrentSearchType"]"
+   asp-route-searchStatus="@ViewData["CurrentStatus"]"
+   class="btn btn-default @prevDisabled"
+>
+    Preivous
+</a>
+
+<a asp-action="@ViewContext.RouteData.Values["Action"]"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-page="@(Model.PageIndex+1)"
+   asp-route-searchTypeId="@ViewData["CurrentSearchType"]"
+   asp-route-searchStatus="@ViewData["CurrentStatus"]"
+   class="btn btn-default @nextDisabled"
+>
+    Next
+</a>

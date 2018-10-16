@@ -18,6 +18,15 @@ table { border-spacing: 5px;/*use to work like cellspacing */
 
 th, td { padding: 10px; } /*use to work like cellpadding */
 
+td {
+    width: auto;
+}
+
+td.min {
+    width: 25%;
+    white-space: nowrap;
+}
+
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
