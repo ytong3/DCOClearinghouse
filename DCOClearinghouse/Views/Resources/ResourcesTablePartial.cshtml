@@ -1,11 +1,4 @@
-﻿@using DCOClearinghouse.Utility
-@model System.Collections.Generic.List<Resource>
-
-@{
-    Layout = "_ResourcesLayout";
-}
-
-
+﻿@model PaginatedList<DCOClearinghouse.Models.Resource>
 @{
     int rowNumber = 0;
 }
@@ -64,9 +57,3 @@
     }
     </tbody>
 </table>
-
-
-@{
-    var paginatedResource = PaginatedList<Resource>.CreateAsync(Model as IQueryable<Resource>, 1, 20);
-    await Html.RenderPartialAsync("ResourceTablePartial",paginatedResource);
-}

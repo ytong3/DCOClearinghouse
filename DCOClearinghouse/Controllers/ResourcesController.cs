@@ -261,6 +261,19 @@ namespace DCOClearinghouse.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        #region Partial View
+        public async Task<IActionResult> ResourcesTablePartial(int page=1)
+        {
+            var allResources = _context.Resources
+            .AsNoTracking()
+            .OrderByDescending(r=>r.CreateDate);
+
+            var pageOfResource = await PaginatedList<Resource>.CreateAsync(allResources, page, 20);
+
+            return PartialView(pageOfResource);
+        }
+        #endregion
+
         private bool ResourceExists(int id)
         {
             return _context.Resources.Any(e => e.ID == id);
