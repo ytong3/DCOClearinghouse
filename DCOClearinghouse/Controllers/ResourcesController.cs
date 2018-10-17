@@ -23,13 +23,15 @@ namespace DCOClearinghouse.Controllers
         public IActionResult Index(int? page)
         {
             //return the latest
-                ViewData["pageNumber"] = page ?? 1;
+            ViewData["pageNumber"] = page ?? 1;
+            ViewData["latestTabActive"] = "active";
             return View();
         }
 
         // GET: Resources
         public async Task<IActionResult> AllCategories()
         {
+            ViewData["classifiedTabActive"] = "active";
             var allRootCategories = await _context.ResourceCategories
                 .AsNoTracking()
                 .Where(c => c.Depth == 0)
@@ -41,8 +43,9 @@ namespace DCOClearinghouse.Controllers
         }
 
         // Get: Resources/Category/3
-        public async Task<IActionResult> Category(int? id)
+        public async Task<IActionResult> Category(int? id, int? page)
         {
+            ViewData["classifiedTabActive"] = "active";
             var resourceCategory = await _context.ResourceCategories
                 .AsNoTracking()
                 .Include(c => c.ChildrenCategories)
@@ -54,6 +57,8 @@ namespace DCOClearinghouse.Controllers
                 throw new InvalidOperationException("resource category.");
             }
 
+            ViewData["pageNumber"] = page??1;
+
 
             //TODO: make use of ViewData to pass in multiple models
 
@@ -62,6 +67,7 @@ namespace DCOClearinghouse.Controllers
 
         public async Task<IActionResult> Tagcloud()
         {
+            ViewData["tagCloudTabActive"] = "active";
             var allTags = await _context.Tags
                 .AsNoTracking()
                 .Include(t => t.ResourceTags)
@@ -73,6 +79,8 @@ namespace DCOClearinghouse.Controllers
 
         public async Task<IActionResult> Tag(int? id)
         {
+            ViewData["tagCloudTabActive"] = "active";
+
             var resourceTags = await _context.ResourceTags.AsNoTracking()
                 .Include(rt => rt.Tag)
                 .Include(rt => rt.Resource)
@@ -249,6 +257,7 @@ namespace DCOClearinghouse.Controllers
 
         public async Task<IActionResult> ReportBadLink(int id)
         {
+            //TODO: this shouldn't be a GET
             var resource = await _context.Resources.FindAsync(id);
             resource.BadlinkVotes++;
 

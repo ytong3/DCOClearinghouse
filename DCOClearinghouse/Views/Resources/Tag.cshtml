@@ -1,5 +1,11 @@
      @model IEnumerable<DCOClearinghouse.Models.ResourceTag>
-     
+     @{
+         Layout = "_ResourcesLayout";
+     }
+
+<div class="well">
+    <h3>#@Html.DisplayFor(model=>model.FirstOrDefault().Tag.Name)</h3>
+</div>
      <div class="container">
          <table class="table table-striped">
              <thead>

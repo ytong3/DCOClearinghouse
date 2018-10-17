@@ -3,30 +3,14 @@
     Layout = "_Layout";
 }
 
-@functions
-{
-
-    string IsActive(string viewName)
-    {
-        if (string.Equals(viewName, ViewContext.RouteData.Values["Action"]))
-            
-            return "active";
-        else
-        {
-            return "";
-        }
-    }
-
-}
-
-<nav class="page-header">
+<div class="page-header">
     <h1>Resources</h1>
-</nav>
+</div>
 
 <ul class="nav nav-tabs">
-    <li class="@IsActive("Index")">@Html.ActionLink("Latest", "Index", "Resources")</li>
-    <li class="@IsActive("AllCategories")">@Html.ActionLink("Classified", "AllCategories", "Resources")</li>
-    <li class="@IsActive("Tagcloud")">@Html.ActionLink("Tags", "Tagcloud", "Resources")</li>
+    <li class="@ViewData["latestTabActive"]">@Html.ActionLink("Latest", "Index", "Resources")</li>
+    <li class="@ViewData["classifiedTabActive"]">@Html.ActionLink("Classified", "AllCategories", "Resources")</li>
+    <li class="@ViewData["tagCloudTabActive"]">@Html.ActionLink("Tags", "Tagcloud", "Resources")</li>
 </ul>
 
 <br />
