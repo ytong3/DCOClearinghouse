@@ -16,14 +16,17 @@ table { border-spacing: 5px;/*use to work like cellspacing */
     height:200px;   
 } 
 
-th, td { padding: 10px; } /*use to work like cellpadding */
-
 td {
     width: auto;
 }
 
 td.min {
-    width: 25%;
+    width: 5%;
+    white-space: nowrap;
+}
+
+th.min {
+    width: 5%;
     white-space: nowrap;
 }
 
