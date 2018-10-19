@@ -77,17 +77,15 @@ namespace DCOClearinghouse.Controllers
             return View(allTags);
         }
 
-        public async Task<IActionResult> Tag(int? id)
+        public async Task<IActionResult> Tag(int? id, int? page)
         {
             ViewData["tagCloudTabActive"] = "active";
+            ViewData["pageNumber"] = page??1;
 
-            var resourceTags = await _context.ResourceTags.AsNoTracking()
-                .Include(rt => rt.Tag)
-                .Include(rt => rt.Resource)
-                .Where(rt => rt.TagID == id)
-                .ToListAsync();
+            var resourceTag = await _context.Tags.AsNoTracking()
+                .FirstOrDefaultAsync(t=>t.ID == id);
 
-            return View(resourceTags);
+            return View(resourceTag);
         }
 
         // GET: Resources/Details/5

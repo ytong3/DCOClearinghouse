@@ -18,29 +18,21 @@
                 <span asp-validation-for="Resource.Subject" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Resource.Description" class="control-label"></label>
-                <textarea asp-for="Resource.Description" class="form-control"></textarea>
-                <span asp-validation-for="Resource.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Resource.Link" class="control-label"></label>
                 <input asp-for="Resource.Link" class="form-control" />
                 <span asp-validation-for="Resource.Link" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Resource.CategoryID" class="control-label">Category</label>
-                <select asp-for="Resource.CategoryID" class="form-control" asp-items="ViewBag.CategoryID">
-                    <option value="" slected hidden>Please select</option>
-                    <option value="">I don't know. Let admin choose for me.</option>
-                </select>
+                <label asp-for="Resource.Description" class="control-label"></label>
+                <textarea asp-for="Resource.Description" class="form-control"></textarea>
+                <span asp-validation-for="Resource.Description" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Resource.TypeID" class="control-label"></label>
-                <select asp-for="Resource.TypeID" class="form-control" asp-items="ViewBag.TypeID">
-                    <option value="" slected hidden>Please select</option>
-                    <option value="">I don't know. Let admin choose for me.</option>
-                </select>
+                <label>Notes for admin</label>
+                <textarea class="form-control"></textarea>
             </div>
+
             <div class="form-group">
                 <input type="checkbox"  asp-for="ContactProvided" class="form-check-input" id="contactInfoProvidedCheck">
                 <label class="form-check-label">I also would like to provide my contact information.</label>

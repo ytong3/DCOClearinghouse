@@ -1,35 +1,12 @@
-     @model IEnumerable<DCOClearinghouse.Models.ResourceTag>
+     @model Tag
      @{
          Layout = "_ResourcesLayout";
      }
 
 <div class="well">
-    <h3>#@Html.DisplayFor(model=>model.FirstOrDefault().Tag.Name)</h3>
+    <h3>#@Html.DisplayFor(model=>model.Name)</h3>
 </div>
+
      <div class="container">
-         <table class="table table-striped">
-             <thead>
-             <tr>
-                 <th scope="col">
-                     @Html.DisplayNameFor(model => model.Resource.Subject)
-                 </th>
-                 <th scope="col">
-                     @Html.DisplayNameFor(model => model.Resource.CreateDate)
-                 </th>
-             </tr>
-             </thead>
-             <tbody>
-             @foreach (var item in Model)
-             {
-                 <tr>
-                     <td scope="row">
-                         <a asp-action="Details" asp-route-id="@item.Resource.ID">@Html.DisplayFor(modelItem => item.Resource.Subject)</a>
-                     </td>
-                     <td>
-                         @Html.DisplayFor(modelItem => item.Resource.CreateDate)
-                     </td>
-                 </tr>
-             }
-             </tbody>
-         </table>
+         @await Component.InvokeAsync("ResourceTable", new {pageNumber = ViewData["pageNumber"], tagID = Model.ID})
      </div>
