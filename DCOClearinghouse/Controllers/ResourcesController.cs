@@ -113,8 +113,6 @@ namespace DCOClearinghouse.Controllers
         // GET: Resources/Create
         public IActionResult Create()
         {
-            ViewData["CategoryID"] = new SelectList(_context.ResourceCategories, "ID", "CategoryName");
-            ViewData["TypeID"] = new SelectList(_context.ResourceTypes, "ID", "TypeName");
             ViewData["latestTabActive"] = "active";
             return View();
         }
@@ -131,6 +129,9 @@ namespace DCOClearinghouse.Controllers
                 if (ModelState.IsValid)
                 {
                     var resource = resourceVM.Resource;
+                    
+                    //Set initial category to uncategorized
+
                     resource.CreateDate = DateTime.Now;
                     resource.Status = ResourceStatus.New;
                     if (resourceVM.ContactProvided)

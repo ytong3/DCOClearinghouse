@@ -8,6 +8,7 @@
 
 <h4>Resource</h4>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
@@ -20,18 +21,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Link" class="control-label"></label>
                 <input asp-for="Link" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TypeID" class="control-label">Type</label>
-                <select asp-for="TypeID" class="form-control" asp-items="ViewBag.ResourceTypeList"></select>
-                <span asp-validation-for="Type" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CategoryID" class="control-label">Category</label>
@@ -56,7 +52,18 @@
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                @Html.Label("Tags", "Tags") <div class="small">use comma(,) to separate tags</div>
+                <textarea class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <div>
+                    <input type="submit" value="Save" class="btn btn-success" />
+
+                    <a asp-action="Details" asp-controller="Resources" class="btn btn-primary">Cancel</a>
+                    
+                    <a asp-action="Delete" asp-route-id="@Model.ID" class="btn btn-danger">Delete</a>
+                </div>
+
             </div>
         </form>
     </div>

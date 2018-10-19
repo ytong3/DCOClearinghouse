@@ -1,6 +1,4 @@
-﻿@model PaginatedList<DCOClearinghouse.Models.Resource>
-
-@{
+﻿@{
     ViewData["Title"] = "Admin Console";
 }
 
@@ -12,127 +10,12 @@
 
 <ul>
     <li>
-        <a asp-action="Create">Create new resource</a>
+        @Html.ActionLink("Create a new resource", "Create", "Resources")
     </li>
     <li>
-        <a asp-action="">Review newly suggested resource (under construction)</a>
+        <a asp-action="">Review uncategorized resource (under construction)</a>
     </li>
     <li>
-        <a asp-action="BrowseByCategory">Find resource by category</a>
+        @Html.ActionLink("See category tree", "BrowseByCategory")
     </li>
 </ul>
-
-<form asp-action="Index" method="get">
-    <h3>Find resources</h3>
-    <div class="row">
-        <div class="form-group col-md-4">
-            <label class="control-label">Category</label>
-            <select name="searchCategoryId" class="form-control" asp-items="ViewBag.CategoryDropdownList">
-                <option value="">Any</option>
-            </select>
-        </div>
-        <div class="form-group col-md-4">
-            <label class="control-label">Type</label>
-            <select name="searchTypeId" class="form-control" asp-items="ViewBag.TypeDropdownList">
-                <option value="" selected>Any</option>
-            </select>
-        </div>
-        <div class="form-group col-md-4">
-            <label class="control-label">Status</label>
-                <select name="searchStatus" asp-items="ViewBag.StatusDropdownList" class="form-control">
-                    <option value="" selected>Any</option>
-                </select>
-        </div>
-     </div>
-     <input type="submit" value="Search" class="btn btn-default"/> |
-     <a asp-action="Index">Reset filter</a>
-</form>
-
-
-<table class="table table-striped">
-    <thead>
-    <tr>
-        <th>
-            <a asp-action="Index"
-               asp-route-sortOrder="@ViewData["TitleSortParam"]"
-               asp-route-searchCategoryId="@ViewData["CurrentSearchCategory"]"
-               asp-route-searchTypeId="@ViewData["CurrentSearchType"]"
-               asp-route-searchStatus="@ViewData["CurrentStatus"]">
-                Title
-            </a>
-        </th>
-        <th>
-            Category
-        </th>
-        <th>
-            Type
-        </th>
-        <th>
-            <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]"               
-               asp-route-searchCategoryId="@ViewData["CurrentSearchCategory"]"
-               asp-route-searchTypeId="@ViewData["CurrentSearchType"]"
-               asp-route-searchStatus="@ViewData["CurrentStatus"]">
-                Date
-            </a>
-        </th>
-        <th>
-            Status
-        </th>
-        <th>
-
-        </th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var resource in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(_=>resource.Subject)
-            </td>
-            <td>
-                @Html.DisplayFor(_=>resource.Category.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(_=>resource.Type.TypeName)
-            </td>
-            <td>
-                @Html.DisplayFor(_=>resource.CreateDate)
-            </td>
-            <td>
-                @Html.DisplayFor(_=>resource.Status)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@resource.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@resource.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@resource.ID">Delete</a>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
-
-@{
-    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-}
-
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-page="@(Model.PageIndex-1)"
-   asp-route-searchTypeId="@ViewData["CurrentSearchType"]"
-   asp-route-searchStatus="@ViewData["CurrentStatus"]"
-   class="btn btn-default @prevDisabled"
->
-    Preivous
-</a>
-
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-page="@(Model.PageIndex+1)"
-   asp-route-searchTypeId="@ViewData["CurrentSearchType"]"
-   asp-route-searchStatus="@ViewData["CurrentStatus"]"
-   class="btn btn-default @nextDisabled"
->
-    Next
-</a>

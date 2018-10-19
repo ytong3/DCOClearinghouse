@@ -21,85 +21,9 @@ namespace DCOClearinghouse.Controllers
         }
 
         // GET: ResourcesController
-        public async Task<IActionResult> Index(
-            int? searchCategoryId, 
-            int? searchTypeId, 
-            ResourceStatus? searchStatus, 
-            string sortOrder,
-            int? page)
+        public async Task<IActionResult> Index()
         {
-            ViewData["CategoryDropdownList"] = GetCategorySelectListDFSOrdered(searchCategoryId, allowAddNew: false);
-            ViewData["TypeDropdownList"] = GetTypeSelectList(searchTypeId, allowAddNew: false);
-            ViewData["StatusDropdownList"] = GetStatusSelectList(searchStatus);
-            ViewData["CurrentSearchType"] = searchTypeId;
-            ViewData["CurrentSearchCategory"] = searchCategoryId;
-            ViewData["CurrentStatus"] = searchStatus;
-            ViewData["CurrentSort"] = sortOrder;
-            ViewData["TitleSortParam"] = string.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
-            ViewData["DateSortParam"] = string.Equals(sortOrder, "Date") ? "date_desc" : "Date";
-
-
-            var resources = _context.Resources.AsNoTracking();
-
-            if (searchTypeId != null)
-            {
-                resources = resources.Where(r => r.TypeID == searchTypeId);
-            }
-
-            if (searchCategoryId != null)
-            {
-                resources = resources.Where(r => r.CategoryID == searchCategoryId);
-            }
-
-            if (searchStatus != null)
-            {
-                searchStatus = (ResourceStatus)searchStatus;
-                resources = resources.Where(r=> r.Status == searchStatus);
-            }
-
-            switch (sortOrder)
-            {
-                case "title_desc":
-                    resources = resources.OrderByDescending(r => r.Subject);
-                    break;
-                case "Date":
-                    resources = resources.OrderBy(r => r.CreateDate);
-                    break;
-                case "date_desc":
-                    resources = resources.OrderByDescending(r => r.CreateDate);
-                    break;
-                default:
-                    resources = resources.OrderBy(r => r.Subject);
-                    break;
-            }
-
-            // load related data
-            resources = resources.Include(r => r.Category).Include(r => r.Type);
-
-            int pageSize = 20;
-            //return View(await resources.Include(r => r.Category).Include(r => r.Type).ToListAsync());
-            return View(await PaginatedList<Resource>.CreateAsync(resources, page ?? 1, pageSize));
-        }
-
-        // GET: ResourcesController/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var resource = await _context.Resources
-                .AsNoTracking()
-                .Include(r => r.Category)
-                .Include(r=>r.Type)
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
-
-            return View(resource);
+            return View();
         }
 
         // GET: ResourcesController/Create
@@ -188,6 +112,7 @@ namespace DCOClearinghouse.Controllers
         // GET: ResourcesController/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            //requires authentication
             if (id == null)
             {
                 return NotFound();
@@ -199,7 +124,6 @@ namespace DCOClearinghouse.Controllers
                 return NotFound();
             }
             ViewData["CategoryID"] = GetCategorySelectListDFSOrdered(resource.CategoryID);
-            ViewData["ResourceTypeList"] = GetTypeSelectList(resource.TypeID);
 
             return View(resource);
         }
@@ -287,7 +211,7 @@ namespace DCOClearinghouse.Controllers
 
         #region Dropdown list helpers
 
-        private List<SelectListItem> GetCategorySelectListDFSOrdered(int? currentCategoryId = null, bool allowAddNew = true)
+        private List<SelectListItem> GetCategorySelectListDFSOrdered(int? currentCategoryId = null, bool allowAddNew = false)
         {
             // get all
             List<ResourceCategory> allCategories = _context.ResourceCategories
@@ -308,7 +232,7 @@ namespace DCOClearinghouse.Controllers
                 select new
                 {
                     category.ID,
-                    CategoryName = string.Concat(Enumerable.Repeat("--", category.Depth))+category.CategoryName+$"({category.Resources.Count})"
+                    CategoryName = string.Concat(Enumerable.Repeat("----", category.Depth))+category.CategoryName+$"({category.Resources.Count})"
                 };
 
 
