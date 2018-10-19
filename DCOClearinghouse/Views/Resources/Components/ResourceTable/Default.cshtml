@@ -28,19 +28,22 @@
 
         var diff = DateTime.UtcNow.Subtract(resourceDateTime.Value);
 
-        var result = $"{diff.Minutes} minutes ago";
-
-        if (diff.Hours > 0)
-        {
-            result = $"{diff.Hours} hours ago";
-        }
+        string result;
 
         if (diff.Days > 0)
         {
-            result = diff.Days == 1 ? $"{diff.Days} day {result}" : $"{diff.Days} days {result}";
+            result = diff.Days == 1 ? $"1 day" : $"{diff.Days} days";
+        }
+        else if (diff.Hours > 0)
+        {
+            result = $"{diff.Hours} hours";
+        }
+        else
+        {
+            result = $"{diff.Minutes} minutes ago";
         }
 
-        return result;
+        return result+" ago";
     }
 }
 
