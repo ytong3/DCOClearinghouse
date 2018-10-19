@@ -2,6 +2,10 @@
     Layout = "_ResourcesLayout";
 }
 
+<a asp-action="Create" asp-controller="Resources" type="button" class="btn btn-primary">
+    <span class="glyphicon glyphicon-plus"></span> Submit New
+</a>
+
 <div id="resource-table">
     @await Component.InvokeAsync("ResourceTable", new {pageNumber = ViewData["pageNumber"]})
 </div>

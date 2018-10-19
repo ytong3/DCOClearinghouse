@@ -9,7 +9,7 @@ namespace DCOClearinghouse.ViewComponents
 {
     public class ResourceTableViewComponent : ViewComponent
     {
-        private static int PageSize = 20;
+        private static int PageSize = 30;
         
         private readonly ResourceContext _context;
 

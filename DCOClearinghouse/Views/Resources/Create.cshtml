@@ -2,12 +2,11 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = "_ResourcesLayout";
 }
 
-<h2>Create</h2>
+<h4>Post a new resource</h4>
 
-<h4>Resource</h4>
-<hr />
 <div class="row">
     <div class="col-md-6">
         <form asp-action="Create">
@@ -19,7 +18,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Resource.Link" class="control-label"></label>
-                <input asp-for="Resource.Link" class="form-control" />
+                <input asp-for="Resource.Link" class="form-control" placeholder="Please include https:// or http://" />
                 <span asp-validation-for="Resource.Link" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -27,10 +26,9 @@
                 <textarea asp-for="Resource.Description" class="form-control"></textarea>
                 <span asp-validation-for="Resource.Description" class="text-danger"></span>
             </div>
-
             <div class="form-group">
                 <label>Notes for admin</label>
-                <textarea class="form-control"></textarea>
+                <textarea class="form-control" placeholder="Optionally suggest the categories for this resource."></textarea>
             </div>
 
             <div class="form-group">
@@ -115,15 +113,13 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div>
+                    <input type="submit" value="Create" class="btn btn-success" />
+
+                    <a asp-action="Index" class="btn btn-danger">Cancel</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

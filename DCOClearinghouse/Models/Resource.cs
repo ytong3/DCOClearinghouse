@@ -24,6 +24,7 @@ namespace DCOClearinghouse.Models
         public string Link { get; set; }
 
         [StringLength(300, MinimumLength = 3)]
+        [Display(Name = "Text")]
         public string Description { get; set; }
 
         [Display(Name = "Category")]

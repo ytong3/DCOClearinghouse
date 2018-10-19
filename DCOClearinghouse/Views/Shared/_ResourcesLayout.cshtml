@@ -10,7 +10,7 @@
 <ul class="nav nav-tabs">
     <li class="@ViewData["latestTabActive"]">
         <a href="@Url.Action("Index", "Resources")">
-            <span class="glyphicon glyphicon-flash"></span> Latest
+            <span class="glyphicon glyphicon-flash"></span> New
         </a>
     </li>
     <li class="@ViewData["classifiedTabActive"]">
@@ -25,16 +25,9 @@
     </li>
 </ul>
 
-<br />
-
-<a asp-action="Create" asp-controller="Resources" type="button" class="btn btn-primary">
-        <span class="glyphicon glyphicon-plus"></span> Submit New
-</a>
 
 @section Scripts{ 
     @RenderSection("Scripts", false)
 }
-
-<br/>
 <br/>
 @RenderBody()
