@@ -22,8 +22,7 @@ namespace DCOClearinghouse.ViewComponents
                                                             int? categoryID,
                                                             int? tagID)
         {
-            var resources = _context.Resources
-                                .AsNoTracking();
+            var resources = _context.Resources.AsNoTracking();
 
             if (categoryID!=null)
             {
@@ -33,9 +32,9 @@ namespace DCOClearinghouse.ViewComponents
             if (tagID!=null)
             {
                 resources = _context.ResourceTags
-                .Include(rt=>rt.Resource)
-                .Where(rt=>rt.TagID == tagID)
-                .Select(rt=>rt.Resource);
+                            .Include(rt=>rt.Resource)
+                            .Where(rt=>rt.TagID == tagID)
+                            .Select(rt=>rt.Resource);
             }
             
             resources = resources.OrderByDescending(r=>r.CreateDate);

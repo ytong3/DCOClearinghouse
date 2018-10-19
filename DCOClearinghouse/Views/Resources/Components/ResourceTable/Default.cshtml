@@ -20,6 +20,28 @@
             return null;
         }
     }
+
+    string GetAgo(DateTime? resourceDateTime)
+    {
+        if (resourceDateTime == null)
+            return "";
+
+        var diff = DateTime.UtcNow.Subtract(resourceDateTime.Value);
+
+        var result = $"{diff.Minutes} minutes ago";
+
+        if (diff.Hours > 0)
+        {
+            result = $"{diff.Hours} hours ago";
+        }
+
+        if (diff.Days > 0)
+        {
+            result = diff.Days == 1 ? $"{diff.Days} day {result}" : $"{diff.Days} days {result}";
+        }
+
+        return result;
+    }
 }
 
 <div id="table-container">
@@ -32,10 +54,6 @@
         <th>
             
         </th>
-        <th class="min">
-            
-        </th>
-
     </tr>
     </thead>
     <tbody>
@@ -43,17 +61,14 @@
     {
         <tr>
             <td>
-                @{ rowNumber++;} <span>@rowNumber</span>.
+                @{ rowNumber++;} <span>@rowNumber.</span>
             </td>
             <td>
                 <a href="@resource.Link" target="_blank">@Html.DisplayFor(_ => resource.Subject)</a>
                 <span class="small">@GetHostDomain(resource.Link)</span>
-            </td>
-            <td class="min"> 
-                <div class="btn-group btn-group-sm" role="group" aria-label="actions">
-                    @Html.ActionLink("Details", "Details", "Resources", new {@ID = resource.ID}, new { @class = "btn btn-default"})
-                    @Html.ActionLink("Bad link", "ReportBadLink", "Resources", new {@ID = resource.ID}, new { @class = "btn btn-default"})
-                    <button type="button" class="btn btn-default">Upvote</button>
+                <br/>
+                <div class="small">
+                    @GetAgo(resource.CreateDate ?? null)  | @Html.ActionLink("Details", "Details", "Resources", new { @ID = resource.ID }) | @Html.ActionLink("Bad link", "ReportBadLink", "Resources", new { @ID = resource.ID })
                 </div>
             </td>
         </tr>
