@@ -48,6 +48,7 @@ namespace DCOClearinghouse.Controllers
             var resourceCategory = await _context.ResourceCategories
                 .AsNoTracking()
                 .Include(c => c.ChildrenCategories)
+                .Include(c=>c.ParentCategory)
                 .Include(c => c.Resources)
                 .SingleOrDefaultAsync(c => c.ID == id);
 

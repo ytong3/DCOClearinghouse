@@ -4,6 +4,18 @@
     Layout="_ResourcesLayout";
 }
 
+<div class="h4">
+    @if (@Model.ParentCategory == null)
+    {
+    <span>@@@Model.CategoryName</span>
+    }
+    else
+    {
+        <span>@@<a asp-action="Category" asp-route-id="@Model.ParentCategoryID">@Model.ParentCategory.CategoryName</a> <bold>/</bold> @Model.CategoryName</span>
+    }
+
+</div>
+
 @if (Model.Depth == 0)
 {
     <ol>
