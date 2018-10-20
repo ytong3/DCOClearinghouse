@@ -7,16 +7,19 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace DCOClearinghouse.Controllers
 {
     public class ResourcesController : Controller
     {
         private readonly ResourceContext _context;
+        private int _uncategorizedId;
 
-        public ResourcesController(ResourceContext context)
+        public ResourcesController(ResourceContext context, IConfiguration config)
         {
             _context = context;
+            _uncategorizedId = int.Parse(config["UncategorizedID"]);
         }
 
         public IActionResult Index(int? page)
@@ -33,7 +36,7 @@ namespace DCOClearinghouse.Controllers
             ViewData["classifiedTabActive"] = "active";
             var allRootCategories = await _context.ResourceCategories
                 .AsNoTracking()
-                .Where(c => c.Depth == 0)
+                .Where(c => c.Depth == 0 && c.ID != _uncategorizedId)
                 .Include(c => c.ChildrenCategories)
                 .ThenInclude(childCategory => childCategory.Resources)
                 .ToListAsync();
@@ -129,9 +132,8 @@ namespace DCOClearinghouse.Controllers
                 if (ModelState.IsValid)
                 {
                     var resource = resourceVM.Resource;
-                    
-                    //Set initial category to uncategorized
 
+                    resource.CategoryID = _uncategorizedId;
                     resource.CreateDate = DateTime.Now;
                     resource.Status = ResourceStatus.New;
                     if (resourceVM.ContactProvided)

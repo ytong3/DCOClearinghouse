@@ -19,7 +19,6 @@ namespace DCOClearinghouse
                 try
                 {
                     var context = services.GetRequiredService<ResourceContext>();
-                    //DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)
                 {

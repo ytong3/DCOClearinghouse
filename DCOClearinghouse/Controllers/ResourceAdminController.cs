@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace DCOClearinghouse.Controllers
 {
@@ -228,7 +229,7 @@ namespace DCOClearinghouse.Controllers
                     dfsOrdered.AddRange(subTree);
             }
 
-            var dropDownItems = from category in dfsOrdered
+            var dropDownItems = from category in dfsOrdered orderby category.CategoryName!="Uncategorized"
                 select new
                 {
                     category.ID,

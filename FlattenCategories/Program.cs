@@ -13,8 +13,15 @@ namespace DatabaseMaintenance
         {
             Console.WriteLine("Start to flatten the categories and keep the subcategories as tags.");
 
+            #region Flatten worked on v9-29 database
+
             //FlattenCategories("flattened_dco_resources");
             //RemoveEmptyCategories("flattened_dco_resources");
+
+            #endregion
+
+            #region Merge duplicate Tags for v10-13 database
+
             var optionsForNewDb = new DbContextOptionsBuilder<ResourceContext>()
                 .UseMySql($"Server=localhost;Port=3306;Database=flattened_dco_resources;Uid=root;Pwd=root;")
                 .EnableSensitiveDataLogging()
@@ -25,6 +32,8 @@ namespace DatabaseMaintenance
                 TagMaintenance.MergeDuplicateTags(context);
                 TagMaintenance.RemoveEmptyTags(context);
             }
+
+            #endregion
         }
 
         private static void RemoveEmptyCategories(string database)

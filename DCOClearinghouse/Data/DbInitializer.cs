@@ -263,7 +263,7 @@ namespace DCOClearinghouse.Data
                     BadlinkVotes = 0,
                     Description = @"Website: http://www.ilr.cornell.edu/ped/",
                     Link = "http://www.ilr.cornell.edu/ped/",
-                    Status = ResourceStatus.Approved,
+                    Status = ResourceStatus.Categorized,
                     CreateDate = new DateTime(2018, 8, 3),
                     Type = new ResourceType()
                     {
@@ -323,7 +323,7 @@ namespace DCOClearinghouse.Data
                     BadlinkVotes = 0,
                     Description = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
                     Link = "https://yahoo.com",
-                    Status = ResourceStatus.Approved,
+                    Status = ResourceStatus.Categorized,
                     CreateDate = new DateTime(2018, 8, 3),
                     Type = new ResourceType()
                     {
@@ -337,7 +337,7 @@ namespace DCOClearinghouse.Data
                     BadlinkVotes = 0,
                     Description = @"Website: http://www.classesusa.com/featuredschools/fos/index.cfm",
                     Link = "https://bing.com",
-                    Status = ResourceStatus.Approved,
+                    Status = ResourceStatus.Categorized,
                     CreateDate = new DateTime(2011, 7, 3),
                     Type = new ResourceType()
                     {
