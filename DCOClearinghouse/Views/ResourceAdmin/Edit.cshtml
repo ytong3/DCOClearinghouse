@@ -1,4 +1,4 @@
-﻿@model DCOClearinghouse.Models.Resource
+﻿@model DCOClearinghouse.ViewModels.AdminEditViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -13,55 +13,50 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ID" />
+            <input type="hidden" asp-for="Resource.ID" />
             <div class="form-group">
-                <label asp-for="Subject" class="control-label"></label>
-                <input asp-for="Subject" class="form-control" />
-                <span asp-validation-for="Subject" class="text-danger"></span>
+                <label asp-for="Resource.Subject" class="control-label"></label>
+                <input asp-for="Resource.Subject" class="form-control" />
+                <span asp-validation-for="Resource.Subject" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="Resource.Description" class="control-label"></label>
+                <textarea asp-for="Resource.Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Resource.Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Link" class="control-label"></label>
-                <input asp-for="Link" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="Resource.Link" class="control-label"></label>
+                <input asp-for="Resource.Link" class="form-control" />
+                <span asp-validation-for="Resource.Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CategoryID" class="control-label">Category</label>
-                <select asp-for="CategoryID" class="form-control" asp-items="ViewBag.CategoryID"></select>
-                <span asp-validation-for="CategoryID" class="text-danger"></span>
+                <label asp-for="Resource.CategoryID" class="control-label">Category</label>
+                <select asp-for="Resource.CategoryID" class="form-control" asp-items="ViewBag.CategoryID"></select>
+                <span asp-validation-for="Resource.CategoryID" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BadlinkVotes" class="control-label"></label>
-                <input asp-for="BadlinkVotes" class="form-control" />
-                <span asp-validation-for="BadlinkVotes" class="text-danger"></span>
+                <label asp-for="Resource.BadlinkVotes" class="control-label"></label>
+                <input asp-for="Resource.BadlinkVotes" class="form-control" />
+                <span asp-validation-for="Resource.BadlinkVotes" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CreateDate" class="control-label"></label>
-                <input asp-for="CreateDate" class="form-control" />
-                <span asp-validation-for="CreateDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" asp-items="Html.GetEnumSelectList<ResourceStatus>()" class="form-control">
+                <label asp-for="Resource.Status" class="control-label"></label>
+                <select asp-for="Resource.Status" asp-items="Html.GetEnumSelectList<ResourceStatus>()" class="form-control">
                     <option selected="selected" value="">Please select</option>
                 </select>
-                <span asp-validation-for="Status" class="text-danger"></span>
+                <span asp-validation-for="Resource.Status" class="text-danger"></span>
             </div>
             <div class="form-group">
                 @Html.Label("Tags", "Tags")
-                <textarea class="form-control" placeholder="use comma(,) to separate tags"></textarea>
+                <textarea class="form-control" placeholder="use comma(,) to separate tags" asp-for="Tags"></textarea>
             </div>
             <div class="form-group">
                 <div>
                     <input type="submit" value="Save" class="btn btn-success" />
 
-                    <a asp-action="Details" asp-controller="Resources" asp-route-id="@Model.ID" class="btn btn-primary">Cancel</a>
+                    <a asp-action="Details" asp-controller="Resources" asp-route-id="@Model.Resource.ID" class="btn btn-primary">Cancel</a>
                     
-                    <a asp-action="Delete" asp-route-id="@Model.ID" class="btn btn-danger">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@Model.Resource.ID" class="btn btn-danger">Delete</a>
                 </div>
 
             </div>

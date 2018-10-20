@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Tag = DCOClearinghouse.Models.Tag;
 
 namespace DCOClearinghouse.Controllers
 {
@@ -36,6 +37,7 @@ namespace DCOClearinghouse.Controllers
             return View();
         }
 
+
         // POST: ResourcesController/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -50,7 +52,7 @@ namespace DCOClearinghouse.Controllers
                     newResourceVM.Resource.CreateDate = DateTime.UtcNow;
                     var newResource = newResourceVM?.Resource;
                     if (newResource == null)
-                        throw new Exception("resource creates");
+                        throw new Exception("editedResource creates");
 
                     // TODO: prevent overposting
 
@@ -119,14 +121,26 @@ namespace DCOClearinghouse.Controllers
                 return NotFound();
             }
 
-            var resource = await _context.Resources.FindAsync(id);
+            var resource = await _context.Resources
+                .Include(r=>r.ResourceTags)
+                .ThenInclude(rt=>rt.Tag)
+                .FirstOrDefaultAsync(r=>r.ID == id);
+
             if (resource == null)
             {
                 return NotFound();
             }
+
+            var tags = string.Join(",", from t in resource.ResourceTags select t.Tag.Name);
+
+            
             ViewData["CategoryID"] = GetCategorySelectListDFSOrdered(resource.CategoryID);
 
-            return View(resource);
+            return View(new AdminEditViewModel()
+            {
+                Resource = resource,
+                Tags = tags
+            });
         }
 
         // POST: ResourcesController/Edit/5
@@ -134,10 +148,10 @@ namespace DCOClearinghouse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Subject,Description,TypeID,CategoryID,BadlinkVotes,CreateDate,Status")] Resource resource)
+        public async Task<IActionResult> Edit(int id, [Bind("Resource, Tags")] AdminEditViewModel editedResource)
         {
             //TODO: implement the anti-overposting mechanism in the Contoso University example.
-            if (id != resource.ID)
+            if (id != editedResource.Resource.ID)
             {
                 return NotFound();
             }
@@ -146,12 +160,61 @@ namespace DCOClearinghouse.Controllers
             {
                 try
                 {
-                    _context.Update(resource);
+                    var resourceToUpdate = editedResource.Resource;
+                    _context.Update(editedResource.Resource);
+
+                    // process tags
+                    var currentTagAssociations = await _context.ResourceTags
+                        .Include(rt=>rt.Tag)
+                        .AsNoTracking()
+                        .Where(rt => rt.ResourceID == id)
+                        .ToListAsync();
+
+                    //existing tags
+                    var tagsBefore = currentTagAssociations.Select(rt => rt.Tag.Name).ToHashSet();
+                    var tagsAfter = editedResource.Tags.Split(",").Select(p => p.Trim()).ToList().ToHashSet();
+
+
+                    var tagNamesToRemoveFromResource = tagsBefore.Except(tagsAfter);
+                    if (tagNamesToRemoveFromResource.Count() != 0)
+                    {
+                        var tagsToRemove = from t in currentTagAssociations where tagNamesToRemoveFromResource.Contains(t.Tag.Name)
+                                            select t;
+                        _context.ResourceTags.RemoveRange(tagsToRemove);
+                    }
+
+                    var tagNamesToAddToResource = new HashSet<string>(tagsAfter.Except(tagsBefore));
+
+                    // add unknown tags
+                    if (tagNamesToAddToResource.Count() != 0)
+                    {
+                        var existingTags = _context.Tags.AsNoTracking().Select(t => t.Name);
+                        var unknownTagNames = tagNamesToAddToResource.Except(new HashSet<string>(existingTags));
+                        foreach (var unknownTagName in unknownTagNames)
+                        {
+                            var tagEntity = _context.Tags.Add(new Tag {Name = unknownTagName});
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+
+                    // add tagNamesToAddToResource to the resource
+                    foreach (var tagName in tagNamesToAddToResource)
+                    {
+                        var tag = _context.Tags.AsNoTracking().FirstOrDefault(t => t.Name == tagName);
+                        _context.ResourceTags.Add(new ResourceTag()
+                        {
+                            ResourceID = resourceToUpdate.ID,
+                            TagID = tag.ID
+                        });
+                    }
+                    
+
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ResourceExists(resource.ID))
+                    if (!ResourceExists(editedResource.Resource.ID))
                     {
                         return NotFound();
                     }
@@ -162,7 +225,7 @@ namespace DCOClearinghouse.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(resource);
+            return View(editedResource);
         }
 
         // GET: ResourcesController/Delete/5
@@ -208,6 +271,11 @@ namespace DCOClearinghouse.Controllers
         private bool ResourceExists(int id)
         {
             return _context.Resources.Any(e => e.ID == id);
+        }
+
+        private bool TagExists(string tagName)
+        {
+            return _context.Tags.Any(t => t.Name == tagName);
         }
 
         #region Dropdown list helpers
