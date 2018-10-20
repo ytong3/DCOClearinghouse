@@ -67,11 +67,18 @@
                 @{ rowNumber++;} <span>@rowNumber.</span>
             </td>
             <td>
-                <a href="@resource.Link" target="_blank">@Html.DisplayFor(_ => resource.Subject)</a>
-                <span class="small">@GetHostDomain(resource.Link)</span>
+                @if (resource.Link == null)
+                {
+                    @Html.ActionLink(resource.Subject, "Details", new {ID = resource.ID})
+                }
+                else
+                {
+                    <a href="@resource.Link" target="_blank">@Html.DisplayFor(_ => resource.Subject)</a>
+                    <span class="small">@GetHostDomain(resource.Link)</span>
+                }
                 <br/>
                 <div class="small">
-                    @GetAgo(resource.CreateDate ?? null)  | @Html.ActionLink("Details", "Details", "Resources", new { @ID = resource.ID }) | @Html.ActionLink("Bad link", "ReportBadLink", "Resources", new { @ID = resource.ID })
+                    @GetAgo(resource.CreateDate ?? null) | @Html.ActionLink("Details", "Details", "Resources", new {@ID = resource.ID}) | @Html.ActionLink("Bad link", "ReportBadLink", "Resources", new {@ID = resource.ID})
                 </div>
             </td>
         </tr>
