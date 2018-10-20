@@ -59,7 +59,7 @@
                 <div>
                     <input type="submit" value="Save" class="btn btn-success" />
 
-                    <a asp-action="Details" asp-controller="Resources" class="btn btn-primary">Cancel</a>
+                    <a asp-action="Details" asp-controller="Resources" asp-route-id="@Model.ID" class="btn btn-primary">Cancel</a>
                     
                     <a asp-action="Delete" asp-route-id="@Model.ID" class="btn btn-danger">Delete</a>
                 </div>
