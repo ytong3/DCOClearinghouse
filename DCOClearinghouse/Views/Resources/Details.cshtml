@@ -16,6 +16,10 @@
     <div class="well">@Html.DisplayFor(model => model.Description)</div>
 }
 
+<div>
+    Created at @Model.CreateDate
+</div>
+
 <br />
 <br />
 @if (Model.Contact != null && !string.IsNullOrEmpty(Model.Contact.FirstName))
@@ -73,5 +77,5 @@
 <div>
     <a asp-action="ReportBadlink" asp-route-id="@Model.ID">Report link is broken</a> |
     <a asp-action="Index">Back to List</a> |
-    <a asp-action="Edit" asp-controller="ResourceAdmin" asp-route-id="@Model.ID">Edit (Admin)</a>
+    <a asp-action="Edit" asp-controller="ResourceAdmin" asp-route-id="@Model.ID">Admin</a>
 </div>
