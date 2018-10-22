@@ -466,7 +466,7 @@ namespace DCOClearinghouse.Controllers
                 return NotFound();
             _context.ResourceCategories.Remove(category);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("AllCategories", "Resources");
         }
 
         #region Ajax
