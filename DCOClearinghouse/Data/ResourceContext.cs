@@ -1,5 +1,6 @@
 ﻿using DCOClearinghouse.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Newtonsoft.Json;
 
 namespace DCOClearinghouse.Data
@@ -23,6 +24,10 @@ namespace DCOClearinghouse.Data
                 .HasConversion(
                     c => JsonConvert.SerializeObject(c),
                     c => JsonConvert.DeserializeObject<ContactInfo>(c));
+            modelBuilder.Entity<Resource>(builder =>
+                {
+                    builder.Property(r => r.CreateDate).Metadata.AfterSaveBehavior = PropertySaveBehavior.Ignore;
+                });
 
             modelBuilder.Entity<ResourceCategory>().ToTable("ResourceCategory");
 
