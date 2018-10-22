@@ -18,14 +18,20 @@
 
 @if (Model.Depth == 0)
 {
-    <ol>
-        @foreach (var subcat in Model.ChildrenCategories)
-        {
-            <li>
-                <a asp-action="Category" asp-route-id="@subcat.ID">@Html.DisplayFor(m=>subcat.CategoryName)</a>
-            </li>
-        }
-    </ol>
+    if (Model.ChildrenCategories.Count == 0)
+    {
+        <a asp-action="DeleteEmptyCategory" asp-controller="ResourceAdmin" asp-route-id="@Model.ID">Admin Delete</a>
+    }
+    {
+        <ol>
+            @foreach (var subcat in Model.ChildrenCategories)
+            {
+                <li>
+                    <a asp-action="Category" asp-route-id="@subcat.ID">@Html.DisplayFor(m=>subcat.CategoryName)</a>
+                </li>
+            }
+        </ol>
+    }
 }
 else
 {
@@ -33,6 +39,7 @@ else
 if (Model.Resources.Count == 0)
  {
      <p>None</p>
+     @Html.ActionLink("Admin", "DeleteEmptyCategory", "ResourceAdmin", new {id=Model.ID})
  }
  else
  {

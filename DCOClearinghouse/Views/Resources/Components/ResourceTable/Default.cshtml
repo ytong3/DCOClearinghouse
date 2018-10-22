@@ -78,7 +78,7 @@
                 }
                 <br/>
                 <div class="small">
-                    @GetAgo(resource.CreateDate ?? null) | @Html.ActionLink("Details", "Details", "Resources", new {@ID = resource.ID}) | @Html.ActionLink("Bad link", "ReportBadLink", "Resources", new {@ID = resource.ID})
+                    @GetAgo(resource.CreateDate ?? null) | @Html.ActionLink("Open", "Details", "Resources", new {@ID = resource.ID}) | @Html.ActionLink("Bad link", "ReportBadLink", "Resources", new {@ID = resource.ID})
                 </div>
             </td>
         </tr>

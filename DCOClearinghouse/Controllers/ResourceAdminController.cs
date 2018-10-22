@@ -431,6 +431,44 @@ namespace DCOClearinghouse.Controllers
             return View();
         }
 
+        public async Task<IActionResult> DeleteEmptyCategory(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var category = await _context.ResourceCategories
+                .AsNoTracking()
+                .Include(c=>c.ChildrenCategories)
+                .Include(c=>c.Resources)
+                .FirstOrDefaultAsync(m => m.ID == id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            if (category.Resources.Count != 0 || category.ChildrenCategories.Count != 0)
+            {
+                ModelState.AddModelError("", "Category has resources or subcategories. Cannot delete.");
+            }
+
+            return View(category);
+        }
+
+        [HttpPost, ActionName("DeleteEmptyCategory")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteEmptyCategoryConfirmed(int id)
+        {
+            var category = await _context.ResourceCategories.FindAsync(id);
+            if (null == category)
+                return NotFound();
+            _context.ResourceCategories.Remove(category);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
         #region Ajax
 
         //Action result for ajax call

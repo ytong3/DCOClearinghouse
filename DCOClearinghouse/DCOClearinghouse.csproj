@@ -18,5 +18,8 @@
     <Content Update="Views\ResourceAdmin\CreateNewCategory.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\ResourceAdmin\DeleteEmptyCategory.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 </Project>
