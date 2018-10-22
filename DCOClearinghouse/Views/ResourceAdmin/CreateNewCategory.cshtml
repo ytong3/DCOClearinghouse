@@ -1,0 +1,84 @@
+﻿@model DCOClearinghouse.ViewModels.CategoryCreationViewModel
+
+
+@{
+    ViewData["Title"] = "Create a new category";
+}
+
+<h3>Create a new category</h3>
+<div class="row">
+    <div class="col-md-5">
+        @using (Html.BeginForm())
+        {
+            <div class="form-group">
+                <label class="control-label">Choose a category</label>
+                <select id="ddlparent"
+                        asp-for="ParentCategoryID"
+                        asp-items="@(new SelectList(Model.ParentCategories, "ID", "CategoryName"))"
+                        size="10"
+                        class="form-control"
+                        onchange="javascript: GetSubcategories(this.value);">
+                    <option value="" selected>Please choose one</option>
+                </select>
+            </div>
+            <div class="form-group">
+                @Html.CheckBoxFor(m => m.IsNewParentCategory, new {@onchange="javascript:OnAddNewCategoryChange(this.value);"}) <label>Or add a new category</label>
+                <input asp-for="NewParentCategoryName" class="form-control" placeholder="Name of the new top category to add to" />
+                <span asp-validation-for="NewParentCategoryName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>New subcategory name. Make it different from any existing ones.</label>
+                <input asp-for="NewSubcategoryName" class="form-control" placeholder="Name of the new subcategory" />
+                <span asp-validation-for="NewSubcategoryName" class="text-danger"></span>
+            </div>
+            <br />
+            <br />
+
+            <div>
+                <input type="submit" value="Create" class="btn btn-success">
+                @Html.ActionLink("Cancel", "Index", null, null, new { @class = "btn btn-danger" })
+            </div>
+        }
+    </div>
+    <div class="col-md-5">
+        <strong>Existing subcategories:</strong>
+        <ul id="listSubcategory"></ul>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script language="javascript" type="text/javascript">
+        function GetSubcategories(_parentCategoryId) {
+            var procemessage = "<option value='0'> Please wait...</option>";
+            $("#listSubcategory").html(procemessage).show();
+            var url = "/ResourceAdmin/GetSubcategoyByCategoryID";
+
+            $.ajax({
+                url: url,
+                data: { categoryID: _parentCategoryId },
+                cache: false,
+                type: "POST",
+                success: function(data) {
+                    var markup = "";
+                    for (var x = 0; x < data.length; x++) {
+                        markup += "<li>" + data[x].text + "</li>";
+                    }
+                    $("#listSubcategory").html(markup).show();
+                },
+                error: function(response) {
+                    alert("error: " + response);
+                }
+            });
+        };
+
+        function OnAddNewCategoryChange(checked) {
+            if (checked === true) {
+                $("#ddlparent").disable();
+            } else {
+                $("#ddlparent").enable();
+            }
+        }
+    </script>
+}

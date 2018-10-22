@@ -134,7 +134,7 @@ namespace DCOClearinghouse.Controllers
                     var resource = resourceVM.Resource;
 
                     resource.CategoryID = _uncategorizedId;
-                    resource.CreateDate = DateTime.Now;
+                    resource.CreateDate = DateTime.UtcNow;
                     resource.Status = ResourceStatus.New;
                     if (resourceVM.ContactProvided)
                     {

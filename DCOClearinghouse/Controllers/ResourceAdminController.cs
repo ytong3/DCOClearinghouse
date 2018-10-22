@@ -32,7 +32,8 @@ namespace DCOClearinghouse.Controllers
         public IActionResult Create()
         {
             ViewData["CategoryDropdownListAddAllowed"] = GetCategorySelectListDFSOrdered();
-            ViewData["CategoryDropdownList"] = GetCategorySelectListDFSOrdered(currentCategoryId: null, allowAddNew: false);
+            ViewData["CategoryDropdownList"] =
+                GetCategorySelectListDFSOrdered(currentCategoryId: null, allowAddNew: false);
             ViewData["TypeDropdownList"] = GetTypeSelectList();
             return View();
         }
@@ -43,7 +44,8 @@ namespace DCOClearinghouse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Resource, NewCategory, NewTypeName")] ResourceAdminViewModel newResourceVM)
+        public async Task<IActionResult> Create([Bind("Resource, NewCategory, NewTypeName")]
+            ResourceAdminViewModel newResourceVM)
         {
             try
             {
@@ -65,7 +67,7 @@ namespace DCOClearinghouse.Controllers
                             var parentCategory = await
                                 _context.ResourceCategories
                                     .AsNoTracking()
-                                    .SingleOrDefaultAsync(c=>c.ID == newCategory.ParentCategoryID);
+                                    .SingleOrDefaultAsync(c => c.ID == newCategory.ParentCategoryID);
 
                             if (parentCategory == null)
                                 throw new Exception("Category doesn't exist.");
@@ -75,6 +77,7 @@ namespace DCOClearinghouse.Controllers
                         {
                             newCategory.Depth = 0;
                         }
+
                         _context.ResourceCategories.Add(newCategory);
                         await _context.SaveChangesAsync();
 
@@ -106,8 +109,10 @@ namespace DCOClearinghouse.Controllers
                                              "Try again, and if the problem persists " +
                                              "see your system administrator.");
             }
+
             ViewData["CategoryDropdownListAddAllowed"] = GetCategorySelectListDFSOrdered();
-            ViewData["CategoryDropdownList"] = GetCategorySelectListDFSOrdered(currentCategoryId:null, allowAddNew:false);
+            ViewData["CategoryDropdownList"] =
+                GetCategorySelectListDFSOrdered(currentCategoryId: null, allowAddNew: false);
             ViewData["TypeDropdownList"] = GetTypeSelectList();
             return View();
         }
@@ -122,9 +127,9 @@ namespace DCOClearinghouse.Controllers
             }
 
             var resource = await _context.Resources
-                .Include(r=>r.ResourceTags)
-                .ThenInclude(rt=>rt.Tag)
-                .FirstOrDefaultAsync(r=>r.ID == id);
+                .Include(r => r.ResourceTags)
+                .ThenInclude(rt => rt.Tag)
+                .FirstOrDefaultAsync(r => r.ID == id);
 
             if (resource == null)
             {
@@ -133,7 +138,7 @@ namespace DCOClearinghouse.Controllers
 
             var tags = string.Join(",", from t in resource.ResourceTags select t.Tag.Name);
 
-            
+
             ViewData["CategoryID"] = GetCategorySelectListDFSOrdered(resource.CategoryID);
 
             return View(new AdminEditViewModel()
@@ -165,21 +170,26 @@ namespace DCOClearinghouse.Controllers
 
                     // process tags
                     var currentTagAssociations = await _context.ResourceTags
-                        .Include(rt=>rt.Tag)
+                        .Include(rt => rt.Tag)
                         .AsNoTracking()
                         .Where(rt => rt.ResourceID == id)
                         .ToListAsync();
 
                     //existing tags
                     var tagsBefore = currentTagAssociations.Select(rt => rt.Tag.Name).ToHashSet();
-                    var tagsAfter = editedResource.Tags.Split(",").Select(p => p.Trim()).ToList().ToHashSet();
 
+                    var tagsAfter = new HashSet<string>();
+                    if (!string.IsNullOrWhiteSpace(editedResource.Tags))
+                    {
+                        tagsAfter = editedResource.Tags.Split(",").Select(p => p?.Trim()).ToList().ToHashSet();
+                    }
 
                     var tagNamesToRemoveFromResource = tagsBefore.Except(tagsAfter);
                     if (tagNamesToRemoveFromResource.Count() != 0)
                     {
-                        var tagsToRemove = from t in currentTagAssociations where tagNamesToRemoveFromResource.Contains(t.Tag.Name)
-                                            select t;
+                        var tagsToRemove = from t in currentTagAssociations
+                            where tagNamesToRemoveFromResource.Contains(t.Tag.Name)
+                            select t;
                         _context.ResourceTags.RemoveRange(tagsToRemove);
                     }
 
@@ -207,7 +217,6 @@ namespace DCOClearinghouse.Controllers
                             TagID = tag.ID
                         });
                     }
-                    
 
 
                     await _context.SaveChangesAsync();
@@ -223,8 +232,10 @@ namespace DCOClearinghouse.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(editedResource);
         }
 
@@ -261,9 +272,8 @@ namespace DCOClearinghouse.Controllers
 
         public async Task<IActionResult> BrowseByCategory()
         {
-            var allCategories = await _context.ResourceCategories.AsNoTracking().
-                Include(c=>c.ChildrenCategories)
-                .Include(c=>c.Resources)
+            var allCategories = await _context.ResourceCategories.AsNoTracking().Include(c => c.ChildrenCategories)
+                .Include(c => c.Resources)
                 .ToListAsync();
             return View(allCategories);
         }
@@ -280,15 +290,16 @@ namespace DCOClearinghouse.Controllers
 
         #region Dropdown list helpers
 
-        private List<SelectListItem> GetCategorySelectListDFSOrdered(int? currentCategoryId = null, bool allowAddNew = false)
+        private List<SelectListItem> GetCategorySelectListDFSOrdered(int? currentCategoryId = null,
+            bool allowAddNew = false)
         {
             // get all
             List<ResourceCategory> allCategories = _context.ResourceCategories
                 .Include(c => c.ChildrenCategories)
-                .Include(c=>c.Resources)
+                .Include(c => c.Resources)
                 .ToList();
             var rootCategories = from rootCategory in allCategories where rootCategory.Depth == 0 select rootCategory;
-            
+
             List<ResourceCategory> dfsOrdered = new List<ResourceCategory>();
             foreach (var rootCategory in rootCategories)
             {
@@ -297,18 +308,20 @@ namespace DCOClearinghouse.Controllers
                     dfsOrdered.AddRange(subTree);
             }
 
-            var dropDownItems = from category in dfsOrdered orderby category.CategoryName!="Uncategorized"
+            var dropDownItems = from category in dfsOrdered
+                orderby category.CategoryName != "Uncategorized"
                 select new
                 {
                     category.ID,
-                    CategoryName = string.Concat(Enumerable.Repeat("----", category.Depth))+category.CategoryName+$"({category.Resources.Count})"
+                    CategoryName = string.Concat(Enumerable.Repeat("----", category.Depth)) + category.CategoryName +
+                                   $"({category.Resources.Count})"
                 };
 
 
             List<SelectListItem> list = new SelectList(dropDownItems, "ID", "CategoryName", currentCategoryId).ToList();
 
             if (allowAddNew)
-                list.Insert(0,new SelectListItem
+                list.Insert(0, new SelectListItem
                 {
                     Text = "Add new",
                     Value = null
@@ -328,7 +341,7 @@ namespace DCOClearinghouse.Controllers
             foreach (var childCategory in category.ChildrenCategories)
             {
                 var subTreeDFSTraversal = DepthFirstTranversalCategories(childCategory);
-                if (subTreeDFSTraversal!=null)
+                if (subTreeDFSTraversal != null)
                     result.AddRange(subTreeDFSTraversal);
             }
 
@@ -349,10 +362,86 @@ namespace DCOClearinghouse.Controllers
             return list;
         }
 
-        private SelectList GetStatusSelectList(ResourceStatus? status){
+        private SelectList GetStatusSelectList(ResourceStatus? status)
+        {
             var allStatuses = from ResourceStatus s in Enum.GetValues(typeof(ResourceStatus))
-                select new { ID = s, Name = s.ToString()};
+                select new {ID = s, Name = s.ToString()};
             return new SelectList(allStatuses, "ID", "Name", status);
+        }
+
+        #endregion
+
+        public async Task<IActionResult> CreateNewCategory()
+        {
+            var categoryCreationVM = new CategoryCreationViewModel
+            {
+                ParentCategories = await _context.ResourceCategories.Where(c => c.Depth == 0).ToListAsync(),
+            };
+
+            return View(categoryCreationVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateNewCategory(
+            [Bind("ParentCategoryID", "IsNewParentCategory", "NewParentCategoryName", "NewSubcategoryName")]
+            CategoryCreationViewModel categoryCreationViewModel)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    int topLevelCategoryId = categoryCreationViewModel.ParentCategoryID;
+
+                    if (categoryCreationViewModel.IsNewParentCategory)
+                    {
+                        //create a new top level category
+                        if (string.IsNullOrEmpty(categoryCreationViewModel.NewParentCategoryName))
+                            ModelState.AddModelError("", "New top-level category is unspecified");
+
+                        var categoryEntry = _context.Add(new ResourceCategory()
+                        {
+                            CategoryName = categoryCreationViewModel.NewParentCategoryName,
+                            Depth = 0,
+                        });
+
+                        await _context.SaveChangesAsync();
+
+                        //overwrite this if new toplevel category to be created.
+                        topLevelCategoryId = categoryEntry.Entity.ID;
+                    }
+
+                    _context.Add(new ResourceCategory()
+                    {
+                        Depth = 1,
+                        ParentCategoryID = topLevelCategoryId,
+                        CategoryName = categoryCreationViewModel.NewSubcategoryName
+                    });
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Unable to save changes. " +
+                                             "Try again, and if the problem persists " +
+                                             "see your system administrator.");
+            }
+
+            return View();
+        }
+
+        #region Ajax
+
+        //Action result for ajax call
+        [HttpPost]
+        public async Task<IActionResult> GetSubcategoyByCategoryID(int categoryID)
+        {
+            var subcategories = await _context.ResourceCategories.AsNoTracking()
+                .Where(c => c.ParentCategoryID == categoryID)
+                .ToListAsync();
+            SelectList subcategoryList = new SelectList(subcategories, "ID", "CategoryName", 0);
+            return Json(subcategoryList);
         }
 
         #endregion

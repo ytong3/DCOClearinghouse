@@ -13,4 +13,10 @@
   <ItemGroup>
     <None Include="wwwroot\js\tagcloud.js" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\ResourceAdmin\CreateNewCategory.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
 </Project>
