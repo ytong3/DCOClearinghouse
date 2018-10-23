@@ -8,11 +8,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
-using Tag = DCOClearinghouse.Models.Tag;
 
 namespace DCOClearinghouse.Controllers
 {
+    [Authorize]
     public class ResourceAdminController : Controller
     {
         private readonly ResourceContext _context;
