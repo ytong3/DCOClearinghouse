@@ -22,7 +22,10 @@
                 </select>
             </div>
             <div class="form-group">
-                @Html.CheckBoxFor(m => m.IsNewParentCategory, new {@onchange="javascript:OnAddNewCategoryChange(this.value);"}) <label>Or add a new category</label>
+                <label>
+                @Html.CheckBoxFor(m => m.IsNewParentCategory, new {@onchange="javascript:OnAddNewCategoryChange(this.value);"})
+                Or add a new top level category
+                </label>
                 <input asp-for="NewParentCategoryName" class="form-control" placeholder="Name of the new top category to add to" />
                 <span asp-validation-for="NewParentCategoryName" class="text-danger"></span>
             </div>
