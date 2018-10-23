@@ -69,7 +69,7 @@
             <td>
                 @if (resource.Link == null)
                 {
-                    @Html.ActionLink(resource.Subject, "Details", new {ID = resource.ID})
+                    @Html.ActionLink(resource.Subject, "Details", "Resources", new {ID = resource.ID})
                 }
                 else
                 {

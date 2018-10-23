@@ -7,8 +7,15 @@
     <h3>#@Html.DisplayFor(model=>model.Name)</h3>
 </div>
 
-@if(Model.ResourceTags.Count()==0)
-
-     <div class="container">
-         @await Component.InvokeAsync("ResourceTable", new {pageNumber = ViewData["pageNumber"], tagID = Model.ID})
-     </div>
+@if (Model.ResourceTags.Any())
+{
+    <div class="container">
+        @await Component.InvokeAsync("ResourceTable", new {pageNumber = ViewData["pageNumber"], tagID = Model.ID, status=ResourceStatus.New})
+    </div>
+}
+else
+{
+    <div class="container">
+        <a asp-action="DeleteEmptyTag" asp-controller="ResourceAdmin" asp-route-id="@Model.ID">Manage Tags</a>
+    </div>
+}

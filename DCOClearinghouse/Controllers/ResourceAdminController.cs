@@ -16,10 +16,12 @@ namespace DCOClearinghouse.Controllers
     public class ResourceAdminController : Controller
     {
         private readonly ResourceContext _context;
+        private int _uncategorizedId;
 
-        public ResourceAdminController(ResourceContext context)
+        public ResourceAdminController(ResourceContext context, IConfiguration config)
         {
             _context = context;
+            _uncategorizedId = int.Parse(config["UncategorizedID"]);
         }
 
         // GET: ResourcesController
@@ -449,7 +451,7 @@ namespace DCOClearinghouse.Controllers
                 return NotFound();
             }
 
-            if (category.Resources.Count != 0 || category.ChildrenCategories.Count != 0)
+            if (category.Resources.Any() || category.ChildrenCategories.Any())
             {
                 ModelState.AddModelError("", "Category has resources or subcategories. Cannot delete.");
             }
@@ -469,6 +471,43 @@ namespace DCOClearinghouse.Controllers
             return RedirectToAction("AllCategories", "Resources");
         }
 
+        public async Task<IActionResult> DeleteEmptyTag(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tag = await _context.Tags
+                .AsNoTracking()
+                .Include(t => t.ResourceTags)
+                .FirstOrDefaultAsync(t => t.ID == id);
+
+            if (tag == null)
+            {
+                return NotFound();
+            }
+
+            if (tag.ResourceTags.Any())
+            {
+                ModelState.AddModelError("", "Cannot delete a tag that still attached to a resource.");
+            }
+
+            return View(tag);
+        }
+
+        [HttpPost, ActionName("DeleteEmptyTag")]
+        public async Task<IActionResult> DeleteEmptyTagConfirmed(int id)
+        {
+            var tag = await _context.Tags.FindAsync(id);
+            if (null == tag)
+                return NotFound();
+
+            _context.Tags.RemoveRange(tag);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Tagcloud", "Resources");
+        }
+
         #region Ajax
 
         //Action result for ajax call
@@ -483,5 +522,24 @@ namespace DCOClearinghouse.Controllers
         }
 
         #endregion
+
+        public async Task<IActionResult> ListRemoved()
+        {
+            var removedResources = await _context.Resources
+                .AsNoTracking()
+                .Include(r => r.Category)
+                .Where(r => r.Status == ResourceStatus.Removed)
+                .ToListAsync();
+
+            return View(removedResources);
+        }
+
+        public IActionResult ListUncategorized(int? page)
+        {
+            ViewData["pageNumber"] = page ?? 1;
+            ViewData["uncategorizedID"] = _uncategorizedId;
+
+            return View();
+        }
     }
 }

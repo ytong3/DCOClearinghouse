@@ -13,7 +13,7 @@
             <div class="col-md-3">
                 <div class="panel panel-info">
                     <div class="panel-heading">
-                        <a asp-action="Category" asp-route-id="@category.ID" target="_blank">
+                        <a asp-action="Category" asp-route-id="@category.ID">
                             <strong>@category.CategoryName</strong>
                         </a>
                     </div>
@@ -25,7 +25,7 @@
                                 @foreach (var subCategory in rowInPanel)
                                 {
                                     <div class="col-sm-12">
-                                        <a asp-action="Category" asp-route-id="@subCategory.ID" target="_blank">@subCategory.CategoryName (@subCategory.Resources.Count)</a>
+                                        <a asp-action="Category" asp-route-id="@subCategory.ID" target="_blank">@subCategory.CategoryName (@subCategory.Resources.Count(r => r.Status==ResourceStatus.New))</a>
                                         <br>
                                     </div>
                                 }

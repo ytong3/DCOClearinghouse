@@ -7,5 +7,5 @@
 </a>
 
 <div id="resource-table">
-    @await Component.InvokeAsync("ResourceTable", new {pageNumber = ViewData["pageNumber"]})
+    @await Component.InvokeAsync("ResourceTable", new {pageNumber = ViewData["pageNumber"], status=ResourceStatus.New})
 </div>

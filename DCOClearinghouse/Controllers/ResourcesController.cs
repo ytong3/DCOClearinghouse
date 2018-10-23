@@ -36,9 +36,9 @@ namespace DCOClearinghouse.Controllers
             ViewData["classifiedTabActive"] = "active";
             var allRootCategories = await _context.ResourceCategories
                 .AsNoTracking()
-                .Where(c => c.Depth == 0 && c.ID != _uncategorizedId)
                 .Include(c => c.ChildrenCategories)
                 .ThenInclude(childCategory => childCategory.Resources)
+                .Where(c => c.Depth == 0 && c.ID != _uncategorizedId)
                 .ToListAsync();
 
             return View(allRootCategories);
@@ -74,6 +74,7 @@ namespace DCOClearinghouse.Controllers
             var allTags = await _context.Tags
                 .AsNoTracking()
                 .Include(t => t.ResourceTags)
+                .ThenInclude(rt=>rt.Resource)
                 .OrderByDescending(t => t.ResourceTags.Count)
                 .ToListAsync();
 
@@ -86,6 +87,7 @@ namespace DCOClearinghouse.Controllers
             ViewData["pageNumber"] = page??1;
 
             var resourceTag = await _context.Tags.AsNoTracking()
+                .Include(t=>t.ResourceTags)
                 .FirstOrDefaultAsync(t=>t.ID == id);
 
             return View(resourceTag);

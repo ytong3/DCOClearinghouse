@@ -20,7 +20,8 @@ namespace DCOClearinghouse.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(int pageNumber, 
                                                             int? categoryID,
-                                                            int? tagID)
+                                                            int? tagID,
+                                                            ResourceStatus? status = ResourceStatus.New)
         {
             var resources = _context.Resources.AsNoTracking();
 
@@ -35,6 +36,11 @@ namespace DCOClearinghouse.ViewComponents
                             .Include(rt=>rt.Resource)
                             .Where(rt=>rt.TagID == tagID)
                             .Select(rt=>rt.Resource);
+            }
+
+            if (status != null)
+            {
+                resources = resources.Where(r => r.Status == status);
             }
             
             resources = resources.OrderByDescending(r=>r.CreateDate);

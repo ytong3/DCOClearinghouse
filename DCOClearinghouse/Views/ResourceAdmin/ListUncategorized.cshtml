@@ -1,0 +1,10 @@
+﻿@model IEnumerable<DCOClearinghouse.Models.Resource>
+
+@{
+    ViewData["Title"] = "List Uncategorized";
+}
+
+<h2>Uncategorized Resources</h2>
+
+@await Component.InvokeAsync("ResourceTable", new {pageNumber = ViewData["pageNumber"], categoryID = ViewData["uncategorizedID"], status=ResourceStatus.New})
+

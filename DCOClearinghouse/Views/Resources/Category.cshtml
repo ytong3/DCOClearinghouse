@@ -39,12 +39,12 @@ else
 if (Model.Resources.Count == 0)
  {
      <p>None</p>
-     @Html.ActionLink("Admin", "DeleteEmptyCategory", "ResourceAdmin", new {id=Model.ID})
+     @Html.ActionLink("delete this empty category", "DeleteEmptyCategory", "ResourceAdmin", new {id=Model.ID})
  }
  else
  {
      <div class="container">
-         @await Component.InvokeAsync("ResourceTable", new {pageNumber = ViewData["pageNumber"], categoryID = Model.ID})
+         @await Component.InvokeAsync("ResourceTable", new {pageNumber = ViewData["pageNumber"], categoryID = Model.ID, status = ResourceStatus.New})
      </div>
  }
 }

@@ -8,8 +8,8 @@ namespace DCOClearinghouse.Models
     public enum ResourceStatus
     {
         New = 0,
-        Categorized,
-        Removed
+        //Categorized,
+        Removed = 2
     }
     public class Resource
     {
