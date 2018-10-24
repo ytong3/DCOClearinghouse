@@ -75,7 +75,7 @@ namespace DCOClearinghouse.Controllers
                 .AsNoTracking()
                 .Include(t => t.ResourceTags)
                 .ThenInclude(rt=>rt.Resource)
-                .OrderByDescending(t => t.ResourceTags.Count)
+                .OrderBy(t => t.Name)
                 .ToListAsync();
 
             return View(allTags);

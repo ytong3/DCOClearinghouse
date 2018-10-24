@@ -23,9 +23,9 @@
     <div id="tags">
         @foreach (var tag in Model)
         {
-            <a asp-action="Tag" asp-route-id="@tag.ID" rel="@tag.ResourceTags.Count">
-                @tag.Name (@tag.ResourceTags.Count(t => t.Resource.Status == ResourceStatus.New))
-            </a>
+        <a asp-action="Tag" asp-route-id="@tag.ID" rel="@tag.ResourceTags.Count">
+            @tag.Name (@tag.ResourceTags.Count(t => t.Resource.Status == ResourceStatus.New))
+        </a><span>&nbsp;</span>
         }
     </div>
 </div>

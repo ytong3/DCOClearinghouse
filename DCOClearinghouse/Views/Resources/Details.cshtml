@@ -74,8 +74,8 @@
 }
 
 
-<div>
-    <a asp-action="ReportBadlink" asp-route-id="@Model.ID">Report link is broken</a> |
-    <a asp-action="Index">Back</a> |
-    <a asp-action="Edit" asp-controller="ResourceAdmin" asp-route-id="@Model.ID">Administrator</a>
-</div>
+    <div>
+        <a asp-action="Index">Back</a> |
+        <a asp-action="ReportBadlink" asp-route-id="@Model.ID">Report link is broken</a> |
+        <a asp-action="Edit" asp-controller="ResourceAdmin" asp-route-id="@Model.ID">Administrator</a>
+    </div>
