@@ -43,7 +43,7 @@ namespace DatabaseMigration
 
             Console.ReadLine();
 
-            WriteToNewDatabase("new_dco_resources", outputCategories, outputResources);
+            WriteToNewDatabase("new_dco_resources_w_uncategorized", outputCategories, outputResources);
         }
 
         static void WriteToNewDatabase(string databaseName, ResourceCategory[] outputCategories, Resource[] outputResources)
@@ -58,6 +58,15 @@ namespace DatabaseMigration
             using (var context = new ResourceContext(options))
             {
                 context.Database.EnsureCreated();
+                
+                // add initial Uncategorized
+                context.ResourceCategories.Add(new ResourceCategory()
+                {
+                    ID = 1,
+                    CategoryName = "Uncategorized",
+                    Depth = 0
+                });
+
                 foreach (var category in outputCategories)
                 {
                     context.ResourceCategories.Add(category);

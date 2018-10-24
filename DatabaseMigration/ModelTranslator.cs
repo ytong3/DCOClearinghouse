@@ -16,8 +16,8 @@ namespace DatabaseMigration
                 select new ResourceCategory
                 {
                     CategoryName = oldCategory.Name,
-                    ID = oldCategory.Id,
-                    ParentCategoryID = oldCategory.ParentId
+                    ID = oldCategory.Id + 1,
+                    ParentCategoryID = oldCategory.ParentId + 1
                 };
 
             var resourceCategoryArray = newCategories as ResourceCategory[] ?? newCategories.ToArray();
@@ -53,7 +53,7 @@ namespace DatabaseMigration
                 select new Resource
                 {
                     ID = listing.Id,
-                    CategoryID = binding.CategoryId,
+                    CategoryID = binding.CategoryId+1,
                     Link = listing.Website,
                     Description = listing.Description,
                     Subject = listing.Name,

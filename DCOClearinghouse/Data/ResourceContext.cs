@@ -31,6 +31,14 @@ namespace DCOClearinghouse.Data
 
             modelBuilder.Entity<ResourceCategory>().ToTable("ResourceCategory");
 
+            modelBuilder.Entity<ResourceCategory>().HasData(
+                new ResourceCategory()
+                {
+                    ID = 1,
+                    Depth = 0,
+                    CategoryName = "Uncategorized"
+                });
+
             modelBuilder.Entity<ResourceType>().ToTable("ResourceType");
 
             modelBuilder.Entity<ResourceTag>().ToTable("ResourceTag");

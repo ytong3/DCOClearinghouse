@@ -15,15 +15,15 @@ namespace DatabaseMaintenance
 
             #region Flatten worked on v9-29 database
 
-            //FlattenCategories("flattened_dco_resources");
-            //RemoveEmptyCategories("flattened_dco_resources");
+            FlattenCategories("new_dco_resources_w_uncategorized");
+            RemoveEmptyCategories("new_dco_resources_w_uncategorized");
 
             #endregion
 
             #region Merge duplicate Tags for v10-13 database
 
             var optionsForNewDb = new DbContextOptionsBuilder<ResourceContext>()
-                .UseMySql($"Server=localhost;Port=3306;Database=flattened_dco_resources;Uid=root;Pwd=root;")
+                .UseMySql($"Server=localhost;Port=3306;Database=new_dco_resources_w_uncategorized;Uid=root;Pwd=root;")
                 .EnableSensitiveDataLogging()
                 .Options;
 
