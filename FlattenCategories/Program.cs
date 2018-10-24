@@ -17,13 +17,15 @@ namespace DatabaseMaintenance
 
             FlattenCategories("new_dco_resources_w_uncategorized");
             RemoveEmptyCategories("new_dco_resources_w_uncategorized");
+            MergeDuplicateTags("new_dco_resources_w_uncategorized");
 
             #endregion
+        }
 
-            #region Merge duplicate Tags for v10-13 database
-
+        private static void MergeDuplicateTags(string databaseName)
+        {
             var optionsForNewDb = new DbContextOptionsBuilder<ResourceContext>()
-                .UseMySql($"Server=localhost;Port=3306;Database=new_dco_resources_w_uncategorized;Uid=root;Pwd=root;")
+                .UseMySql($"Server=localhost;Port=3306;Database={databaseName};Uid=root;Pwd=root;")
                 .EnableSensitiveDataLogging()
                 .Options;
 
@@ -32,8 +34,6 @@ namespace DatabaseMaintenance
                 TagMaintenance.MergeDuplicateTags(context);
                 TagMaintenance.RemoveEmptyTags(context);
             }
-
-            #endregion
         }
 
         private static void RemoveEmptyCategories(string database)
