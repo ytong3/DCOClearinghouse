@@ -6,7 +6,7 @@ namespace DCOClearinghouse.Controllers
 {
     public class AccountController : Controller
     {
-        public async Task<IActionResult> Login()
+        public IActionResult Login()
         {
             return View();
         }

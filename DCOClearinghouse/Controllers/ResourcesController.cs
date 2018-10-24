@@ -166,7 +166,7 @@ namespace DCOClearinghouse.Controllers
             return View();
         }
 
-        public async Task<IActionResult> CreatedConfirmed()
+        public IActionResult CreatedConfirmed()
         {
             return View();
         }
