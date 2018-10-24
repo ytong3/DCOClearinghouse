@@ -32,10 +32,21 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Resources" asp-action="Index">Resources</a></li>
-                    <li><a asp-area="" asp-controller="ResourceAdmin" asp-action="Index">Resources(Admin)</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 </ul>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a asp-area="" asp-controller="Account" asp-action="Logout">[Logout]</a></li>
+                    </ul>
+                }
+                else
+                {
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a asp-area="" asp-controller="Account" asp-action="LogIn">[Login]</a></li>
+                    </ul>
+                }
             </div>
         </div>
     </nav>
@@ -46,7 +57,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2018 - Resources</p>
+            <p>&copy; 2018 - DisabledCommunity.Org</p>
         </footer>
     </div>
 

@@ -18,7 +18,7 @@ namespace DCOClearinghouse.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LogIn([FromForm]LogInViewModel loginVM, [FromQuery(Name="returnUrl")] string returnUrl)
+        public async Task<IActionResult> LogIn([FromForm]LogInViewModel loginVM, [FromQuery] string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -27,7 +27,7 @@ namespace DCOClearinghouse.Controllers
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.Name, loginVM.Username),
-                        new Claim(ClaimTypes.Role, "site-administrator")
+                        new Claim(ClaimTypes.Role, "Administrator")
                     };
 
 
@@ -38,12 +38,16 @@ namespace DCOClearinghouse.Controllers
 
                     var principal = new ClaimsPrincipal(identity);
 
-                    var props = new AuthenticationProperties();
-                    props.IsPersistent = loginVM.RememberMe;
+                    var props = new AuthenticationProperties {IsPersistent = loginVM.RememberMe};
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, props);
 
-                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    if (string.IsNullOrEmpty(returnUrl))
+                    {
+                        return RedirectToAction("Index", "ResourceAdmin");
+                    }
+
+                    if (Url.IsLocalUrl(returnUrl))
                         return Redirect(returnUrl);
 
                     return RedirectToAction("Index", "Home");
@@ -55,7 +59,12 @@ namespace DCOClearinghouse.Controllers
             }
 
             return View();
+        }
 
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Resources");
         }
 
         private bool LogInUser(string username, string password)
