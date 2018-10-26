@@ -39,7 +39,14 @@ namespace DCOClearinghouse.Controllers
                 .Include(c => c.ChildrenCategories)
                 .ThenInclude(childCategory => childCategory.Resources)
                 .Where(c => c.Depth == 0 && c.ID != _uncategorizedId)
+                .OrderBy(c=>c.CategoryName)
                 .ToListAsync();
+
+            //sort subcategories
+            foreach (var category in allRootCategories)
+            {
+                category.ChildrenCategories = category.ChildrenCategories.OrderBy(c => c.CategoryName).ToList();
+            }
 
             return View(allRootCategories);
         }
