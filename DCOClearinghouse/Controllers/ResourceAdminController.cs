@@ -204,7 +204,7 @@ namespace DCOClearinghouse.Controllers
                     // add unknown tags
                     if (tagNamesToAddToResource.Count() != 0)
                     {
-                        var existingTags = _context.Tags.AsNoTracking().Select(t => t.Name);
+                        var existingTags = _context.Tags.AsNoTracking().Select(t => t.Name).ToList();
                         var unknownTagNames = tagNamesToAddToResource.Except(new HashSet<string>(existingTags));
                         foreach (var unknownTagName in unknownTagNames)
                         {
@@ -216,7 +216,7 @@ namespace DCOClearinghouse.Controllers
                     // add tagNamesToAddToResource to the resource
                     foreach (var tagName in tagNamesToAddToResource)
                     {
-                        var tag = _context.Tags.AsNoTracking().FirstOrDefault(t => t.Name == tagName);
+                        var tag = _context.Tags.AsNoTracking().FirstOrDefault(t => string.Equals(t.Name,tagName,StringComparison.Ordinal));
                         _context.ResourceTags.Add(new ResourceTag()
                         {
                             ResourceID = resourceToUpdate.ID,
