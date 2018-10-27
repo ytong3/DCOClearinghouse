@@ -266,17 +266,30 @@ namespace DCOClearinghouse.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> ReportBadLink(int id)
+        public async Task<IActionResult> ReportBadLink(int? id)
         {
-            //TODO: this shouldn't be a GET
-            var resource = await _context.Resources.FindAsync(id);
-            resource.BadlinkVotes++;
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-            await _context.SaveChangesAsync();
-            // TODO: give the user some feedback like greying out the link after reporting.
-            return RedirectToAction(nameof(Index));
+            var resource = await _context.Resources.FindAsync(id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            return View(resource);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ReportBadLinkConfirmed(int id)
+        {
+            var resource = await _context.Resources.FindAsync(id);
+            resource.BadlinkVotes++;
+            await _context.SaveChangesAsync();
+            return View(resource);
+        }
         public IActionResult GetResourceTable(int? page)
         {
             return ViewComponent("ResourceTable", new {pageNumber = page??1});

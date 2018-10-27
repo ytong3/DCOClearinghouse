@@ -1,4 +1,5 @@
-﻿@model DCOClearinghouse.Models.Resource
+﻿@using Microsoft.AspNetCore.Http
+@model DCOClearinghouse.Models.Resource
 
 @{
     ViewData["Title"] = "Details";
@@ -76,6 +77,9 @@
 
     <div>
         <a asp-action="Index">Back</a> |
-        <a asp-action="ReportBadlink" asp-route-id="@Model.ID">Report link is broken</a> |
-        <a asp-action="Edit" asp-controller="ResourceAdmin" asp-route-id="@Model.ID">Administrator</a>
+        <a asp-action="ReportBadlink" asp-route-id="@Model.ID">Report</a>
+        @if (User.Identity.IsAuthenticated)
+        {
+        <span> | @Html.ActionLink("Edit", "Edit", "ResourceAdmin", new { id = Model.ID })</span> 
+        }
     </div>
