@@ -22,21 +22,25 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Subject)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BadlinkVotes)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID" asp-route-returnUrl="/ResourceAdmin/ListBadResources">Edit</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subject)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BadlinkVotes)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID" asp-route-returnUrl="/ResourceAdmin/ListBadResources">Edit</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@Html.ActionLink("Back to console", "Index")
+
