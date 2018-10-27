@@ -1,16 +1,15 @@
 ﻿using DCOClearinghouse.Data;
 using DCOClearinghouse.Models;
 using DCOClearinghouse.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Configuration;
-using Remotion.Linq.Clauses;
 
 namespace DCOClearinghouse.Controllers
 {
@@ -122,7 +121,7 @@ namespace DCOClearinghouse.Controllers
         }
 
         // GET: ResourcesController/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, string returnUrl)
         {
             //requires authentication
             if (id == null)
@@ -144,6 +143,7 @@ namespace DCOClearinghouse.Controllers
 
 
             ViewData["CategoryID"] = GetCategorySelectListDFSOrdered(resource.CategoryID);
+            ViewData["ReturnUrl"] = returnUrl;
 
             return View(new AdminEditViewModel()
             {
@@ -157,7 +157,7 @@ namespace DCOClearinghouse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Resource, Tags")] AdminEditViewModel editedResource)
+        public async Task<IActionResult> Edit(int id, string returnUrl, [Bind("Resource, Tags")] AdminEditViewModel editedResource)
         {
             //TODO: implement the anti-overposting mechanism in the Contoso University example.
             if (id != editedResource.Resource.ID)
@@ -237,7 +237,11 @@ namespace DCOClearinghouse.Controllers
                     }
                 }
 
-                return RedirectToAction(nameof(Index));
+                if (string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
+                {
+                    return RedirectToAction("Index");
+                }
+                return Redirect(returnUrl);
             }
 
             return View(editedResource);

@@ -23,7 +23,7 @@ namespace DCOClearinghouse.Models
         [UIHint("NewWindowUrl"), DataType(DataType.Url)]
         public string Link { get; set; }
 
-        [StringLength(300, MinimumLength = 3)]
+        [StringLength(500, MinimumLength = 3)]
         [Display(Name = "Text")]
         public string Description { get; set; }
 
