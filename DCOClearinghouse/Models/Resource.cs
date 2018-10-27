@@ -32,7 +32,7 @@ namespace DCOClearinghouse.Models
         [Display(Name = "Type")]
         public int? TypeID { get; set; }
 
-        [Display(Name = "Marked as bad link")]
+        [Display(Name = "Bad resource votes")]
         public int BadlinkVotes { get; set; }
 
         [Display(Name = "Date")]

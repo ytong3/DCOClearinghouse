@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using Remotion.Linq.Clauses;
 
 namespace DCOClearinghouse.Controllers
 {
@@ -542,6 +543,18 @@ namespace DCOClearinghouse.Controllers
             ViewData["uncategorizedID"] = _uncategorizedId;
 
             return View();
+        }
+
+        public async Task<IActionResult> ListBadResources()
+        {
+            var reportedResources = await _context.Resources
+                .AsNoTracking()
+                .Include(r=>r.Category)
+                .Where(r => r.BadlinkVotes > 0 && r.Status == ResourceStatus.New)
+                .OrderByDescending(r => r.BadlinkVotes)
+                .ToListAsync();
+
+            return View(reportedResources);
         }
     }
 }

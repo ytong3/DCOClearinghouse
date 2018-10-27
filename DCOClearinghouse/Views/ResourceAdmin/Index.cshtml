@@ -6,20 +6,31 @@
     <h1>Admin Console</h1>
 </div>
 
-<h3>Quick tasks</h3>
+<h3>Your attention please</h3>
 
 <ul>
+
+
+    <li>
+        @Html.ActionLink("Review problematic resources", "ListBadResources")
+    </li>
+    <li>
+        @Html.ActionLink("Review uncategorized resource", "ListUncategorized")
+    </li>
+
+
+</ul>
+
+<h3>Quick tasks</h3>
+<ul>
+    <li>
+        @Html.ActionLink("Create a new category", "CreateNewCategory")
+    </li>
     <li>
         @Html.ActionLink("Create a new resource", "Create", "Resources")
     </li>
     <li>
-        <a asp-action="ListUncategorized">Review uncategorized resource</a>
-    </li>
-    <li>
         @Html.ActionLink("See category tree", "BrowseByCategory")
-    </li>
-    <li>
-        @Html.ActionLink("Create a new category", "CreateNewCategory")
     </li>
     <li>
         @Html.ActionLink("Recycle Bin", "ListRemoved")
