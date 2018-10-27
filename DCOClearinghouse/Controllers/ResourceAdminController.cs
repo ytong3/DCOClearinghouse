@@ -186,7 +186,7 @@ namespace DCOClearinghouse.Controllers
                     if (!string.IsNullOrWhiteSpace(editedResource.Tags))
                     {
                         tagsAfter = editedResource.Tags.Split(",")
-                            .Where(p=>!string.IsNullOrEmpty(p))
+                            .Where(p=>!string.IsNullOrWhiteSpace(p))
                             .Select(p => p?.Trim()).ToList().ToHashSet();
                     }
 
