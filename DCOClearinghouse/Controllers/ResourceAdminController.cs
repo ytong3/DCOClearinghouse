@@ -517,6 +517,7 @@ namespace DCOClearinghouse.Controllers
         {
             var subcategories = await _context.ResourceCategories.AsNoTracking()
                 .Where(c => c.ParentCategoryID == categoryID)
+                .OrderBy(c=>c.CategoryName)
                 .ToListAsync();
             SelectList subcategoryList = new SelectList(subcategories, "ID", "CategoryName", 0);
             return Json(subcategoryList);
