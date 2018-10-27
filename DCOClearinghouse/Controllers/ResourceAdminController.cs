@@ -185,7 +185,9 @@ namespace DCOClearinghouse.Controllers
                     var tagsAfter = new HashSet<string>();
                     if (!string.IsNullOrWhiteSpace(editedResource.Tags))
                     {
-                        tagsAfter = editedResource.Tags.Split(",").Select(p => p?.Trim()).ToList().ToHashSet();
+                        tagsAfter = editedResource.Tags.Split(",")
+                            .Where(p=>!string.IsNullOrEmpty(p))
+                            .Select(p => p?.Trim()).ToList().ToHashSet();
                     }
 
                     var tagNamesToRemoveFromResource = tagsBefore.Except(tagsAfter);
