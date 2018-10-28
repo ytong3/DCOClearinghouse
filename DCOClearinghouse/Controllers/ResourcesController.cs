@@ -236,36 +236,6 @@ namespace DCOClearinghouse.Controllers
             return View(resource);
         }
 
-        // GET: Resources/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var resource = await _context.Resources
-                .Include(r => r.Category)
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (resource == null)
-            {
-                return NotFound();
-            }
-
-            return View(resource);
-        }
-
-        // POST: Resources/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var resource = await _context.Resources.FindAsync(id);
-            _context.Resources.Remove(resource);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
         public async Task<IActionResult> ReportBadLink(int? id)
         {
             if (id == null)
