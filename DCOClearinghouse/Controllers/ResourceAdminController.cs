@@ -277,7 +277,7 @@ namespace DCOClearinghouse.Controllers
             var resource = await _context.Resources.FindAsync(id);
             _context.Resources.Remove(resource);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(ListRemoved));
         }
 
         public async Task<IActionResult> BrowseByCategory()

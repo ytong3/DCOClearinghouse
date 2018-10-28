@@ -1,8 +1,8 @@
 @model PaginatedList<DCOClearinghouse.Models.Resource>
 
-@{
+@*@{
     int rowNumber = (int)ViewData["startIndex"];
-}
+}*@
 
 @functions
 {
@@ -62,9 +62,9 @@
 <table class="table table-striped">
     <thead>
     <tr>
-        <th>
+        @*<th>
 
-        </th>
+        </th>*@
         <th>
             
         </th>
@@ -74,9 +74,9 @@
     @foreach (var resource in Model)
     {
         <tr>
-            <td>
+            @*<td>
                 @{ rowNumber++;} <span>@rowNumber.</span>
-            </td>
+            </td>*@
             <td>
                 @if (resource.Link == null)
                 {

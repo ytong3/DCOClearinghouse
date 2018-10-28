@@ -6,9 +6,8 @@
 
 <h2>Delete</h2>
 
-<h3>Are you sure you want to permanently delete this?</h3>
+<h3>Are you sure you want to permanently delete this resource?</h3>
 <div>
-    <h4>Resource</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -45,13 +44,15 @@
             @Html.DisplayNameFor(model => model.Category)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Category.ID)
+            @Html.DisplayFor(model => model.Category.CategoryName)
         </dd>
     </dl>
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="ID" />
-        <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-action="Index">Back to List</a>
+        <div>
+            <input type="submit" value="Delete" class="btn btn-danger" />
+            <a onclick="javascript: history.go(-1);" class="btn btn-default">Cancel</a>
+        </div>
     </form>
 </div>

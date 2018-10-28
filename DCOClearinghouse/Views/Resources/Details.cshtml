@@ -77,7 +77,7 @@
 
 
 <div>
-    <a asp-action="Index">Back</a> |
+    <a onclick="javascript:history.go(-1)">Back</a> |
     <a asp-action="ReportBadlink" asp-route-id="@Model.ID">Report</a>
     @if (User.Identity.IsAuthenticated)
     {
