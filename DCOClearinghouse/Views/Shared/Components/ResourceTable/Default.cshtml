@@ -1,8 +1,8 @@
 @model PaginatedList<DCOClearinghouse.Models.Resource>
 
-@{
+@*@{
     int rowNumber = (int)ViewData["startIndex"];
-}
+}*@
 
 @functions
 {
@@ -13,7 +13,18 @@
         try
         {
             Uri uri = new Uri(urlString);
-            return "("+uri?.Host+")";
+
+            if (uri == null)
+                return null;
+                
+            var host = uri.Host;
+
+            if (host.Split(".").Length>2)
+            {
+                var index = host.IndexOf(".");
+                return "(" + host.Substring(index + 1) + ")";
+            }
+            return "("+uri?.Authority+")";
         }
         catch (UriFormatException)
         {
@@ -51,9 +62,9 @@
 <table class="table table-striped">
     <thead>
     <tr>
-        <th>
+        @*<th>
 
-        </th>
+        </th>*@
         <th>
             
         </th>
@@ -63,9 +74,9 @@
     @foreach (var resource in Model)
     {
         <tr>
-            <td>
+            @*<td>
                 @{ rowNumber++;} <span>@rowNumber.</span>
-            </td>
+            </td>*@
             <td>
                 @if (resource.Link == null)
                 {
@@ -73,12 +84,14 @@
                 }
                 else
                 {
-                    <a href="@resource.Link" target="_blank">@Html.DisplayFor(_ => resource.Subject)</a>
+                    <a href="@resource.Link">@Html.DisplayFor(_ => resource.Subject)</a>
                     <span class="small">@GetHostDomain(resource.Link)</span>
                 }
                 <br/>
                 <div class="small">
-                    @GetAgo(resource.CreateDate ?? null) | @Html.ActionLink("Open", "Details", "Resources", new {@ID = resource.ID}) | @Html.ActionLink("Bad link", "ReportBadLink", "Resources", new {@ID = resource.ID})
+                    @GetAgo(resource.CreateDate ?? null) | 
+                    @Html.ActionLink("Details", "Details", "Resources", new {@ID = resource.ID}) | 
+                    @Html.ActionLink("Report", "ReportBadLink", "Resources", new {@ID = resource.ID})
                 </div>
             </td>
         </tr>

@@ -1,0 +1,46 @@
+﻿@model IEnumerable<DCOClearinghouse.Models.Resource>
+
+@{
+    ViewData["Title"] = "ListBadResources";
+}
+
+<h4>Users reported the following resources as problematic but they are still publicly visible</h4>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Subject)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BadlinkVotes)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subject)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BadlinkVotes)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID" asp-route-returnUrl="/ResourceAdmin/ListBadResources">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@Html.ActionLink("Back to console", "Index")
+

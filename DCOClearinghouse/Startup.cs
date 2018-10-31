@@ -1,4 +1,5 @@
 ﻿using DCOClearinghouse.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -28,6 +29,9 @@ namespace DCOClearinghouse
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
+
             var connectionStr = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddDbContext<ResourceContext>(options =>
@@ -50,10 +54,11 @@ namespace DCOClearinghouse
                 app.UseHsts();
             }
 
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

@@ -23,7 +23,7 @@ namespace DCOClearinghouse.Models
         [UIHint("NewWindowUrl"), DataType(DataType.Url)]
         public string Link { get; set; }
 
-        [StringLength(300, MinimumLength = 3)]
+        [StringLength(500, MinimumLength = 3)]
         [Display(Name = "Text")]
         public string Description { get; set; }
 
@@ -32,7 +32,7 @@ namespace DCOClearinghouse.Models
         [Display(Name = "Type")]
         public int? TypeID { get; set; }
 
-        [Display(Name = "Marked as bad link")]
+        [Display(Name = "Bad resource votes")]
         public int BadlinkVotes { get; set; }
 
         [Display(Name = "Date")]

@@ -1,18 +1,19 @@
 ﻿using DCOClearinghouse.Data;
 using DCOClearinghouse.Models;
 using DCOClearinghouse.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using Tag = DCOClearinghouse.Models.Tag;
 
 namespace DCOClearinghouse.Controllers
 {
+    [Authorize]
     public class ResourceAdminController : Controller
     {
         private readonly ResourceContext _context;
@@ -120,7 +121,7 @@ namespace DCOClearinghouse.Controllers
         }
 
         // GET: ResourcesController/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, string returnUrl)
         {
             //requires authentication
             if (id == null)
@@ -142,6 +143,7 @@ namespace DCOClearinghouse.Controllers
 
 
             ViewData["CategoryID"] = GetCategorySelectListDFSOrdered(resource.CategoryID);
+            ViewData["ReturnUrl"] = returnUrl;
 
             return View(new AdminEditViewModel()
             {
@@ -155,7 +157,7 @@ namespace DCOClearinghouse.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Resource, Tags")] AdminEditViewModel editedResource)
+        public async Task<IActionResult> Edit(int id, string returnUrl, [Bind("Resource, Tags")] AdminEditViewModel editedResource)
         {
             //TODO: implement the anti-overposting mechanism in the Contoso University example.
             if (id != editedResource.Resource.ID)
@@ -183,7 +185,9 @@ namespace DCOClearinghouse.Controllers
                     var tagsAfter = new HashSet<string>();
                     if (!string.IsNullOrWhiteSpace(editedResource.Tags))
                     {
-                        tagsAfter = editedResource.Tags.Split(",").Select(p => p?.Trim()).ToList().ToHashSet();
+                        tagsAfter = editedResource.Tags.Split(",")
+                            .Where(p=>!string.IsNullOrWhiteSpace(p))
+                            .Select(p => p?.Trim()).ToList().ToHashSet();
                     }
 
                     var tagNamesToRemoveFromResource = tagsBefore.Except(tagsAfter);
@@ -200,7 +204,7 @@ namespace DCOClearinghouse.Controllers
                     // add unknown tags
                     if (tagNamesToAddToResource.Count() != 0)
                     {
-                        var existingTags = _context.Tags.AsNoTracking().Select(t => t.Name);
+                        var existingTags = _context.Tags.AsNoTracking().Select(t => t.Name).ToList();
                         var unknownTagNames = tagNamesToAddToResource.Except(new HashSet<string>(existingTags));
                         foreach (var unknownTagName in unknownTagNames)
                         {
@@ -212,7 +216,7 @@ namespace DCOClearinghouse.Controllers
                     // add tagNamesToAddToResource to the resource
                     foreach (var tagName in tagNamesToAddToResource)
                     {
-                        var tag = _context.Tags.AsNoTracking().FirstOrDefault(t => t.Name == tagName);
+                        var tag = _context.Tags.AsNoTracking().FirstOrDefault(t => string.Equals(t.Name,tagName,StringComparison.Ordinal));
                         _context.ResourceTags.Add(new ResourceTag()
                         {
                             ResourceID = resourceToUpdate.ID,
@@ -235,7 +239,11 @@ namespace DCOClearinghouse.Controllers
                     }
                 }
 
-                return RedirectToAction(nameof(Index));
+                if (string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
+                {
+                    return RedirectToAction("Index");
+                }
+                return Redirect(returnUrl);
             }
 
             return View(editedResource);
@@ -269,7 +277,7 @@ namespace DCOClearinghouse.Controllers
             var resource = await _context.Resources.FindAsync(id);
             _context.Resources.Remove(resource);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(ListRemoved));
         }
 
         public async Task<IActionResult> BrowseByCategory()
@@ -516,6 +524,7 @@ namespace DCOClearinghouse.Controllers
         {
             var subcategories = await _context.ResourceCategories.AsNoTracking()
                 .Where(c => c.ParentCategoryID == categoryID)
+                .OrderBy(c=>c.CategoryName)
                 .ToListAsync();
             SelectList subcategoryList = new SelectList(subcategories, "ID", "CategoryName", 0);
             return Json(subcategoryList);
@@ -540,6 +549,18 @@ namespace DCOClearinghouse.Controllers
             ViewData["uncategorizedID"] = _uncategorizedId;
 
             return View();
+        }
+
+        public async Task<IActionResult> ListBadResources()
+        {
+            var reportedResources = await _context.Resources
+                .AsNoTracking()
+                .Include(r=>r.Category)
+                .Where(r => r.BadlinkVotes > 0 && r.Status == ResourceStatus.New)
+                .OrderByDescending(r => r.BadlinkVotes)
+                .ToListAsync();
+
+            return View(reportedResources);
         }
     }
 }

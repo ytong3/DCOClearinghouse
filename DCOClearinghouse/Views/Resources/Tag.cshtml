@@ -1,7 +1,8 @@
-     @model Tag
-     @{
-         Layout = "_ResourcesLayout";
-     }
+@model Tag
+
+@{
+    Layout = "_ResourcesLayout";
+}
 
 <div class="well">
     <h3>#@Html.DisplayFor(model=>model.Name)</h3>
@@ -16,6 +17,6 @@
 else
 {
     <div class="container">
-        <a asp-action="DeleteEmptyTag" asp-controller="ResourceAdmin" asp-route-id="@Model.ID">Manage Tags</a>
+        <a asp-action="DeleteEmptyTag" asp-controller="ResourceAdmin" asp-route-id="@Model.ID">Delete Empty Tag</a>
     </div>
 }

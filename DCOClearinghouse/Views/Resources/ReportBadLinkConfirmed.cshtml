@@ -1,0 +1,19 @@
+﻿@model Resource
+<html>
+<head>
+    <title>Report confirmation</title>
+</head>
+<body>
+    <h3>
+        Thanks for reporting this
+    </h3>
+
+The admin has been notified and will review the resource.
+<br/>
+<br/>
+    <div>
+        @Html.ActionLink("Go back to Resource Hub", "Index") |
+        @Html.ActionLink("Go back to the resource", "Details", new { id = Model.ID })
+    </div>
+</body>
+</html>

@@ -39,7 +39,14 @@ namespace DCOClearinghouse.Controllers
                 .Include(c => c.ChildrenCategories)
                 .ThenInclude(childCategory => childCategory.Resources)
                 .Where(c => c.Depth == 0 && c.ID != _uncategorizedId)
+                .OrderBy(c=>c.CategoryName)
                 .ToListAsync();
+
+            //sort subcategories
+            foreach (var category in allRootCategories)
+            {
+                category.ChildrenCategories = category.ChildrenCategories.OrderBy(c => c.CategoryName).ToList();
+            }
 
             return View(allRootCategories);
         }
@@ -75,7 +82,7 @@ namespace DCOClearinghouse.Controllers
                 .AsNoTracking()
                 .Include(t => t.ResourceTags)
                 .ThenInclude(rt=>rt.Resource)
-                .OrderByDescending(t => t.ResourceTags.Count)
+                .OrderBy(t => t.Name)
                 .ToListAsync();
 
             return View(allTags);
@@ -166,7 +173,7 @@ namespace DCOClearinghouse.Controllers
             return View();
         }
 
-        public async Task<IActionResult> CreatedConfirmed()
+        public IActionResult CreatedConfirmed()
         {
             return View();
         }
@@ -229,17 +236,14 @@ namespace DCOClearinghouse.Controllers
             return View(resource);
         }
 
-        // GET: Resources/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> ReportBadLink(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var resource = await _context.Resources
-                .Include(r => r.Category)
-                .FirstOrDefaultAsync(m => m.ID == id);
+            var resource = await _context.Resources.FindAsync(id);
             if (resource == null)
             {
                 return NotFound();
@@ -248,28 +252,14 @@ namespace DCOClearinghouse.Controllers
             return View(resource);
         }
 
-        // POST: Resources/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpPost]
+        public async Task<IActionResult> ReportBadLinkConfirmed(int id)
         {
-            var resource = await _context.Resources.FindAsync(id);
-            _context.Resources.Remove(resource);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> ReportBadLink(int id)
-        {
-            //TODO: this shouldn't be a GET
             var resource = await _context.Resources.FindAsync(id);
             resource.BadlinkVotes++;
-
             await _context.SaveChangesAsync();
-            // TODO: give the user some feedback like greying out the link after reporting.
-            return RedirectToAction(nameof(Index));
+            return View(resource);
         }
-
         public IActionResult GetResourceTable(int? page)
         {
             return ViewComponent("ResourceTable", new {pageNumber = page??1});
