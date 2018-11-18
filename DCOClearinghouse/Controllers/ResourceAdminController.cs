@@ -120,6 +120,63 @@ namespace DCOClearinghouse.Controllers
             return View();
         }
 
+        // GET: ResourceAdmin/EditCategory/5
+        public async Task<IActionResult> EditCategory(int? id, string returnUrl)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var category = await _context.ResourceCategories
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.ID == id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["ReturnUrl"] = returnUrl;
+            return View(category);
+        }
+
+        // POST: ResoureAdmin/EditCategory/5
+        [HttpPost, ActionName("EditCategory")]
+        public async Task<IActionResult> EditCategoryPost(int? id, string returnUrl)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var oldCategory = await _context.ResourceCategories.SingleOrDefaultAsync(c => c.ID == id);
+
+            if (await TryUpdateModelAsync<ResourceCategory>(
+                oldCategory,
+                "",
+                c => c.CategoryName
+            ))
+            {
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    if (string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
+                    {
+                        return RedirectToAction("Index", "Resources");
+                    }
+                    return Redirect(returnUrl);
+                }
+                catch (DbUpdateException)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                "Try again, and if the problem persists, " +
+                "see your system administrator.");
+                }
+            }
+            return View(oldCategory);
+        }
+
         // GET: ResourcesController/Edit/5
         public async Task<IActionResult> Edit(int? id, string returnUrl)
         {
@@ -186,7 +243,7 @@ namespace DCOClearinghouse.Controllers
                     if (!string.IsNullOrWhiteSpace(editedResource.Tags))
                     {
                         tagsAfter = editedResource.Tags.Split(",")
-                            .Where(p=>!string.IsNullOrWhiteSpace(p))
+                            .Where(p => !string.IsNullOrWhiteSpace(p))
                             .Select(p => p?.Trim()).ToList().ToHashSet();
                     }
 
@@ -194,8 +251,8 @@ namespace DCOClearinghouse.Controllers
                     if (tagNamesToRemoveFromResource.Count() != 0)
                     {
                         var tagsToRemove = from t in currentTagAssociations
-                            where tagNamesToRemoveFromResource.Contains(t.Tag.Name)
-                            select t;
+                                           where tagNamesToRemoveFromResource.Contains(t.Tag.Name)
+                                           select t;
                         _context.ResourceTags.RemoveRange(tagsToRemove);
                     }
 
@@ -208,7 +265,7 @@ namespace DCOClearinghouse.Controllers
                         var unknownTagNames = tagNamesToAddToResource.Except(new HashSet<string>(existingTags));
                         foreach (var unknownTagName in unknownTagNames)
                         {
-                            var tagEntity = _context.Tags.Add(new Tag {Name = unknownTagName});
+                            var tagEntity = _context.Tags.Add(new Tag { Name = unknownTagName });
                             await _context.SaveChangesAsync();
                         }
                     }
@@ -216,7 +273,7 @@ namespace DCOClearinghouse.Controllers
                     // add tagNamesToAddToResource to the resource
                     foreach (var tagName in tagNamesToAddToResource)
                     {
-                        var tag = _context.Tags.AsNoTracking().FirstOrDefault(t => string.Equals(t.Name,tagName,StringComparison.Ordinal));
+                        var tag = _context.Tags.AsNoTracking().FirstOrDefault(t => string.Equals(t.Name, tagName, StringComparison.Ordinal));
                         _context.ResourceTags.Add(new ResourceTag()
                         {
                             ResourceID = resourceToUpdate.ID,
@@ -278,12 +335,12 @@ namespace DCOClearinghouse.Controllers
             var resource = await _context.Resources.FindAsync(id);
             _context.Resources.Remove(resource);
             await _context.SaveChangesAsync();
-            
+
             if (string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
-                {
-                    return RedirectToAction("Index");
-                }
-                return Redirect(returnUrl);
+            {
+                return RedirectToAction("Index");
+            }
+            return Redirect(returnUrl);
         }
 
         public async Task<IActionResult> BrowseByCategory()
@@ -325,13 +382,13 @@ namespace DCOClearinghouse.Controllers
             }
 
             var dropDownItems = from category in dfsOrdered
-                orderby category.CategoryName != "Uncategorized"
-                select new
-                {
-                    category.ID,
-                    CategoryName = string.Concat(Enumerable.Repeat("----", category.Depth)) + category.CategoryName +
-                                   $"({category.Resources.Count})"
-                };
+                                orderby category.CategoryName != "Uncategorized"
+                                select new
+                                {
+                                    category.ID,
+                                    CategoryName = string.Concat(Enumerable.Repeat("----", category.Depth)) + category.CategoryName +
+                                                   $"({category.Resources.Count})"
+                                };
 
 
             List<SelectListItem> list = new SelectList(dropDownItems, "ID", "CategoryName", currentCategoryId).ToList();
@@ -352,7 +409,7 @@ namespace DCOClearinghouse.Controllers
                 return null;
             }
 
-            var result = new List<ResourceCategory> {category};
+            var result = new List<ResourceCategory> { category };
 
             foreach (var childCategory in category.ChildrenCategories)
             {
@@ -381,7 +438,7 @@ namespace DCOClearinghouse.Controllers
         private SelectList GetStatusSelectList(ResourceStatus? status)
         {
             var allStatuses = from ResourceStatus s in Enum.GetValues(typeof(ResourceStatus))
-                select new {ID = s, Name = s.ToString()};
+                              select new { ID = s, Name = s.ToString() };
             return new SelectList(allStatuses, "ID", "Name", status);
         }
 
@@ -456,8 +513,8 @@ namespace DCOClearinghouse.Controllers
 
             var category = await _context.ResourceCategories
                 .AsNoTracking()
-                .Include(c=>c.ChildrenCategories)
-                .Include(c=>c.Resources)
+                .Include(c => c.ChildrenCategories)
+                .Include(c => c.Resources)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (category == null)
@@ -530,7 +587,7 @@ namespace DCOClearinghouse.Controllers
         {
             var subcategories = await _context.ResourceCategories.AsNoTracking()
                 .Where(c => c.ParentCategoryID == categoryID)
-                .OrderBy(c=>c.CategoryName)
+                .OrderBy(c => c.CategoryName)
                 .ToListAsync();
             SelectList subcategoryList = new SelectList(subcategories, "ID", "CategoryName", 0);
             return Json(subcategoryList);
@@ -561,7 +618,7 @@ namespace DCOClearinghouse.Controllers
         {
             var reportedResources = await _context.Resources
                 .AsNoTracking()
-                .Include(r=>r.Category)
+                .Include(r => r.Category)
                 .Where(r => r.BadlinkVotes > 0 && r.Status == ResourceStatus.New)
                 .OrderByDescending(r => r.BadlinkVotes)
                 .ToListAsync();

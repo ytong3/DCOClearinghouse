@@ -13,7 +13,17 @@
     {
         <span>@@<a asp-action="Category" asp-route-id="@Model.ParentCategoryID">@Model.ParentCategory.CategoryName</a> <bold>/</bold> @Model.CategoryName</span>
     }
-
+    
+    @if (Context.User.Identity.IsAuthenticated)
+    {
+        <div class="small">
+        <br>
+        <a asp-controller="ResourceAdmin" 
+           asp-action="EditCategory" 
+           asp-route-id="@Model.ID"
+           asp-route-returnurl="@Context.Request.Path">Edit</a>
+        </div>
+    }
 </div>
 
 @if (Model.Depth == 0)
