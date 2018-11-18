@@ -35,8 +35,8 @@
                     @Html.DisplayFor(modelItem => item.BadlinkVotes)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID" asp-route-returnUrl="/ResourceAdmin/ListBadResources">Edit</a> | 
-                    <a asp-action="Delete" asp-route-id="@item.ID" asp-route-returnUrl="/ResourceAdmin/ListBadResources">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.ID" asp-route-returnUrl="@Context.Request.Path">Edit</a> | 
+                    <a asp-action="Delete" asp-route-id="@item.ID" asp-route-returnUrl="@Context.Request.Path">Delete</a>
                 </td>
             </tr>
         }

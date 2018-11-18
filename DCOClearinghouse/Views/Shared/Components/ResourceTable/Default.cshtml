@@ -92,6 +92,17 @@
                     @GetAgo(resource.CreateDate ?? null) | 
                     @Html.ActionLink("Details", "Details", "Resources", new {@ID = resource.ID}) | 
                     @Html.ActionLink("Report", "ReportBadLink", "Resources", new {@ID = resource.ID})
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <span>| </span><a asp-controller="ResourceAdmin" 
+                        asp-action="Edit" 
+                        asp-route-id="@resource.ID"
+                        asp-route-returnurl="@Context.Request.Path">Edit</a>
+                        <span>| </span><a asp-controller="ResourceAdmin" 
+                        asp-action="Delete" 
+                        asp-route-id="@resource.ID"
+                        asp-route-returnurl="@Context.Request.Path">Delete</a>
+                    }
                 </div>
             </td>
         </tr>
