@@ -250,7 +250,7 @@ namespace DCOClearinghouse.Controllers
         }
 
         // GET: ResourcesController/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, string returnUrl)
         {
             if (id == null)
             {
@@ -266,18 +266,24 @@ namespace DCOClearinghouse.Controllers
                 return NotFound();
             }
 
+            ViewData["ReturnUrl"] = returnUrl;
             return View(resource);
         }
 
         // POST: ResourcesController/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, string returnUrl)
         {
             var resource = await _context.Resources.FindAsync(id);
             _context.Resources.Remove(resource);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(ListRemoved));
+            
+            if (string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
+                {
+                    return RedirectToAction("Index");
+                }
+                return Redirect(returnUrl);
         }
 
         public async Task<IActionResult> BrowseByCategory()

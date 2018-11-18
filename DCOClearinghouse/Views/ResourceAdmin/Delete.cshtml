@@ -48,7 +48,7 @@
         </dd>
     </dl>
     
-    <form asp-action="Delete">
+    <form asp-action="Delete" asp-route-returnurl="@ViewData["ReturnUrl"]">
         <input type="hidden" asp-for="ID" />
         <div>
             <input type="submit" value="Delete" class="btn btn-danger" />

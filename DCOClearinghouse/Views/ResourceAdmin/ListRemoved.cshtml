@@ -42,7 +42,7 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID" asp-route-returnUrl="@Context.Request.Path">Edit</a> |
                 <a asp-action="Details" asp-controller="Resources" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.ID" asp-route-returnUrl="@Context.Request.Path">Delete</a>
             </td>
         </tr>
     }
