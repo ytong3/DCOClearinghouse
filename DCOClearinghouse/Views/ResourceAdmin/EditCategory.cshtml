@@ -18,14 +18,17 @@
                 <input asp-for="CategoryToUpdate.CategoryName" class="form-control"/>
                 <span asp-validation-for="CategoryToUpdate.CategoryName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @if(@Model.CategoryToUpdate.Depth>0){
+                <div class="form-group">
                 <label class="control-lable" asp-for="CategoryToUpdate.ParentCategoryID"></label>
                 <select asp-for="CategoryToUpdate.ParentCategoryID"
                         asp-items="@(new SelectList(Model.ParentCategories, "ID", "CategoryName"))"
                         size="15"
                         class="form-control">
                 </select>
-            </div>
+                </div>
+            }
+
             <div class="form-group">
                 <div>
                     <input type="submit" value="Save" class="btn btn-success"/>

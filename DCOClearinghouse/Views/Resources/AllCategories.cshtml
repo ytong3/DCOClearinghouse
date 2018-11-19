@@ -25,7 +25,7 @@
                                 @foreach (var subCategory in rowInPanel)
                                 {
                                     <div class="col-sm-12">
-                                        <a asp-action="Category" asp-route-id="@subCategory.ID" target="_blank">@subCategory.CategoryName (@subCategory.Resources.Count(r => r.Status==ResourceStatus.New))</a>
+                                        <a asp-action="Category" asp-route-id="@subCategory.ID">@subCategory.CategoryName (@subCategory.Resources.Count(r => r.Status==ResourceStatus.New))</a>
                                         <br>
                                     </div>
                                 }
