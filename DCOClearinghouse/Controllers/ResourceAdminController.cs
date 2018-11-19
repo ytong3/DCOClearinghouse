@@ -138,7 +138,17 @@ namespace DCOClearinghouse.Controllers
             }
 
             ViewData["ReturnUrl"] = returnUrl;
-            return View(category);
+
+            // get all top categories
+            var topCategories = await _context.ResourceCategories.AsNoTracking()
+                                .Where(c=>c.Depth==0)
+                                .OrderBy(c=>c.CategoryName)
+                                .ToListAsync();
+
+            return View(new CategoryUpdateViewModel{
+                ParentCategories = topCategories,
+                CategoryToUpdate = category
+            });
         }
 
         // POST: ResoureAdmin/EditCategory/5
@@ -150,12 +160,13 @@ namespace DCOClearinghouse.Controllers
                 return NotFound();
             }
 
-            var oldCategory = await _context.ResourceCategories.SingleOrDefaultAsync(c => c.ID == id);
+            var categoryToUpdate = await _context.ResourceCategories.SingleOrDefaultAsync(c => c.ID == id);
 
             if (await TryUpdateModelAsync<ResourceCategory>(
-                oldCategory,
-                "",
-                c => c.CategoryName
+                categoryToUpdate,
+                "CategoryToUpdate",
+                c => c.CategoryName,
+                c => c.ParentCategoryID
             ))
             {
                 try
@@ -174,7 +185,7 @@ namespace DCOClearinghouse.Controllers
                 "see your system administrator.");
                 }
             }
-            return View(oldCategory);
+            return View(categoryToUpdate);
         }
 
         // GET: ResourcesController/Edit/5
@@ -362,7 +373,6 @@ namespace DCOClearinghouse.Controllers
         }
 
         #region Dropdown list helpers
-
         private List<SelectListItem> GetCategorySelectListDFSOrdered(int? currentCategoryId = null,
             bool allowAddNew = false)
         {
