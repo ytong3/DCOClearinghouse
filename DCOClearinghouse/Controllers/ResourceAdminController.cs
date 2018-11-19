@@ -142,7 +142,8 @@ namespace DCOClearinghouse.Controllers
             // get all top categories
             var topCategories = await _context.ResourceCategories.AsNoTracking()
                                 .Where(c=>c.Depth==0)
-                                .OrderBy(c=>c.CategoryName)
+                                .OrderBy(c=>c.ID != _uncategorizedId)
+                                .ThenBy(c=>c.CategoryName)
                                 .ToListAsync();
 
             return View(new CategoryUpdateViewModel{
